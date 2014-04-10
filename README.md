@@ -9,7 +9,7 @@ The image is built using a copy of [mkimage-debootstrap.sh](https://raw.githubus
 ## Usage
 
 ```
-FROM google/debian
+FROM google/debian:wheezy
 ```
 
 
