@@ -1,5 +1,5 @@
-debian-docker-image
-===================
+debian-docker
+=============
 
 Source for [`google/debian`](https://index.docker.io/u/google/debian/):
 a [docker](https://docker.io) image bundling the stable [debian](https://www.debian.org) distribution suite
