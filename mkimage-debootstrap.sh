@@ -221,16 +221,9 @@ if [ -z "$strictDebootstrap" ]; then
 		esac
 	fi
 	
-	# make sure our packages are as up to date as we can get them
+	# make sure our packages lists are as up to date as we can get them
 	sudo chroot . apt-get update
 	sudo chroot . apt-get dist-upgrade -y
-
-        # Remove the package lists as they are ~30Mb and periodically go stale,
-        # at which point any downstream layers that may have benefited will
-        # need their own "apt-get update", which incurs an additional 30Mb at
-        # their layer.  As the lists are rarely part of the container's runtime
-        # path, we should *never* cache them inside the image.
-	sudo chroot . rm -f /var/lib/apt/lists/*_*
 fi
 
 if [ "$justTar" ]; then
