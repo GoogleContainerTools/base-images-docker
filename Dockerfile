@@ -1,3 +1,3 @@
 FROM scratch
 ENV DEBIAN_FRONTEND noninteractive
-ADD google-debian-wheezy.tar.bz2 /
+ADD google-debian-jessie.tar.bz2 /
