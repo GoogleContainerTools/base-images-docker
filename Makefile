@@ -14,7 +14,10 @@ DOCKER_VERSION=1.11.2
 all: docker-image
 
 docker-image: ${ROOTFS_TAR}
-	docker build -t ${DOCKER_REPO}:${DEBIAN_SUITE} .
+	docker build \
+		-t ${DOCKER_REPO}:${DEBIAN_SUITE} \
+		--build-arg DEBIAN_SUITE=$(DEBIAN_SUITE) \
+		.
 
 ${ROOTFS_TAR}: builder
 	@# Ensure an old builder isn't sitting around
