@@ -3,7 +3,7 @@ FROM debian:jessie
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y debootstrap
-RUN apt-get install -y xz-utils
+RUN apt-get install -y bzip2
 
 ENV WORKDIR /var/builder
 WORKDIR ${WORKDIR}

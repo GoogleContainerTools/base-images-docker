@@ -37,6 +37,7 @@ build:
 		--volume /var/$(DEBIAN_SUITE) \
 		gae-builder \
 			-d /var/$(DEBIAN_SUITE) \
+			--compression bz2 \
 			debootstrap \
 			--variant=minbase \
 			$(DEBIAN_SUITE)
