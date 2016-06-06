@@ -40,6 +40,7 @@ build:
 			--compression bz2 \
 			debootstrap \
 			--variant=minbase \
-			$(DEBIAN_SUITE)
+			$(DEBIAN_SUITE) \
+			$(DEBIAN_MIRROR)
 	docker cp builder:/var/$(DEBIAN_SUITE) .
 	docker rm --volumes builder
