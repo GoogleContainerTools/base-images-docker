@@ -28,7 +28,11 @@ build:
 		--file builder.Dockerfile .
 	rm -rf $(DEBIAN_SUITE)
 	docker rm builder || true
-	docker run --name builder -it \
+	@# We need to run this container in privileged mode so it can run
+	@# chroot as part of debootstrap
+	docker run \
+		--name builder \
+		-it \
 		--privileged \
 		--volume /var/$(DEBIAN_SUITE) \
 		gae-builder \
