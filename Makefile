@@ -3,7 +3,7 @@ DEBIAN_MIRROR=http://gce_debian_mirror.storage.googleapis.com/
 DOCKER_REPO=google/debian
 ROOTFS_TAR=google-debian-${DEBIAN_SUITE}.tar.bz2
 
-.PHONY: docker-image update-mkimage clean
+.PHONY: docker-image builder clean
 
 all: docker-image
 
@@ -35,7 +35,6 @@ clean:
 	docker rm --volumes builder || true
 	docker rmi gae-builder || true
 
-.PHONY: builder
 builder:  ## Create a builder image for easy generation of base images
 	cd builder && docker build \
 		-t gae-builder \
