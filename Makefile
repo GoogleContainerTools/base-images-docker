@@ -26,7 +26,7 @@ build:
 		-t gae-builder \
 		--build-arg DOCKER_VERSION=1.11.2 \
 		--file builder.Dockerfile .
-	rm -rf $(DEBIAN_SUITE)
+	rm -rf $(DEBIAN_SUITE) || true
 	docker rm builder || true
 	@# We need to run this container in privileged mode so it can run
 	@# chroot as part of debootstrap
@@ -41,3 +41,4 @@ build:
 			--variant=minbase \
 			$(DEBIAN_SUITE)
 	docker cp builder:/var/$(DEBIAN_SUITE) .
+	docker rm --volumes builder
