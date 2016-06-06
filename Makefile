@@ -20,3 +20,22 @@ update-mkimage:
 
 clean:
 	rm -f ${ROOTFS_TAR}
+
+build:
+	cd builder && docker build \
+		-t gae-builder \
+		--build-arg DOCKER_VERSION=1.11.2 \
+		--file builder.Dockerfile .
+	rm -rf $(DEBIAN_SUITE)
+	docker rm builder || true
+	docker run --name builder -it \
+		--privileged \
+		--entrypoint /bin/bash \
+		--volume /var/$(DEBIAN_SUITE) \
+		gae-builder \
+			/var/builder/docker-1.11.2/contrib/mkimage.sh \
+			-d /var/$(DEBIAN_SUITE) \
+			debootstrap \
+			--variant=minbase \
+			$(DEBIAN_SUITE)
+	docker cp builder:/var/$(DEBIAN_SUITE) .
