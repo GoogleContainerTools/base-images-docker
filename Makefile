@@ -4,12 +4,12 @@ DOCKER_REPO=google/debian
 ROOTFS_TAR=google-debian-${DEBIAN_SUITE}.tar.bz2
 
 # Builder image configuration
-BUILDER_ID=google/debian-builder
-BUILDER_NAME=builder
+BUILDER_ID=google/mkdebootstrap
+BUILDER_NAME=mkdebootstrap
 DOCKER_VERSION=1.11.2
 
 
-.PHONY: docker-image builder clean
+.PHONY: docker-image mkdebootstrap clean
 
 all: docker-image
 
@@ -19,11 +19,11 @@ docker-image: ${ROOTFS_TAR}
 		--build-arg DEBIAN_SUITE=$(DEBIAN_SUITE) \
 		.
 
-${ROOTFS_TAR}: builder
-	@# Ensure an old builder isn't sitting around
+${ROOTFS_TAR}: mkdebootstrap
+	@# Ensure an old mkdebootstrap isn't sitting around
 	docker rm --volumes $(BUILDER_NAME) || true
-	@# We need to run the builder in privileged mode so it can run
-	@# chroot as part of debootstrap
+	@# We need to run the mkdebootstrap image in privileged mode so it can
+	@# run chroot as part of debootstrap
 	docker run \
 		--name $(BUILDER_NAME) \
 		-it \
@@ -36,7 +36,7 @@ ${ROOTFS_TAR}: builder
 			--variant=minbase \
 			$(DEBIAN_SUITE) \
 			$(DEBIAN_MIRROR)
-	docker cp builder:/var/$(DEBIAN_SUITE)/rootfs.tar.bz2 $@
+	docker cp ${BUILDER_NAME}:/var/$(DEBIAN_SUITE)/rootfs.tar.bz2 $@
 	docker rm --volumes $(BUILDER_NAME)
 
 clean:
@@ -44,8 +44,10 @@ clean:
 	docker rm --volumes $(BUILDER_NAME) || true
 	docker rmi $(BUILDER_ID) || true
 
-builder:  ## Create a builder image for easy generation of base images
-	cd builder && docker build \
+## Create a builder image for easy generation of debootstrap root filesystem
+## tarballs
+mkdebootstrap:
+	cd mkdebootstrap && docker build \
 		-t $(BUILDER_ID) \
 		--build-arg DOCKER_VERSION=$(DOCKER_VERSION) \
-		--file builder.Dockerfile .
+		.
