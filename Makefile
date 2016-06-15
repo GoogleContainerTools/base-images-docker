@@ -1,4 +1,4 @@
-DEBIAN_SUITE=jessie
+DEBIAN_SUITE=wheezy
 DEBIAN_MIRROR=http://gce_debian_mirror.storage.googleapis.com/
 DOCKER_REPO=google/debian
 ROOTFS_TAR=google-debian-${DEBIAN_SUITE}.tar.bz2
