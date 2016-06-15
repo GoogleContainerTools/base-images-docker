@@ -9,7 +9,7 @@ The image is built using docker's [`mkimage.sh`](https://github.com/docker/docke
 ## Usage
 
 ```
-FROM google/debian:wheezy
+FROM google/debian:jessie
 ```
 
 
