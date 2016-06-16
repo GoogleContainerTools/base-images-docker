@@ -26,7 +26,6 @@ ${ROOTFS_TAR}: mkdebootstrap
 	@# run chroot as part of debootstrap
 	docker run \
 		--name $(BUILDER_NAME) \
-		-it \
 		--privileged \
 		--volume /var/$(DEBIAN_SUITE) \
 		$(BUILDER_ID) \
