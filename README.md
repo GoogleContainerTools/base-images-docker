@@ -1,7 +1,7 @@
 debian-docker
 =============
 
-Source for [`google/debian`](https://index.docker.io/u/google/debian/):
+Source for `gcr.io/google_appengine/debian`:
 a [docker](https://docker.io) image bundling the stable [debian](https://www.debian.org) distribution suite
 
 The image is built using docker's [`mkimage.sh`](https://github.com/docker/docker/blob/master/contrib/mkimage.sh).
