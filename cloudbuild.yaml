@@ -1,0 +1,8 @@
+steps:
+        - name: gcr.io/sharif-test/docker-mkdebootstrap:2016-09-02
+        - name: gcr.io/cloud-builders/docker
+          args:
+                - 'build'
+                - '--tag=gcr.io/sharif-test/debian:2016-09-02'
+                - '.'
+images: ['gcr.io/sharif-test/debian:2016-09-02']
