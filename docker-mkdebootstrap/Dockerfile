@@ -1,4 +1,4 @@
-FROM gcr.io/sharif-test/vanilla-debian:jessie
+FROM debian:jessie
 
 COPY docker /usr/bin/
 COPY docker-mkimage.sh /
