@@ -1,6 +1,7 @@
 #!/bin/bash
-# Temp step to get around Argo not running docker commands in privileged mode.
-# Will be fixed with b/31267381.
+# Cloud build doesn't currently run in privileged mode so this script runs
+# docker inside docker to allow privileged mode so debootstrap can run chroot.
+# Once cloud build allows privileged mode, this script will go away.
 set -e
 set -x
 apiversion=1.21
