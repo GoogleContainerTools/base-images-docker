@@ -1,8 +1,21 @@
 steps:
-        - name: $REPO$/docker-mkdebootstrap:jessie
         - name: gcr.io/cloud-builders/docker
           args:
                 - 'build'
-                - '--tag=$REPO$/debian:$TAG$'
+                - '--tag=%REPO%/mkdebootstrap:%VERSION%'
+                - 'mkdebootstrap/'
+        - name: gcr.io/cloud-builders/docker
+          args:
+                - 'build'
+                - '--tag=%REPO%/docker-mkdebootstrap:%VERSION%'
+                - 'docker-mkdebootstrap'
+        - name: %REPO%/docker-mkdebootstrap:%VERSION%
+          args:
+                - '%REPO%'
+                - '%VERSION%'
+        - name: gcr.io/cloud-builders/docker
+          args:
+                - 'build'
+                - '--tag=%REPO%/debian:%TAG%'
                 - '.'
-images: ['$REPO$/debian:$TAG$']
+images: ['%REPO%/mkdebootstrap:%VERSION%', '%REPO%/docker-mkdebootstrap:%VERSION%', '%REPO%/debian:%TAG%']
