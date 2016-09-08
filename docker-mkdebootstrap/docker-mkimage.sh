@@ -6,7 +6,6 @@ set -e
 set -x
 apiversion=1.21
 export DOCKER_API_VERSION="$apiversion"
-printenv
 REPO=$1
 VERSION=$2
 docker run --name mkdebootstrap --privileged --volume /workspace $REPO/mkdebootstrap:jessie -d /workspace --compression bz2 debootstrap --variant=minbase $VERSION

@@ -7,9 +7,12 @@ steps:
         - name: gcr.io/cloud-builders/docker
           args:
                 - 'build'
-                - '--tag=%REPO%/docker-mkdebootstrap:%VERSION%'
+                - '--tag=docker-mkdebootstrap'
                 - 'docker-mkdebootstrap'
-        - name: %REPO%/docker-mkdebootstrap:%VERSION%
+        # This is an intermediate step in order to run docker in privileged mode.
+        # It just pulls the mkdebootstrap image built just above and runs
+        # debootstrap on it.
+        - name: docker-mkdebootstrap
           args:
                 - '%REPO%'
                 - '%VERSION%'
@@ -18,4 +21,4 @@ steps:
                 - 'build'
                 - '--tag=%REPO%/debian:%TAG%'
                 - '.'
-images: ['%REPO%/mkdebootstrap:%VERSION%', '%REPO%/docker-mkdebootstrap:%VERSION%', '%REPO%/debian:%TAG%']
+images: ['%REPO%/mkdebootstrap:%VERSION%', '%REPO%/debian:%TAG%']
