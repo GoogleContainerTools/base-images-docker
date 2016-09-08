@@ -5,8 +5,8 @@ TAG=$(date +%Y-%m-%d)
 REPO=$1
 VERSION=$2
 
-cp -R third_party/docker/* mkdebootstrap/
-cp -R third_party/docker/* docker-mkdebootstrap/
+cp -R third_party/docker/mkimage* mkdebootstrap/
+cp -R third_party/docker/docker docker-mkdebootstrap/
 
 sed -i "s|%REPO%|$REPO|g" cloudbuild.yaml
 sed -i "s|%TAG%|$TAG|g" cloudbuild.yaml
