@@ -14,6 +14,6 @@ steps:
         - name: gcr.io/cloud-builders/docker
           args:
                 - 'build'
-                - '--tag=%REPO%/debian:%TAG%'
+                - '--tag=%REPO%/debian%NUM%:%TAG%'
                 - '.'
-images: ['%REPO%/mkdebootstrap:%VERSION%', '%REPO%/debian:%TAG%']
+images: ['%REPO%/mkdebootstrap:%VERSION%', '%REPO%/debian%NUM%:%TAG%']
