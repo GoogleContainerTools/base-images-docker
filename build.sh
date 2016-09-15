@@ -5,7 +5,7 @@ TAG=$(date +%Y-%m-%d)
 REPO=$1
 VERSION=$2
 GCLOUD_CMD="gcloud"
-if [ "$3" != "" ]
+if [ -n "$3" ]
 then
   GCLOUD_CMD=$3
 fi
