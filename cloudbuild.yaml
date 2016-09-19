@@ -16,6 +16,7 @@ steps:
                 - 'debootstrap'
                 - '--variant=minbase'
                 - '%VERSION%'
+                - 'http://httpredir.debian.org/debian'
         - name: gcr.io/cloud-builders/docker
           args:
                 - 'build'
