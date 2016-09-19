@@ -13,6 +13,9 @@ fi
 if [ "$VERSION" == "jessie" ]
 then
   VERSION_NUMBER=8
+else
+  echo "Invalid version $VERSION"
+  exit 1
 fi
 
 cp -R third_party/docker/mkimage* mkdebootstrap/
