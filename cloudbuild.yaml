@@ -1,25 +1,25 @@
 # All items surrounded by %% are variables to be replaced with real values.
-# gcr.io/google-appengine: The repository to push debian to, e.g. gcr.io/myproject
-# 2016-09-19: What the tag the image with, e.g. latest
-# jessie: The version of debian to build, e.g. jessie
-# 8: The version number associated with the jessie string, e.g. 8 for jessie
+# %REPO%: The repository to push debian to, e.g. gcr.io/myproject
+# %TAG%: What the tag the image with, e.g. latest
+# %VERSION%: The version of debian to build, e.g. %VERSION%
+# 8: The version number associated with the %VERSION% string, e.g. 8 for %VERSION%
 steps:
         - name: gcr.io/cloud-builders/docker
           args:
                 - 'build'
-                - '--tag=gcr.io/google-appengine/mkdebootstrap:jessie'
+                - '--tag=%REPO%/mkdebootstrap:%VERSION%'
                 - 'mkdebootstrap/'
-        - name: gcr.io/google-appengine/mkdebootstrap:jessie
+        - name: %REPO%/mkdebootstrap:%VERSION%
           args:
                 - '-d'
                 - '/workspace'
                 - 'debootstrap'
                 - '--variant=minbase'
-                - 'jessie'
+                - '%VERSION%'
                 - 'http://httpredir.debian.org/debian'
         - name: gcr.io/cloud-builders/docker
           args:
                 - 'build'
-                - '--tag=gcr.io/google-appengine/debian8:2016-09-19'
+                - '--tag=%REPO%/debian%NUM%:%TAG%'
                 - '.'
-images: ['gcr.io/google-appengine/mkdebootstrap:jessie', 'gcr.io/google-appengine/debian8:2016-09-19']
+images: ['%REPO%/mkdebootstrap:%VERSION%', '%REPO%/debian%NUM%:%TAG%']
