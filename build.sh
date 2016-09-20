@@ -21,5 +21,5 @@ fi
 
 cp -R third_party/docker/mkimage* mkdebootstrap/
 
-envsubst '${REPO} ${TAG} ${VERSION} ${VERSION_NUMBER}' <cloudbuild.yaml >cloudbuild.yaml.out
-$GCLOUD_CMD alpha container builds create . --config=cloudbuild.yaml.out --verbosity=info --gcs-source-staging-dir=gs://$BUCKET/staging --gcs-log-dir=gs://$BUCKET/logs
+envsubst '${REPO} ${TAG} ${VERSION} ${VERSION_NUMBER}' <cloudbuild.yaml.in >cloudbuild.yaml
+$GCLOUD_CMD alpha container builds create . --config=cloudbuild.yaml --verbosity=info --gcs-source-staging-dir=gs://$BUCKET/staging --gcs-log-dir=gs://$BUCKET/logs
