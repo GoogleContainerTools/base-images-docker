@@ -89,11 +89,11 @@ touch "$tarFile"
 	tar --numeric-owner --create --auto-compress --file "$tarFile" --directory "$rootfsDir" --transform='s,^./,,' .
 )
 
-echo >&2 "+ cat > '$dir/Dockerfile'"
-cat > "$dir/Dockerfile" <<EOF
-FROM scratch
-ADD $(basename "$tarFile") /
-EOF
+#echo >&2 "+ cat > '$dir/Dockerfile'"
+#cat > "$dir/Dockerfile" <<EOF
+#FROM scratch
+#ADD $(basename "$tarFile") /
+#EOF
 
 # if our generated image has a decent shell, let's set a default command
 for shell in /bin/bash /usr/bin/fish /usr/bin/zsh /bin/sh; do
