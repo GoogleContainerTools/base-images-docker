@@ -1,13 +1,13 @@
 package tests
 
 import (
-	"testing"
 	"io/ioutil"
-	"os"
 	"os/exec"
-	"bufio"
+	"strings"
+	"testing"
 )
 
+// Run ls on the root directory to make sure the filesystem was created properly
 func TestDebianIsUp(t *testing.T) {
 	output, err := ioutil.ReadDir("/")
 	if err != nil {
@@ -25,18 +25,15 @@ func TestCanRunAptGet(t *testing.T) {
 }
 
 func TestHasCorrectMirror(t *testing.T) {
-	file, err := os.Open("/etc/apt/sources.list")
+	filename := "/etc/apt/sources.list"
+	expected := `deb http://httpredir.debian.org/debian jessie main
+deb http://httpredir.debian.org/debian jessie-updates main
+deb http://security.debian.org jessie/updates main`
+	actual, err := ioutil.ReadFile(filename)
 	if err != nil {
-		t.Fatalf("Cannot open sources.list. Error: %s.", err)
+		t.Fatalf("Failed to open %s. Error: %s", filename, err)
 	}
-	defer file.Close()
-	sources := [3]string{"deb http://httpredir.debian.org/debian jessie main", "deb http://httpredir.debian.org/debian jessie-updates main", "deb http://security.debian.org jessie/updates main"}
-	scanner := bufio.NewScanner(file)
-	i := 0
-	for scanner.Scan() {
-		if scanner.Text() != sources[i] {
-			t.Fatalf("Sources.list is inaccurate. Line: %s. Expected: %s.", scanner.Text(), sources[i])
-		}
-		i++
+	if strings.TrimSpace(expected) != strings.TrimSpace(string(actual[:])) {
+		t.Fatalf("Sources.list is incorrect. List:\n %s Expected:\n %s", string(actual[:]), expected)
 	}
 }
