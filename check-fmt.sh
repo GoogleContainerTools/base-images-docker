@@ -6,7 +6,7 @@ if [[ $files ]]; then
     exit 1
 fi
 echo "Checking go vet..."
-files=$(govet ./tests)
+files=$(go vet ./tests)
 if [[ $files ]]; then
    echo "Go vet errors in files: $files"
    exit 1
