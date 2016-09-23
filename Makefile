@@ -50,3 +50,6 @@ mkdebootstrap:
 		-t $(BUILDER_ID) \
 		--build-arg DOCKER_VERSION=$(DOCKER_VERSION) \
 		.
+
+test:
+	./test.sh
