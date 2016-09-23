@@ -52,4 +52,4 @@ mkdebootstrap:
 		.
 
 test:
-	./test.sh
+	./check-fmt.sh

@@ -1,0 +1,18 @@
+# All items surrounded by ${} are variables to be replaced with real values.
+# ${REPO}: The repository to push debian to, e.g. gcr.io/myproject
+# ${TAG}: What the tag the image with, e.g. latest
+# ${VERSION}: The version of debian to build, e.g. jessie
+# ${VERSION_NUMBER}: The version number associated with the ${VERSION} string, e.g. 8 for jessie
+steps:
+        - name: gcr.io/cloud-builders/go
+          args:
+                - 'test'
+                - '-c'
+                - 'tests/debian_test.go'
+                - '-o'
+                - '/workspace/tests.test'
+          env:
+                - 'PROJECT_ROOT=tests'
+        - name: ${REPO}/debian${VERSION_NUMBER}:${TAG}
+          args:
+                - '/workspace/tests.test'
