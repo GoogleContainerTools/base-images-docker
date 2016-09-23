@@ -4,6 +4,11 @@
 # ${VERSION}: The version of debian to build, e.g. jessie
 # ${VERSION_NUMBER}: The version number associated with the ${VERSION} string, e.g. 8 for jessie
 steps:
+        - name: gcr.io/gcp-runtimes/check_if_tag_exists:latest
+          args:
+                - 'python'
+                - '/main.py'
+                - '--image=${REPO}/debian${VERSION_NUMBER}:${TAG}'
         - name: gcr.io/cloud-builders/docker
           args:
                 - 'build'
