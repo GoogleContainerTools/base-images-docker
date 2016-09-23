@@ -1,0 +1,14 @@
+# See cloudbuild.yaml.in for the meaning of the variables
+steps:
+        - name: gcr.io/cloud-builders/go
+          args:
+                - 'test'
+                - '-c'
+                - 'tests/debian_test.go'
+                - '-o'
+                - '/workspace/tests.test'
+          env:
+                - 'PROJECT_ROOT=tests'
+        - name: ${REPO}/debian${VERSION_NUMBER}:${TAG}
+          args:
+                - '/workspace/tests.test'
