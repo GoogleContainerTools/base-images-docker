@@ -5,7 +5,7 @@ steps:
           args:
                 - 'test'
                 - '-c'
-                - '${TEST_SUITE}
+                - '${TEST_SUITE}'
                 - '-o'
                 - '/workspace/tests.test'
           env:
