@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 set -x
-if [ -z $TAG ]
+if [ -z "$TAG" ]
 then
   export TAG=$(date +%Y-%m-%d)
 fi
