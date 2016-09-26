@@ -1,10 +1,11 @@
 # See cloudbuild.yaml.in for the meaning of the variables
+# ${TEST_SUITE} is the Go test file you want to run.
 steps:
         - name: gcr.io/cloud-builders/go
           args:
                 - 'test'
                 - '-c'
-                - 'tests/debian_test.go'
+                - '${TEST_SUITE}
                 - '-o'
                 - '/workspace/tests.test'
           env:
