@@ -1,7 +1,10 @@
 #!/bin/bash
 set -e
 set -x
-export TAG=$(date +%Y-%m-%d)
+if [ -z "$TAG" ]
+then
+  export TAG=$(date +%Y-%m-%d)
+fi
 export REPO=$1
 export VERSION=$2
 export BUCKET=$3
