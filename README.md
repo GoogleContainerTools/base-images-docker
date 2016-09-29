@@ -9,7 +9,7 @@ The image is built using docker's [`mkimage.sh`](https://github.com/docker/docke
 ## Usage
 
 ```
-FROM google/debian:jessie
+FROM gcr.io/google-appengine/debian8:latest
 ```
 
 
@@ -22,5 +22,3 @@ bzipped tarball which results is then used to create a bare debian docker image.
 ```
 # Generate the jessie image
 make all DEBIAN_SUITE=jessie
-# Generate the wheezy image
-make all DEBIAN_SUITE=wheezy
