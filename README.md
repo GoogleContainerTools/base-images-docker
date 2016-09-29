@@ -22,5 +22,3 @@ bzipped tarball which results is then used to create a bare debian docker image.
 ```
 # Generate the jessie image
 make all DEBIAN_SUITE=jessie
-# Generate the wheezy image
-make all DEBIAN_SUITE=wheezy
