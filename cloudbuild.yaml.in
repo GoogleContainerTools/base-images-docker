@@ -27,4 +27,7 @@ steps:
                 - 'build'
                 - '--tag=${REPO}/debian${VERSION_NUMBER}:${TAG}'
                 - '.'
+        - name: gcr.io/gcp-runtimes/structure_test
+          args:
+                - '${REPO}/debian${VERSION_NUMBER}:${TAG}'
 images: ['${REPO}/mkdebootstrap:${VERSION}', '${REPO}/debian${VERSION_NUMBER}:${TAG}']

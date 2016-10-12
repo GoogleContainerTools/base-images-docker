@@ -1,0 +1,48 @@
+{
+	"commands": [
+		{
+			"name": "apt-get",
+			"command": "apt-get",
+			"flags": "help",
+			"expectedOutput": [".*Usage.*"],
+			"excludedError": [".*FAIL.*"]
+		},
+		{
+			"name": "apt-get update",
+			"command": "apt-get",
+			"flags": "-qq update",
+			"expectedOutput": [""]
+		},
+		{
+			"name": "apt-get upgrade",
+			"command": "apt-get",
+			"flags": "-qqs upgrade",
+			"expectedOutput": [""]
+		}
+	],
+	"file_existence": [
+		{
+			"name": "Root",
+			"path": "/",
+			"isDirectory": true,
+			"shouldExist": true
+		},{
+			"name": "Fake file",
+			"path": "/foo/bar",
+			"isDirectory": false,
+			"shouldExist": false
+		}
+	],
+	"file_contents": [
+		{
+			"name": "Debian Sources",
+			"path": "/etc/apt/sources.list",
+			"expectedContents": [
+				".*httpredir\\.debian\\.org.*"
+			],
+			"excludedContents": [
+				".*gce_debian_mirror.*"
+			]
+		}
+	]
+}
