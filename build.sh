@@ -3,7 +3,8 @@ set -e
 set -x
 if [ -z "$TAG" ]
 then
-  export TAG=$(date +%Y-%m-%d)
+  TAG=$(date +%Y-%m-%d)
+  export TAG
 fi
 export REPO=$1
 export VERSION=$2
@@ -24,5 +25,5 @@ fi
 
 cp -R third_party/docker/mkimage* mkdebootstrap/
 
-envsubst '${REPO} ${TAG} ${VERSION} ${VERSION_NUMBER}' <cloudbuild.yaml.in >cloudbuild.yaml
-$GCLOUD_CMD alpha container builds create . --config=cloudbuild.yaml --verbosity=info --gcs-source-staging-dir=gs://$BUCKET/staging --gcs-log-dir=gs://$BUCKET/logs
+envsubst <cloudbuild.yaml.in >cloudbuild.yaml
+$GCLOUD_CMD alpha container builds create . --config=cloudbuild.yaml --verbosity=info --gcs-source-staging-dir="gs://$BUCKET/staging" --gcs-log-dir="gs://$BUCKET/logs"
