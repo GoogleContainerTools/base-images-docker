@@ -20,5 +20,5 @@ else
   exit 1
 fi
 
-envsubst '${REPO} ${TAG} ${TEST_SUITE} ${VERSION_NUMBER}' <cloudbuild_test.yaml.in >cloudbuild_test.yaml
-$GCLOUD_CMD alpha container builds create . --config=cloudbuild_test.yaml --verbosity=info --gcs-source-staging-dir=gs://$BUCKET/staging --gcs-log-dir=gs://$BUCKET/logs
+envsubst <cloudbuild_test.yaml.in >cloudbuild_test.yaml
+$GCLOUD_CMD alpha container builds create . --config=cloudbuild_test.yaml --verbosity=info --gcs-source-staging-dir="gs://$BUCKET/staging" --gcs-log-dir="gs://$BUCKET/logs"

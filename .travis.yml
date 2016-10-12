@@ -1,4 +1,14 @@
 language: go
 go: 1.7.1 
 install: true
-script: make test
+
+addons:
+  apt:
+    sources:
+    - debian-sid    # Grab shellcheck from the Debian repo (o_O)
+    packages:
+    - shellcheck
+
+script:
+ - find . -name "*.sh" | grep -v "third_party/" | xargs shellcheck
+ - make test
