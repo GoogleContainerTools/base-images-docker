@@ -17,7 +17,8 @@
 			"name": "apt-get upgrade",
 			"command": "apt-get",
 			"flags": "-qqs upgrade",
-			"expectedOutput": [""]
+			"excludedOutput": [".*Inst.*Security.* | .*Security.*Inst.*"],
+			"excludedError": [".*Inst.*Security.* | .*Security.*Inst.*"]
 		}
 	],
 	"file_existence": [
