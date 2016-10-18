@@ -1,0 +1,19 @@
+{
+	"commands": [
+		{
+			"name": "apt-get update",
+			"command": "apt-get",
+			"flags": "-qq update",
+			"expectedOutput": [""]
+		},
+		{
+			"name": "apt-get upgrade",
+			"command": "apt-get",
+			"flags": "-qqs upgrade",
+			"excludedOutput": [".*Inst.*Security.* | .*Security.*Inst.*"],
+			"excludedError": [".*Inst.*Security.* | .*Security.*Inst.*"]
+		}
+	],
+	"file_existence": [],
+	"file_contents": []
+}
