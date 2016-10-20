@@ -1,15 +1,9 @@
 {
 	"commands": [
 		{
-			"name": "apt-get update",
-			"command": "apt-get",
-			"flags": "-qq update",
-			"expectedOutput": [""]
-		},
-		{
-			"name": "apt-get upgrade",
-			"command": "apt-get",
-			"flags": "-qqs upgrade",
+			"name": "apt-get update and upgrade",
+			"command": "sh",
+			"flags": "apt-get -qq update && apt-get -qqs upgrade",
 			"excludedOutput": [".*Inst.*Security.* | .*Security.*Inst.*"],
 			"excludedError": [".*Inst.*Security.* | .*Security.*Inst.*"]
 		}

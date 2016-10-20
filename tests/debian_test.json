@@ -14,11 +14,6 @@
 			"path": "/",
 			"isDirectory": true,
 			"shouldExist": true
-		},{
-			"name": "Fake file",
-			"path": "/foo/bar",
-			"isDirectory": false,
-			"shouldExist": false
 		}
 	],
 	"file_contents": [

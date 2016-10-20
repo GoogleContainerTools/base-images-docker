@@ -4,7 +4,7 @@
 # ${VERSION}: The version of debian to build, e.g. jessie
 # ${VERSION_NUMBER}: The version number associated with the ${VERSION} string, e.g. 8 for jessie
 steps:
-        - name: gcr.io/gcp-runtimes/check_if_tag_exists:latest
+        - name: gcr.io/gcp-runtimes/check_if_tag_exists
           args:
                 - 'python'
                 - '/main.py'
@@ -27,6 +27,6 @@ steps:
                 - 'build'
                 - '--tag=${REPO}/debian${VERSION_NUMBER}:${TAG}'
                 - '.'
-        - name: gcr.io/gcp-runtimes/structure_test:config
+        - name: gcr.io/gcp-runtimes/structure_test
           args: ['--image', '${REPO}/debian${VERSION_NUMBER}:${TAG}', '--config', 'tests/debian_test.json', '--config', 'test/security_test.json']
 images: ['${REPO}/mkdebootstrap:${VERSION}', '${REPO}/debian${VERSION_NUMBER}:${TAG}']
