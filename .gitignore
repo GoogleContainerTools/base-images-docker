@@ -1,3 +1,5 @@
 *~
 cloudbuild.yaml
 cloudbuild_test.yaml
+mkdebootstrap/mkimage.sh
+mkdebootstrap/mkimage/

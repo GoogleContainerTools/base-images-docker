@@ -1,0 +1,31 @@
+{
+	"commands": [
+		{
+			"name": "apt-get",
+			"command": "apt-get",
+			"flags": "help",
+			"expectedOutput": [".*Usage.*"],
+			"excludedError": [".*FAIL.*"]
+		}
+	],
+	"file_existence": [
+		{
+			"name": "Root",
+			"path": "/",
+			"isDirectory": true,
+			"shouldExist": true
+		}
+	],
+	"file_contents": [
+		{
+			"name": "Debian Sources",
+			"path": "/etc/apt/sources.list",
+			"expectedContents": [
+				".*httpredir\\.debian\\.org.*"
+			],
+			"excludedContents": [
+				".*gce_debian_mirror.*"
+			]
+		}
+	]
+}

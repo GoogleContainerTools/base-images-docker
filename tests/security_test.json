@@ -1,0 +1,13 @@
+{
+	"commands": [
+		{
+			"name": "apt-get update and upgrade",
+			"command": "sh",
+			"flags": "-c apt-get -qq update && apt-get -qqs upgrade",
+			"excludedOutput": [".*Inst.*Security.* | .*Security.*Inst.*"],
+			"excludedError": [".*Inst.*Security.* | .*Security.*Inst.*"]
+		}
+	],
+	"file_existence": [],
+	"file_contents": []
+}
