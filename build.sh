@@ -1,18 +1,67 @@
 #!/bin/bash
+
+usage() {
+	echo "Usage: $0 [-r repository] [-v version] [-b bucket] [-c command]"
+	echo
+	echo "[repository]: remote repository to push the debian image to (e.g. 'gcr.io/gcp-runtimes/debian')"
+	echo "[version]: version of debian to build (e.g. 'jessie')"
+	echo "[bucket]: GCS bucket to push staging images"
+	echo "[command]: optional gcloud command"
+	echo
+	exit 1
+}
+
 set -e
-set -x
 if [ -z "$TAG" ]
 then
   TAG=$(date +%Y-%m-%d)
   export TAG
 fi
-export REPO=$1
-export VERSION=$2
-export BUCKET=$3
+
 GCLOUD_CMD="gcloud"
-if [ -n "$4" ]
-then
-  GCLOUD_CMD=$4
+
+while test $# -gt 0; do
+	case "$1" in
+		--repo|--repository|-r)
+			shift
+			if test $# -gt 0; then
+				export REPO=$1
+			else
+				usage
+			fi
+			shift
+			;;
+		--version|-v)
+			shift
+			export VERSION=$1
+			;;
+		--bucket|-b)
+			shift
+			if test $# -gt 0; then
+				export BUCKET=$1
+			else
+				usage
+			fi
+			shift
+			;;
+		--command|-c)
+			shift
+			if test $# -gt 0; then
+				GCLOUD_CMD=$1
+			else
+				usage
+			fi
+			;;
+		*)
+			echo "Usage: $0 -i <image> [-c <config>] [-v]"
+			exit 1
+			shift
+			;;
+	esac
+done
+
+if [ -z "$REPO" ] || [ -z "$VERSION" ] || [ -z "$BUCKET" ]; then
+	usage
 fi
 
 if [ "$VERSION" == "jessie" ]
@@ -20,10 +69,10 @@ then
   export VERSION_NUMBER=8
 else
   echo "Invalid version $VERSION"
-  exit 1
+  usage
 fi
 
 cp -R third_party/docker/mkimage* mkdebootstrap/
 
-envsubst <cloudbuild.yaml.in >cloudbuild.yaml
+envsubst < cloudbuild.yaml.in > cloudbuild.yaml
 $GCLOUD_CMD alpha container builds create . --config=cloudbuild.yaml --verbosity=info --gcs-source-staging-dir="gs://$BUCKET/staging" --gcs-log-dir="gs://$BUCKET/logs"
