@@ -1,14 +1,14 @@
 #!/bin/bash
 
 usage() {
-	echo "Usage: $0 [-r repository] [-v version] [-b bucket] [-c command]"
-	echo
-	echo "[repository]: remote repository to push the debian image to (e.g. 'gcr.io/gcp-runtimes/debian')"
-	echo "[version]: version of debian to build (e.g. 'jessie')"
-	echo "[bucket]: GCS bucket to push staging images"
-	echo "[command]: optional gcloud command"
-	echo
-	exit 1
+  echo "Usage: $0 [-r repository] [-v version] [-b bucket] [-c command]"
+  echo
+  echo "[repository]: remote repository to push the debian image to (e.g. 'gcr.io/gcp-runtimes/debian')"
+  echo "[version]: version of debian to build (e.g. 'jessie')"
+  echo "[bucket]: GCS bucket to push staging images"
+  echo "[command]: optional gcloud command"
+  echo
+  exit 1
 }
 
 set -e
@@ -21,47 +21,51 @@ fi
 GCLOUD_CMD="gcloud"
 
 while test $# -gt 0; do
-	case "$1" in
-		--repo|--repository|-r)
-			shift
-			if test $# -gt 0; then
-				export REPO=$1
-			else
-				usage
-			fi
-			shift
-			;;
-		--version|-v)
-			shift
-			export VERSION=$1
-			;;
-		--bucket|-b)
-			shift
-			if test $# -gt 0; then
-				export BUCKET=$1
-			else
-				usage
-			fi
-			shift
-			;;
-		--command|-c)
-			shift
-			if test $# -gt 0; then
-				GCLOUD_CMD=$1
-			else
-				usage
-			fi
-			;;
-		*)
-			echo "Usage: $0 -i <image> [-c <config>] [-v]"
-			exit 1
-			shift
-			;;
-	esac
+  case "$1" in
+          --repo|--repository|-r)
+                  shift
+                  if test $# -gt 0; then
+                          export REPO=$1
+                  else
+                          usage
+                  fi
+                  shift
+                  ;;
+          --version|-v)
+                  shift
+                  if test $# -gt 0; then
+                          export VERSION=$1
+                  else
+                        usage
+                  fi
+                  shift
+                  ;;
+          --bucket|-b)
+                  shift
+                  if test $# -gt 0; then
+                          export BUCKET=$1
+                  else
+                          usage
+                  fi
+                  shift
+                  ;;
+          --command|-c)
+                  shift
+                  if test $# -gt 0; then
+                          GCLOUD_CMD=$1
+                  else
+                          usage
+                  fi
+                  ;;
+          *)
+                  usage
+                  shift
+                  ;;
+  esac
 done
 
 if [ -z "$REPO" ] || [ -z "$VERSION" ] || [ -z "$BUCKET" ]; then
-	usage
+  usage
 fi
 
 if [ "$VERSION" == "jessie" ]
