@@ -11,7 +11,7 @@ usage() {
   exit 1
 }
 
-set -e
+set -ex
 if [ -z "$TAG" ]
 then
   TAG=$(date +%Y-%m-%d)
@@ -56,6 +56,7 @@ while test $# -gt 0; do
                   else
                           usage
                   fi
+                  shift
                   ;;
           *)
                   usage
