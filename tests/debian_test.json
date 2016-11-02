@@ -7,6 +7,12 @@
 			"flags": ["help"],
 			"expectedOutput": [".*Usage.*"],
 			"excludedError": [".*FAIL.*"]
+		},
+		{
+			"name": "apt-config",
+			"command": "apt-config",
+			"flags": ["dump"],
+			"expectedOutput": ["Acquire::Retries \"3\""]
 		}
 	],
 	"fileExistenceTests": [
@@ -26,6 +32,13 @@
 			],
 			"excludedContents": [
 				".*gce_debian_mirror.*"
+			]
+		},
+		{
+			"name": "Retry Policy",
+			"path": "/etc/apt/apt.conf.d/apt-retry",
+			"expectedContents": [
+				"Acquire::Retries 3;"
 			]
 		}
 	]

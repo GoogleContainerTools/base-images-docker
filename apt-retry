@@ -1,0 +1,2 @@
+# Retry apt failures 3 times. See here for more information: https://linux.die.net/man/5/apt.conf
+Acquire::Retries 3;
