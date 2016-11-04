@@ -9,6 +9,6 @@
 			"excludedError": [".*Inst.*Security.* | .*Security.*Inst.*"]
 		}
 	],
-	"file_existence": [],
-	"file_contents": []
+	"fileExistenceTests": [],
+	"filecontentTests": []
 }

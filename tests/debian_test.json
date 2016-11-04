@@ -9,7 +9,7 @@
 			"excludedError": [".*FAIL.*"]
 		}
 	],
-	"file_existence": [
+	"fileExistenceTests": [
 		{
 			"name": "Root",
 			"path": "/",
@@ -17,12 +17,12 @@
 			"shouldExist": true
 		}
 	],
-	"file_contents": [
+	"fileContentTests": [
 		{
 			"name": "Debian Sources",
 			"path": "/etc/apt/sources.list",
 			"expectedContents": [
-				".*httpredir\\hkjldffdkjlhdfg.*"
+				".*httpredir\\.debian\\.org.*"
 			],
 			"excludedContents": [
 				".*gce_debian_mirror.*"
