@@ -1,10 +1,10 @@
 {
 	"schemaVersion": "1.0.0",
-	"commands": [
+	"commandTests": [
 		{
 			"name": "apt-get",
 			"command": "apt-get",
-			"flags": "help",
+			"flags": ["help"],
 			"expectedOutput": [".*Usage.*"],
 			"excludedError": [".*FAIL.*"]
 		}
@@ -22,7 +22,7 @@
 			"name": "Debian Sources",
 			"path": "/etc/apt/sources.list",
 			"expectedContents": [
-				".*httpredir\\.debian\\.org.*"
+				".*httpredir\\hkjldffdkjlhdfg.*"
 			],
 			"excludedContents": [
 				".*gce_debian_mirror.*"
