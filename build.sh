@@ -14,7 +14,7 @@ usage() {
 set -ex
 if [ -z "$TAG" ]
 then
-  TAG=$(date +%Y-%m-%d-%H:%M:%S)
+  TAG=$(date +%Y-%m-%d-%H%M%S)
   export TAG
 fi
 
