@@ -3,8 +3,7 @@
 	"commandTests": [
 		{
 			"name": "apt-get",
-			"command": "apt-get",
-			"flags": ["help"],
+			"command": ["apt-get", "help"],
 			"expectedOutput": [".*Usage.*"],
 			"excludedError": [".*FAIL.*"]
 		},

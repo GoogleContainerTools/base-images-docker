@@ -3,8 +3,7 @@
 	"commandTests": [
 		{
 			"name": "apt-get update and upgrade",
-			"command": "sh",
-			"flags": ["-c", "apt-get -qq update && apt-get -qqs upgrade"],
+			"command": ["sh", "-c", "apt-get -qq update && apt-get -qqs upgrade"],
 			"excludedOutput": [".*Inst.*Security.* | .*Security.*Inst.*"],
 			"excludedError": [".*Inst.*Security.* | .*Security.*Inst.*"]
 		}
