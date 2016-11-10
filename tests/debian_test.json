@@ -9,8 +9,7 @@
 		},
 		{
 			"name": "apt-config",
-			"command": "apt-config",
-			"flags": ["dump"],
+			"command": ["apt-config","dump"],
 			"expectedOutput": ["Acquire::Retries \"3\""]
 		}
 	],
