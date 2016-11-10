@@ -3,15 +3,13 @@
 	"commandTests": [
 		{
 			"name": "apt-get",
-			"command": "apt-get",
-			"flags": ["help"],
+			"command": ["apt-get", "help"],
 			"expectedOutput": [".*Usage.*"],
 			"excludedError": [".*FAIL.*"]
 		},
 		{
 			"name": "apt-config",
-			"command": "apt-config",
-			"flags": ["dump"],
+			"command": ["apt-config","dump"],
 			"expectedOutput": ["Acquire::Retries \"3\""]
 		}
 	],
