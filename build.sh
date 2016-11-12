@@ -17,8 +17,6 @@ then
   export TAG
 fi
 
-GCLOUD_CMD="gcloud"
-
 while test $# -gt 0; do
   case "$1" in
           --repo|--repository|-r)
