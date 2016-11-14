@@ -6,7 +6,6 @@ usage() {
   echo "[repository]: remote repository to push the debian image to (e.g. 'gcr.io/gcp-runtimes/debian')"
   echo "[version]: version of debian to build (e.g. 'jessie')"
   echo "[bucket]: GCS bucket to push staging images"
-  echo "[command]: optional gcloud command"
   echo
   exit 1
 }
@@ -17,8 +16,6 @@ then
   TAG=$(date +%Y-%m-%d-%H%M%S)
   export TAG
 fi
-
-GCLOUD_CMD="gcloud"
 
 while test $# -gt 0; do
   case "$1" in
@@ -44,15 +41,6 @@ while test $# -gt 0; do
                   shift
                   if test $# -gt 0; then
                           export BUCKET=$1
-                  else
-                          usage
-                  fi
-                  shift
-                  ;;
-          --command|-c)
-                  shift
-                  if test $# -gt 0; then
-                          GCLOUD_CMD=$1
                   else
                           usage
                   fi
@@ -84,4 +72,4 @@ cp -R third_party/docker/mkimage* mkdebootstrap/
 
 envsubst < cloudbuild.yaml.in > cloudbuild.yaml
 envsubst < mkdebootstrap/Dockerfile.in > mkdebootstrap/Dockerfile
-$GCLOUD_CMD alpha container builds create . --config=cloudbuild.yaml --verbosity=info --gcs-source-staging-dir="gs://$BUCKET/staging" --gcs-log-dir="gs://$BUCKET/logs"
+gcloud beta container builds submit . --config=cloudbuild.yaml --verbosity=info --gcs-source-staging-dir="gs://$BUCKET/staging" --gcs-log-dir="gs://$BUCKET/logs"
