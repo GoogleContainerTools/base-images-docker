@@ -82,6 +82,6 @@ fi
 
 cp -R third_party/docker/mkimage* mkdebootstrap/
 
-envsubst < $CONFIG.in > $CONFIG
+envsubst < "$CONFIG".in > "$CONFIG"
 envsubst < mkdebootstrap/Dockerfile.in > mkdebootstrap/Dockerfile
-gcloud beta container builds submit . --config=$CONFIG --verbosity=info --gcs-source-staging-dir="gs://$BUCKET/staging" --gcs-log-dir="gs://$BUCKET/logs"
+gcloud beta container builds submit . --config="$CONFIG" --verbosity=info --gcs-source-staging-dir="gs://$BUCKET/staging" --gcs-log-dir="gs://$BUCKET/logs"
