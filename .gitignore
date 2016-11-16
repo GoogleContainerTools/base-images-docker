@@ -1,6 +1,6 @@
 *~
 cloudbuild.yaml
-cloudbuild_test.yaml
+cloudbuild_securitytest.yaml
 mkdebootstrap/mkimage.sh
 mkdebootstrap/mkimage/
 mkdebootstrap/Dockerfile
