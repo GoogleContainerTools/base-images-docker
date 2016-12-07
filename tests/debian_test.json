@@ -40,5 +40,10 @@
 			]
 		}
 	],
-	"licenseTests": []
+	"licenseTests": [
+		{
+			"debian": true,
+			"files": []
+		}
+	]
 }
