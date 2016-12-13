@@ -6,8 +6,6 @@
 steps:
         - name: gcr.io/gcp-runtimes/check_if_tag_exists
           args:
-                - 'python'
-                - '/main.py'
                 - '--image=${REPO}/debian${VERSION_NUMBER}:${TAG}'
         - name: gcr.io/cloud-builders/docker
           args:
