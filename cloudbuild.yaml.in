@@ -6,13 +6,12 @@
 steps:
         - name: gcr.io/gcp-runtimes/check_if_tag_exists
           args:
-                - 'python'
-                - '/main.py'
                 - '--image=${REPO}/debian${VERSION_NUMBER}:${TAG}'
         - name: gcr.io/cloud-builders/docker
           args:
                 - 'build'
                 - '--tag=${REPO}/mkdebootstrap:${VERSION}'
+                - '--no-cache'
                 - 'mkdebootstrap/'
         - name: ${REPO}/mkdebootstrap:${VERSION}
           args:
@@ -26,6 +25,7 @@ steps:
           args:
                 - 'build'
                 - '--tag=${REPO}/debian${VERSION_NUMBER}:${TAG}'
+                - '--no-cache'
                 - '.'
         - name: gcr.io/gcp-runtimes/structure_test
           args: [
