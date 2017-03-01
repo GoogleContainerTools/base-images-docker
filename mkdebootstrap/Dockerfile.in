@@ -1,4 +1,4 @@
-FROM debian:$VERSION
+FROM gcr.io/gcp-runtimes/vanilla-debian:$VERSION
 
 RUN apt-get update && \
 	apt-get install -y debootstrap xz-utils
