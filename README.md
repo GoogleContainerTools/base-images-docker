@@ -6,19 +6,14 @@ a [docker](https://docker.io) image bundling the stable [debian](https://www.deb
 
 The image is built using docker's [`mkimage.sh`](https://github.com/docker/docker/blob/master/contrib/mkimage.sh).
 
+For details on how to contribute to this image, see our [contribution guidelines](CONTRIB.md).
+
 ## Usage
 
-```
-FROM gcr.io/google-appengine/debian8:latest 
-```
-
-
-## Build
-
-`make all` will generate the builder image and create a fresh debootstrap rootfs
-for the debian version specified by `DEBIAN_SUITE` (defaults to jessie). The
-bzipped tarball which results is then used to create a bare debian docker image.
+To use this image in your application, create a Dockerfile that starts with this FROM line:
 
 ```
-# Generate the jessie image
-make all DEBIAN_SUITE=jessie
+FROM gcr.io/google-appengine/debian8:latest
+```
+
+Then add in any necessary build steps to install packages and your code.
