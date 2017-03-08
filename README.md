@@ -1,7 +1,7 @@
 debian-docker
 =============
 
-Source for `gcr.io/google_appengine/debian`:
+Source for `l.gcr.io/google/debian8` and `gcr.io/google-appengine/debian8`:
 a [docker](https://docker.io) image bundling the stable [debian](https://www.debian.org) distribution suite
 
 The image is built using docker's [`mkimage.sh`](https://github.com/docker/docker/blob/master/contrib/mkimage.sh).
@@ -9,7 +9,7 @@ The image is built using docker's [`mkimage.sh`](https://github.com/docker/docke
 ## Usage
 
 ```
-FROM gcr.io/google-appengine/debian8:latest 
+FROM l.gcr.io/google/debian8:latest
 ```
 
 
