@@ -1,8 +1,9 @@
 debian-docker
 =============
 
-Source for `gcr.io/google_appengine/debian`:
-a [docker](https://docker.io) image bundling the stable [debian](https://www.debian.org) distribution suite
+Source for the Google-maintained Debian container image: a [docker](https://docker.io) image bundling the stable [debian](https://www.debian.org) distribution suite.
+
+This image is available at `launcher.gcr.io/google/debian8` and `gcr.io/google-appengine/debian8`.
 
 The image is built using docker's [`mkimage.sh`](https://github.com/docker/docker/blob/master/contrib/mkimage.sh).
 
@@ -13,7 +14,7 @@ For details on how to contribute to this image, see our [contribution guidelines
 To use this image in your application, create a Dockerfile that starts with this FROM line:
 
 ```
-FROM gcr.io/google-appengine/debian8:latest
+FROM launcher.gcr.io/google/debian8:latest
 ```
 
 Then add in any necessary build steps to install packages and your code.
