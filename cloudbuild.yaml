@@ -1,35 +1,35 @@
 # All items surrounded by ${} are variables to be replaced with real values.
-# ${REPO}: The repository to push debian to, e.g. gcr.io/myproject
-# ${TAG}: What the tag the image with, e.g. latest
-# ${VERSION}: The version of debian to build, e.g. jessie
-# ${VERSION_NUMBER}: The version number associated with the ${VERSION} string, e.g. 8 for jessie
+# ${_REPO}: The repository to push debian to, e.g. gcr.io/myproject
+# ${_TAG}: What the tag the image with, e.g. latest
+# ${_VERSION}: The version of debian to build, e.g. jessie
+# ${_VERSION_NUMBER}: The version number associated with the ${_VERSION} string, e.g. 8 for jessie
 steps:
         - name: gcr.io/gcp-runtimes/check_if_tag_exists
           args:
-                - '--image=${REPO}/debian${VERSION_NUMBER}:${TAG}'
+                - '--image=${_REPO}/debian${_VERSION_NUMBER}:${_TAG}'
         - name: gcr.io/cloud-builders/docker
           args:
                 - 'build'
-                - '--tag=${REPO}/mkdebootstrap:${VERSION}'
+                - '--tag=${_REPO}/mkdebootstrap:${_VERSION}'
                 - '--no-cache'
                 - 'mkdebootstrap/'
-        - name: ${REPO}/mkdebootstrap:${VERSION}
+        - name: ${_REPO}/mkdebootstrap:${_VERSION}
           args:
                 - '-d'
                 - '/workspace'
                 - 'debootstrap'
                 - '--variant=minbase'
-                - '${VERSION}'
+                - '${_VERSION}'
                 - 'http://httpredir.debian.org/debian'
         - name: gcr.io/cloud-builders/docker
           args:
                 - 'build'
-                - '--tag=${REPO}/debian${VERSION_NUMBER}:${TAG}'
+                - '--tag=${_REPO}/debian${_VERSION_NUMBER}:${_TAG}'
                 - '--no-cache'
                 - '.'
         - name: gcr.io/gcp-runtimes/structure_test
           args: [
-          '--image', '${REPO}/debian${VERSION_NUMBER}:${TAG}',
+          '--image', '${_REPO}/debian${_VERSION_NUMBER}:${_TAG}',
           '--config', '/workspace/tests/debian_test.json',
           '--config', '/workspace/tests/security_test.json']
-images: ['${REPO}/mkdebootstrap:${VERSION}', '${REPO}/debian${VERSION_NUMBER}:${TAG}']
+images: ['${_REPO}/mkdebootstrap:${_VERSION}', '${_REPO}/debian${_VERSION_NUMBER}:${_TAG}']
