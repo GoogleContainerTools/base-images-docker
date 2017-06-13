@@ -14,7 +14,7 @@ usage() {
 set -e
 if [ -z "$TAG" ]
 then
-  TAG=$(date +%Y-%m-%d-%H%M%S)
+  export TAG=$(date +%Y-%m-%d-%H%M%S)
 fi
 
 CONFIG=cloudbuild.yaml
@@ -70,10 +70,10 @@ fi
 
 if [ "$VERSION" == "jessie" ]
 then
-  VERSION_NUMBER=8
+  export VERSION_NUMBER=8
 elif [ "$VERSION" == "stretch" ]
 then
-  VERSION_NUMBER=9
+  export VERSION_NUMBER=9
 else
   echo "Invalid version $VERSION"
   usage
@@ -82,4 +82,4 @@ fi
 cp -R third_party/docker/mkimage* mkdebootstrap/
 
 envsubst < mkdebootstrap/Dockerfile.in > mkdebootstrap/Dockerfile
-gcloud beta container builds submit . --config="$CONFIG" --verbosity=info --gcs-source-staging-dir="gs://$BUCKET/staging" --gcs-log-dir="gs://$BUCKET/logs" --substitutions=_REPO="$REPO",_TAG="$TAG",_VERSION="$VERSION",_VERSION_NUMBER="$VERSION_NUMBER"
+gcloud container builds submit . --config="$CONFIG" --verbosity=info --gcs-source-staging-dir="gs://$BUCKET/staging" --gcs-log-dir="gs://$BUCKET/logs" --substitutions=_REPO="$REPO",_TAG="$TAG",_VERSION="$VERSION",_VERSION_NUMBER="$VERSION_NUMBER"
