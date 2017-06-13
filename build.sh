@@ -14,7 +14,8 @@ usage() {
 set -e
 if [ -z "$TAG" ]
 then
-  export TAG=$(date +%Y-%m-%d-%H%M%S)
+  TAG=$(date +%Y-%m-%d-%H%M%S)
+  export $TAG
 fi
 
 CONFIG=cloudbuild.yaml
