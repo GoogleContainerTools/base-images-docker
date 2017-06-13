@@ -15,7 +15,7 @@ set -e
 if [ -z "$TAG" ]
 then
   TAG=$(date +%Y-%m-%d-%H%M%S)
-  export $TAG
+  export TAG
 fi
 
 CONFIG=cloudbuild.yaml
