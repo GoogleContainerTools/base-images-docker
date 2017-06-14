@@ -11,3 +11,4 @@ if [[ $files ]]; then
    echo "Go vet errors in files: $files"
    exit 1
 fi
+
