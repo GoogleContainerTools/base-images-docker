@@ -1,11 +1,10 @@
 #!/bin/bash
 
 usage() {
-  echo "Usage: $0 [-r repository] [-v version] [-b bucket] [-c command]"
+  echo "Usage: $0 [-r repository] [-v version] [-c config]"
   echo
   echo "[repository]: remote repository to push the debian image to (e.g. 'gcr.io/gcp-runtimes/debian')"
   echo "[version]: version of debian to build (e.g. 'jessie')"
-  echo "[bucket]: GCS bucket to push staging images"
   echo "[config]: the yaml file defining the steps of the build, defaults to cloudbuild.yaml"
   echo
   exit 1
@@ -40,15 +39,6 @@ while test $# -gt 0; do
                   fi
                   shift
                   ;;
-          --bucket|-b)
-                  shift
-                  if test $# -gt 0; then
-                          BUCKET=$1
-                  else
-                          usage
-                  fi
-                  shift
-                  ;;
           --config|-c)
                   shift
                   if test $# -gt 0; then
@@ -65,7 +55,7 @@ while test $# -gt 0; do
   esac
 done
 
-if [ -z "$REPO" ] || [ -z "$VERSION" ] || [ -z "$BUCKET" ]; then
+if [ -z "$REPO" ] || [ -z "$VERSION" ]; then
   usage
 fi
 
@@ -83,4 +73,4 @@ fi
 cp -R third_party/docker/mkimage* mkdebootstrap/
 
 envsubst < mkdebootstrap/Dockerfile.in > mkdebootstrap/Dockerfile
-gcloud container builds submit . --config="$CONFIG" --verbosity=info --gcs-source-staging-dir="gs://$BUCKET/staging" --gcs-log-dir="gs://$BUCKET/logs" --substitutions=_REPO="$REPO",_TAG="$TAG",_VERSION="$VERSION",_VERSION_NUMBER="$VERSION_NUMBER"
+gcloud container builds submit . --config="$CONFIG" --verbosity=info --substitutions=_REPO="$REPO",_TAG="$TAG",_VERSION="$VERSION",_VERSION_NUMBER="$VERSION_NUMBER"
