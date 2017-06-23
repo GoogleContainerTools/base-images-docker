@@ -1,5 +1,4 @@
 FROM scratch
-ENV DEBIAN_FRONTEND noninteractive
 ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENV PORT 8080
 ADD rootfs.tar.xz /
