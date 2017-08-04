@@ -1,0 +1,12 @@
+steps:
+  # It's unclear why we need this, but bazel apepars to need it sometimes.
+  - name: 'ubuntu'
+    args: ['chmod', 'a+rx', '-R', '/workspace']
+  # We have to build and load the builder image first, so it can be used in the next step.
+  - name: gcr.io/cloud-builders/bazel
+    args: ['run', '//repeatable:builder']
+  - name: gcr.io/cloud-builders/bazel
+    args: ['run', '//repeatable:debian8']
+  - name: gcr.io/cloud-builders/docker
+    args: ['tag', 'bazel/repeatable:debian8', 'gcr.io/$PROJECT_ID/debtest:latest']
+images: ['gcr.io/$PROJECT_ID/debtest:latest']
