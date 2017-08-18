@@ -19,6 +19,12 @@
 			"path": "/",
 			"isDirectory": true,
 			"shouldExist": true
+		},
+		{
+			"name": "Netbase",
+			"path": "/etc/protocols",
+			"isDirectory": false,
+			"shouldExist": true
 		}
 	],
 	"fileContentTests": [
