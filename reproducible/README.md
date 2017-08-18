@@ -7,7 +7,7 @@ The same git revision should result in a Docker image with the same digest, ever
 
 ### Usage
 
-Use `bazel build //repeatable:debian8` to generate the image locally, or `gcloud container builds submit --config=repeatable/cloudbuild.yaml .` to build it in the cloud.
+Use `gcloud container builds submit --config=repeatable/cloudbuild.yaml .` to build the image in the cloud.
 
 ### Process
 

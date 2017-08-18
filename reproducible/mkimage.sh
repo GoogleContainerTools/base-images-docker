@@ -15,33 +15,33 @@ fi
 
 SNAPSHOT=$1
 
-JESSIE="/tmp/jessie"
-mkdir "$JESSIE"
+WORKDIR="/workspace/jessie"
+mkdir -p "$WORKDIR"
 
-debootstrap jessie "$JESSIE" http://snapshot.debian.org/archive/debian/"$SNAPSHOT"
+debootstrap --variant=minbase jessie "$WORKDIR" http://snapshot.debian.org/archive/debian/"$SNAPSHOT"
 
 # Delete dirs we don't need.
-rm -rf "$JESSIE"/dev
-rm -rf "$JESSIE"/proc
+rm -rf "$WORKDIR"/dev
+rm -rf "$WORKDIR"/proc
 
 # These are showing up as broken symlinks?
-rm -rf "$JESSIE"/usr/share/vim/vimrc
-rm -rf "$JESSIE"/usr/share/vim/vimrc.tiny
+rm -rf "$WORKDIR"/usr/share/vim/vimrc
+rm -rf "$WORKDIR"/usr/share/vim/vimrc.tiny
 
 # Remove files with non-determinism
-rm -rf "$JESSIE"/var/cache/man
-rm -rf "$JESSIE"/var/cache/ldconfig/aux-cache
-rm -rf "$JESSIE"/var/log/dpkg.log
-rm -rf "$JESSIE"/var/log/bootstrap.log
-rm -rf "$JESSIE"/var/log/alternatives.log
+rm -rf "$WORKDIR"/var/cache/man
+rm -rf "$WORKDIR"/var/cache/ldconfig/aux-cache
+rm -rf "$WORKDIR"/var/log/dpkg.log
+rm -rf "$WORKDIR"/var/log/bootstrap.log
+rm -rf "$WORKDIR"/var/log/alternatives.log
 
 # Hardcode this somewhere
-rm "$JESSIE"/etc/machine-id
+rm "$WORKDIR"/etc/machine-id
 
 # This gets overridden by Docker at runtime.
-rm "$JESSIE"/etc/hostname
+rm "$WORKDIR"/etc/hostname
 
 # pass -n to gzip to strip timestamps
 # strip the '.' with --transform that tar includes at the root to build a real rootfs
-GZIP="-n" tar --numeric-owner -czf /tmp/rootfs.tar.gz -C "$JESSIE" . --transform='s,^./,,' --mtime='1970-01-01'
-md5sum /tmp/rootfs.tar.gz
+GZIP="-n" tar --numeric-owner -czf /workspace/rootfs.tar.gz -C "$WORKDIR" . --transform='s,^./,,' --mtime='1970-01-01'
+md5sum /workspace/rootfs.tar.gz

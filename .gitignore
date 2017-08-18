@@ -4,3 +4,4 @@ mkdebootstrap/mkimage.sh
 mkdebootstrap/mkimage/
 mkdebootstrap/Dockerfile
 bazel-*
+rootfs.tar.gz
