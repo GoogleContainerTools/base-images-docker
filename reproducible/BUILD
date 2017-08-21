@@ -4,6 +4,7 @@ load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 load("@package_bundle//file:packages.bzl", "packages")
 load("@runtimes_common//structure_tests:tests.bzl", "structure_test")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
+load("@distroless//cacerts:cacerts.bzl", "cacerts")
 
 
 # TODO: Try to reuse this variable from WORKSPACE.
@@ -31,13 +32,18 @@ pkg_tar(
     package_dir="/etc/apt/apt.conf.d/"
 )
 
+cacerts(
+    name = "cacerts",
+)
+
 # This rule expects that you've created a rootfs.tar.gz at the root of this repo yourself somehow.
 # TODO: figure out how to generate this in bazel somehow.
 docker_build(
    name = "debian8",
    tars = [ ":sources_list.tar",
             ":apt_retries.tar",
-            "//:rootfs.tar.gz"],
+            "//:rootfs.tar.gz",
+            ":cacerts.tar",],
 )
 
 structure_test(

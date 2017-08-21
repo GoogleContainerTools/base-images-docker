@@ -12,6 +12,9 @@ load(
     "docker_repositories", "docker_pull"
 )
 
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+
 docker_repositories()
 
 docker_pull(
@@ -24,7 +27,7 @@ docker_pull(
 
 git_repository(
     name = "distroless",
-    commit = "e6c9254b04bd2cb4c171ece3c91d8b997a20c30c",
+    commit = "bd16e2028cc0dd6acba3de58448c94b3d2ead21a",
     remote = "https://github.com/GoogleCloudPlatform/distroless.git"
 )
 
@@ -53,6 +56,7 @@ dpkg_src(
 dpkg_list(
     name = "package_bundle",
     packages = [
+        "ca-certificates",
         "debootstrap",
         "libffi6",
         "libgmp10",

@@ -1,5 +1,7 @@
 steps:
-  # It's unclear why we need this, but bazel apepars to need it sometimes.
+  - name: gcr.io/cloud-builders/bazel
+    args: ['fetch', '...']
+  # It's unclear why we need this, but bazel appears to need it sometimes.
   - name: 'l.gcr.io/google/debian8:latest'
     args: ['chmod', 'a+rx', '-R', '/workspace']
 
