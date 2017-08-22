@@ -1,49 +1,62 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
-load("@package_bundle//file:packages.bzl", "packages")
+load(
+    "@package_bundle//file:packages.bzl",
+    builder_packages = "packages",
+)
+load(
+    "@image_package_bundle//file:packages.bzl",
+    image_packages = "packages",
+)
 load("@runtimes_common//structure_tests:tests.bzl", "structure_test")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load("@distroless//cacerts:cacerts.bzl", "cacerts")
 
-
 # TODO: Try to reuse this variable from WORKSPACE.
 # The Debian snapshot datetime to use. See http://snapshot.debian.org/ for more information.
-SNAPSHOT="20170816T214423Z"
+SNAPSHOT = "20170816T214423Z"
 
 docker_build(
     name = "builder",
     base = "@debian_base//image",
-    debs = packages.values(),
-    files = [":mkimage.sh"],
-    entrypoint = ["/mkimage.sh"],
     cmd = [SNAPSHOT],
+    debs = builder_packages.values(),
+    entrypoint = ["/mkimage.sh"],
+    files = [":mkimage.sh"],
 )
 
 pkg_tar(
-    name="sources_list",
-    files=[":sources.list"],
-    package_dir="/etc/apt"
+    name = "sources_list",
+    files = [":sources.list"],
+    package_dir = "/etc/apt",
 )
 
 pkg_tar(
-    name="apt_retries",
-    files=[":apt_retry"],
-    package_dir="/etc/apt/apt.conf.d/"
+    name = "apt_retries",
+    files = [":apt-retry"],
+    package_dir = "/etc/apt/apt.conf.d/",
 )
 
 cacerts(
     name = "cacerts",
 )
 
-# This rule expects that you've created a rootfs.tar.gz at the root of this repo yourself somehow.
-# TODO: figure out how to generate this in bazel somehow.
+load("//reproducible:debootstrap.bzl", "debootstrap_image")
+
+debootstrap_image(
+    name = "debootstrap_base",
+)
+
 docker_build(
-   name = "debian8",
-   tars = [ ":sources_list.tar",
-            ":apt_retries.tar",
-            "//:rootfs.tar.gz",
-            ":cacerts.tar",],
+    name = "debian8",
+    base = ":debootstrap_base",
+    debs = image_packages.values(),
+    tars = [
+        ":sources_list.tar",
+        ":apt_retries.tar",
+        ":cacerts.tar",
+    ],
 )
 
 structure_test(

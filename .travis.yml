@@ -1,3 +1,13 @@
+dist: trusty
+sudo: required
+python:
+  - "2.7"
+os:
+  - linux
+
+jdk:
+  - oraclejdk8
+
 language: go
 go: 1.7.1 
 install: true
@@ -6,8 +16,14 @@ addons:
   apt:
     sources:
     - debian-sid    # Grab shellcheck from the Debian repo (o_O)
+    - sourceline: 'deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8'
+      key_url: 'https://storage.googleapis.com/bazel-apt/doc/apt-key.pub.gpg'
     packages:
     - shellcheck
+    - bazel
+
+install:
+  - go get -u github.com/bazelbuild/buildifier/buildifier
 
 script:
  - find . -name "*.sh" | grep -v "third_party/" | xargs shellcheck

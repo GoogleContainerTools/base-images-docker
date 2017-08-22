@@ -9,26 +9,24 @@ git_repository(
 
 load(
     "@io_bazel_rules_docker//docker:docker.bzl",
-    "docker_repositories", "docker_pull"
+    "docker_repositories",
+    "docker_pull",
 )
-
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
-
 
 docker_repositories()
 
 docker_pull(
-  name = "debian_base",
-  registry = "gcr.io",
-  repository = "google-appengine/debian8",
-  digest = "sha256:987494b558cc0c9c341b5808b6e259ee449cf70c6f7c7adce4fd8f15eef1dea2",
+    name = "debian_base",
+    digest = "sha256:987494b558cc0c9c341b5808b6e259ee449cf70c6f7c7adce4fd8f15eef1dea2",
+    registry = "gcr.io",
+    repository = "google-appengine/debian8",
 )
-
 
 git_repository(
     name = "distroless",
     commit = "bd16e2028cc0dd6acba3de58448c94b3d2ead21a",
-    remote = "https://github.com/GoogleCloudPlatform/distroless.git"
+    remote = "https://github.com/GoogleCloudPlatform/distroless.git",
 )
 
 load(
@@ -41,7 +39,7 @@ load(
 package_manager_repositories()
 
 # The Debian snapshot datetime to use. See http://snapshot.debian.org/ for more information.
-SNAPSHOT="20170816T214423Z"
+SNAPSHOT = "20170816T214423Z"
 
 dpkg_src(
     name = "debian_jessie",
@@ -69,8 +67,20 @@ dpkg_list(
         "libpsl0",
         "libtasn1-6",
         "wget",
-],
+    ],
+    sources = [
+        "@debian_jessie//file:Packages.json",
+    ],
+)
 
+# These are needed in the final image.
+dpkg_list(
+    name = "image_package_bundle",
+    packages = [
+        "netbase",
+        "openssl",
+        "libssl1.0.0",
+    ],
     sources = [
         "@debian_jessie//file:Packages.json",
     ],
