@@ -1,0 +1,15 @@
+steps:
+  # It's unclear why we need this, but bazel appears to need it sometimes.
+  - name: 'l.gcr.io/google/debian8:latest'
+    args: ['chmod', 'a+rx', '-R', '/workspace']
+
+  # We have to build and load the builder image first, so it can be used in the next step.
+  # Using "run" instead of "build" loads the built image into the daemon.
+  - name: gcr.io/cloud-builders/bazel
+    args: ['run', '//reproducible:debian8']
+  
+  # Give the image the right tag, and let CloudBuild push it.
+  - name: gcr.io/cloud-builders/docker
+    args: ['tag', 'bazel/reproducible:debian8', 'gcr.io/$PROJECT_ID/debtest:latest']
+
+images: ['gcr.io/$PROJECT_ID/debtest:latest']
