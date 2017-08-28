@@ -11,6 +11,11 @@
 			"name": "apt-config",
 			"command": ["apt-config","dump"],
 			"expectedOutput": ["Acquire::Retries \"3\""]
+		},
+		{
+			"name": "path",
+			"command": ["sh", "-c", "echo $PATH"],
+			"expectedOutput": ["/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"]
 		}
 	],
 	"fileExistenceTests": [
@@ -23,6 +28,12 @@
 		{
 			"name": "Netbase",
 			"path": "/etc/protocols",
+			"isDirectory": false,
+			"shouldExist": true
+		},
+		{
+			"name": "Machine ID",
+			"path": "/etc/machine-id",
 			"isDirectory": false,
 			"shouldExist": true
 		}
