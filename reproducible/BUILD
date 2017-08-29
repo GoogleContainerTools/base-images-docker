@@ -5,13 +5,8 @@ load(
     "@package_bundle//file:packages.bzl",
     builder_packages = "packages",
 )
-load(
-    "@image_package_bundle//file:packages.bzl",
-    image_packages = "packages",
-)
 load("@runtimes_common//structure_tests:tests.bzl", "structure_test")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
-load("@distroless//cacerts:cacerts.bzl", "cacerts")
 
 # TODO: Try to reuse this variable from WORKSPACE.
 # The Debian snapshot datetime to use. See http://snapshot.debian.org/ for more information.
@@ -26,27 +21,12 @@ docker_build(
     files = [":mkimage.sh"],
 )
 
+# The overlay directory contains files that should be overlaid into the rootfs at /.
 pkg_tar(
-    name = "sources_list",
-    files = [":sources.list"],
-    package_dir = "/etc/apt",
-)
-
-pkg_tar(
-    name = "apt_retries",
-    files = [":apt-retry"],
-    package_dir = "/etc/apt/apt.conf.d/",
-)
-
-# This file was generated once by debootstrap and then committed here.
-pkg_tar(
-    name = "machine_id",
-    files = [":machine-id"],
-    package_dir = "/etc/",
-)
-
-cacerts(
-    name = "cacerts",
+    name = "overlay",
+    files = glob(["overlay/**/*"]),
+    package_dir = "/",
+    strip_prefix = "overlay/",
 )
 
 load("//reproducible:debootstrap.bzl", "debootstrap_image")
@@ -58,12 +38,8 @@ debootstrap_image(
 docker_build(
     name = "debian8",
     base = ":debootstrap_base",
-    debs = image_packages.values(),
     tars = [
-        ":sources_list.tar",
-        ":apt_retries.tar",
-        ":cacerts.tar",
-        ":machine_id.tar",
+        ":overlay.tar",
     ],
 )
 

@@ -73,19 +73,6 @@ dpkg_list(
     ],
 )
 
-# These are needed in the final image.
-dpkg_list(
-    name = "image_package_bundle",
-    packages = [
-        "netbase",
-        "openssl",
-        "libssl1.0.0",
-    ],
-    sources = [
-        "@debian_jessie//file:Packages.json",
-    ],
-)
-
 git_repository(
     name = "runtimes_common",
     commit = "3d73b4fecbd18de77588ab5eef712d50f34f601e",
