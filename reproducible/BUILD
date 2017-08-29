@@ -38,6 +38,13 @@ pkg_tar(
     package_dir = "/etc/apt/apt.conf.d/",
 )
 
+# This file was generated once by debootstrap and then committed here.
+pkg_tar(
+    name = "machine_id",
+    files = [":machine-id"],
+    package_dir = "/etc/",
+)
+
 cacerts(
     name = "cacerts",
 )
@@ -56,6 +63,7 @@ docker_build(
         ":sources_list.tar",
         ":apt_retries.tar",
         ":cacerts.tar",
+        ":machine_id.tar",
     ],
 )
 
