@@ -32,12 +32,39 @@ pkg_tar(
 load("//reproducible:debootstrap.bzl", "debootstrap_image")
 
 debootstrap_image(
-    name = "debootstrap_base",
+    name = "jessie_base",
+    distro = "jessie",
+)
+
+debootstrap_image(
+    name = "stretch_base",
+    distro = "stretch",
+)
+
+debootstrap_image(
+    name = "buster_base",
+    distro = "buster",
 )
 
 docker_build(
     name = "debian8",
-    base = ":debootstrap_base",
+    base = ":jessie_base",
+    tars = [
+        ":overlay.tar",
+    ],
+)
+
+docker_build(
+    name = "debian9",
+    base = ":stretch_base",
+    tars = [
+        ":overlay.tar",
+    ],
+)
+
+docker_build(
+    name = "debian10",
+    base = ":buster_base",
     tars = [
         ":overlay.tar",
     ],
@@ -45,6 +72,18 @@ docker_build(
 
 structure_test(
     name = "debian8_test",
-    config = "//tests:debian_test.json",
+    config = "//tests:debian_test.yaml",
     image = ":debian8",
+)
+
+structure_test(
+    name = "debian9_test",
+    config = "//tests:debian_test.yaml",
+    image = ":debian9",
+)
+
+structure_test(
+    name = "debian10_test",
+    config = "//tests:debian_test.yaml",
+    image = ":debian10",
 )
