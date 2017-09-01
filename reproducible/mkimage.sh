@@ -20,9 +20,29 @@ mkdir -p "$WORKDIR"
 
 debootstrap --variant=minbase jessie "$WORKDIR" http://snapshot.debian.org/archive/debian/"$SNAPSHOT"
 
-# Delete dirs we don't need.
-rm -rf "$WORKDIR"/dev
-rm -rf "$WORKDIR"/proc
+rootfs_chroot() {
+
+	PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' \
+		chroot "$WORKDIR" "$@"
+}
+
+# Add some tools we need.
+rootfs_chroot apt-get install -y --no-install-recommends \
+  netbase \
+  ca-certificates
+
+# We have our own version of initctl, tell dpkg to not overwrite it.
+rootfs_chroot dpkg-divert --local --rename --add /sbin/initctl
+
+# Clean some apt artifacts
+rootfs_chroot apt-get clean
+
+# Delete dirs we don't need, leaving the entries.
+rm -rf "$WORKDIR"/dev "$WORKDIR"/proc
+mkdir -p "$WORKDIR"/dev "$WORKDIR"/proc
+
+rm -rf "$WORKDIR"/var/lib/apt/lists/snapshot*
+rm -rf "$WORKDIR"/etc/apt/apt.conf.d/01autoremove-kernels
 
 # These are showing up as broken symlinks?
 rm -rf "$WORKDIR"/usr/share/vim/vimrc
