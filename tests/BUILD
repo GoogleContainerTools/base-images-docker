@@ -1,3 +1,3 @@
 package(default_visibility = ["//visibility:public"])
 
-exports_files(glob(["*.json"]))
+exports_files(glob(["*.yaml"]))
