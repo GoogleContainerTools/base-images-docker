@@ -17,7 +17,7 @@ then
   export TAG
 fi
 
-CONFIG=cloudbuild.yaml
+CONFIG=reproducible/cloudbuild.yaml
 
 while test $# -gt 0; do
   case "$1" in
@@ -70,7 +70,4 @@ else
   usage
 fi
 
-cp -R third_party/docker/mkimage* mkdebootstrap/
-
-envsubst < mkdebootstrap/Dockerfile.in > mkdebootstrap/Dockerfile
-gcloud container builds submit . --config="$CONFIG" --verbosity=info --substitutions=_REPO="$REPO",_TAG="$TAG",_VERSION="$VERSION",_VERSION_NUMBER="$VERSION_NUMBER"
+gcloud container builds submit . --config="$CONFIG" --verbosity=info --substitutions=_REPO="$REPO",_TAG="$TAG",_VERSION_NUMBER="$VERSION_NUMBER"
