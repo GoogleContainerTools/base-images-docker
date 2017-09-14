@@ -56,10 +56,10 @@ rm -rf "$WORKDIR"/var/log/bootstrap.log
 rm -rf "$WORKDIR"/var/log/alternatives.log
 
 # Hardcode this somewhere
-rm "$WORKDIR"/etc/machine-id
+rm -f "$WORKDIR"/etc/machine-id
 
 # This gets overridden by Docker at runtime.
-rm "$WORKDIR"/etc/hostname
+rm -f "$WORKDIR"/etc/hostname
 
 # pass -n to gzip to strip timestamps
 # strip the '.' with --transform that tar includes at the root to build a real rootfs
