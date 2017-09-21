@@ -10,14 +10,13 @@ load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 
 # TODO: Try to reuse this variable from WORKSPACE.
 # The Debian snapshot datetime to use. See http://snapshot.debian.org/ for more information.
-SNAPSHOT = "20170816T214423Z"
+SNAPSHOT = "20170912T170400Z"
 
 docker_build(
     name = "builder",
     base = "@debian_base//image",
-    cmd = [SNAPSHOT],
     debs = builder_packages.values(),
-    entrypoint = ["/mkimage.sh"],
+    entrypoint = ["/mkimage.sh", SNAPSHOT],
     files = [":mkimage.sh"],
 )
 
@@ -32,42 +31,21 @@ pkg_tar(
 load("//reproducible:debootstrap.bzl", "debootstrap_image")
 
 debootstrap_image(
-    name = "jessie_base",
-    distro = "jessie",
-)
-
-debootstrap_image(
-    name = "stretch_base",
-    distro = "stretch",
-)
-
-debootstrap_image(
-    name = "buster_base",
-    distro = "buster",
-)
-
-docker_build(
     name = "debian8",
-    base = ":jessie_base",
-    tars = [
-        ":overlay.tar",
-    ],
+    distro = "jessie",
+    overlay_tar = ":overlay.tar",
 )
 
-docker_build(
+debootstrap_image(
     name = "debian9",
-    base = ":stretch_base",
-    tars = [
-        ":overlay.tar",
-    ],
+    distro = "stretch",
+    overlay_tar = ":overlay.tar",
 )
 
-docker_build(
+debootstrap_image(
     name = "debian10",
-    base = ":buster_base",
-    tars = [
-        ":overlay.tar",
-    ],
+    distro = "buster",
+    overlay_tar = ":overlay.tar",
 )
 
 structure_test(

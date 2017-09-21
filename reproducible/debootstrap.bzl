@@ -26,16 +26,20 @@ def _impl(ctx):
 #!/bin/bash
 set -ex
 
-docker load -i %s
+docker load -i {0}
 # Run the builder image.
-cid=$(docker run -d --privileged %s)
+cid=$(docker run -d --privileged {1} {2} {3})
 docker attach $cid
 # Copy out the rootfs.
-docker cp $cid:/workspace/rootfs.tar.gz %s
+docker cp $cid:/workspace/rootfs.tar.gz {4}
 
 # Cleanup
 docker rm $cid
- """ % (ctx.file._builder_image.path, builder_image_name, ctx.outputs.out.path)
+ """.format(ctx.file._builder_image.path,
+            builder_image_name,
+            ctx.attr.variant,
+            ctx.attr.distro,
+            ctx.outputs.out.path)
     script = ctx.new_file(ctx.label.name + ".build")
     ctx.file_action(
         output=script,
@@ -77,14 +81,18 @@ load(
     "docker_build",
 )
 
-def debootstrap_image(name, variant="minbase", distro="jessie"):
+def debootstrap_image(name, variant="minbase", distro="jessie", overlay_tar=""):
     rootfs = "%s.rootfs" % name
     debootstrap(
         name=rootfs,
         variant=variant,
         distro=distro,
     )
+    tars = [rootfs]
+    if overlay_tar:
+        # The overlay tar has to come first to actuall overwrite existing files.
+        tars.insert(0, overlay_tar)
     docker_build(
         name=name,
-        tars=[rootfs]
+        tars=tars
     )
