@@ -1,15 +1,18 @@
-schemaVersion: '1.0.0'
+schemaVersion: '2.0.0'
 commandTests:
 - name: 'apt-get'
-  command: ['apt-get', 'help']
+  command: 'apt-get'
+  args: ['help']
   excludedError: ['.*FAIL.*']
   expectedOutput: ['.*Usage.*']
 - name: 'apt-config'
-  command: ['apt-config', 'dump']
+  command: 'apt-config'
+  args: ['dump']
   expectedOutput: ['Acquire::Retries "3"']
   name: 'apt-config'
 - name: 'path'
-  command: ['sh', '-c', 'echo $PATH']
+  command: 'sh'
+  args: ['-c', 'echo $PATH']
   expectedOutput: ['/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin']
 fileContentTests:
 - name: 'Debian Sources'
