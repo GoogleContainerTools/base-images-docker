@@ -39,7 +39,7 @@ load(
 package_manager_repositories()
 
 # The Debian snapshot datetime to use. See http://snapshot.debian.org/ for more information.
-SNAPSHOT = "20170912T170400Z"
+SNAPSHOT = "20171004T154711Z"
 
 dpkg_src(
     name = "debian_jessie",
