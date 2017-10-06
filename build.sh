@@ -65,6 +65,9 @@ then
 elif [ "$VERSION" == "stretch" ]
 then
   export VERSION_NUMBER=9
+elif [ "$VERSION" == "buster" ]
+then
+  export VERSION_NUMBER=10
 else
   echo "Invalid version $VERSION"
   usage
