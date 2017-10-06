@@ -81,7 +81,9 @@ load(
     "docker_build",
 )
 
-def debootstrap_image(name, variant="minbase", distro="jessie", overlay_tar=""):
+def debootstrap_image(name, variant="minbase", distro="jessie", overlay_tar="", env=None):
+    if not env:
+        env = {}
     rootfs = "%s.rootfs" % name
     debootstrap(
         name=rootfs,
@@ -94,5 +96,6 @@ def debootstrap_image(name, variant="minbase", distro="jessie", overlay_tar=""):
         tars.insert(0, overlay_tar)
     docker_build(
         name=name,
-        tars=tars
+        tars=tars,
+        env=env,
     )

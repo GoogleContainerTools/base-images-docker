@@ -14,6 +14,10 @@ commandTests:
   command: 'sh'
   args: ['-c', 'echo $PATH']
   expectedOutput: ['/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin']
+- name: 'PORT'
+  command: 'sh'
+  args: ['-c', 'echo $PORT']
+  expectedOutput: ['8080']
 fileContentTests:
 - name: 'Debian Sources'
   excludedContents: ['.*gce_debian_mirror.*']
