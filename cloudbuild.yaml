@@ -31,4 +31,8 @@ steps:
           args: [
           '--image', '${_REPO}/debian${_VERSION_NUMBER}:${_TAG}',
           '--config', '/workspace/tests/debian_test.yaml']
+        - name: gcr.io/gcp-runtimes/structure_test
+          args: [
+          '--image', '${_REPO}/debian${_VERSION_NUMBER}:${_TAG}',
+          '--config', '/workspace/tests/debian_${_VERSION_NUMBER}_test.yaml']          
 images: ['${_REPO}/mkdebootstrap:${_VERSION}', '${_REPO}/debian${_VERSION_NUMBER}:${_TAG}']
