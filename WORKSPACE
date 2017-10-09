@@ -89,3 +89,9 @@ load(
     "go_repositories",
 )
 go_repositories()
+
+http_file(
+    name = "ubuntu_tar_download",
+    url = "https://partner-images.canonical.com/core/xenial/20171006/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
+    sha256 = "e43f802f876505c0cee1759fbc545f65b2d59c4dd33835e93afea3fa124b5799",
+)
