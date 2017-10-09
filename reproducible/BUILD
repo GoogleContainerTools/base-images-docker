@@ -33,24 +33,29 @@ pkg_tar(
 
 load("//reproducible:debootstrap.bzl", "debootstrap_image")
 
+DEBIAN_ENV = {
+    "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    "PORT": "8080",
+}
+
 debootstrap_image(
     name = "debian8",
     distro = "jessie",
-    env = {"PORT": "8080"},
+    env = DEBIAN_ENV,
     overlay_tar = ":overlay.tar",
 )
 
 debootstrap_image(
     name = "debian9",
     distro = "stretch",
-    env = {"PORT": "8080"},
+    env = DEBIAN_ENV,
     overlay_tar = ":overlay.tar",
 )
 
 debootstrap_image(
     name = "debian10",
     distro = "buster",
-    env = {"PORT": "8080"},
+    env = DEBIAN_ENV,
     overlay_tar = ":overlay.tar",
 )
 
