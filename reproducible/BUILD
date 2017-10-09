@@ -61,13 +61,31 @@ structure_test(
 )
 
 structure_test(
+    name = "debian8_version_test",
+    config = "//tests:debian_8_test.yaml",
+    image = ":debian8",
+)
+
+structure_test(
     name = "debian9_test",
     config = "//tests:debian_test.yaml",
     image = ":debian9",
 )
 
 structure_test(
+    name = "debian9_version_test",
+    config = "//tests:debian_9_test.yaml",
+    image = ":debian9",
+)
+
+structure_test(
     name = "debian10_test",
     config = "//tests:debian_test.yaml",
+    image = ":debian10",
+)
+
+structure_test(
+    name = "debian10_version_test",
+    config = "//tests:debian_10_test.yaml",
     image = ":debian10",
 )

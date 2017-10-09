@@ -1,0 +1,6 @@
+schemaVersion: '2.0.0'
+commandTests:
+fileContentTests:
+- name: 'Debian Sources Version'
+  expectedContents: ['buster']
+  path: '/etc/apt/sources.list'

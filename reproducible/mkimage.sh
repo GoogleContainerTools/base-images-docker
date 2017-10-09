@@ -39,7 +39,7 @@ rootfs_chroot apt-get install -y --no-install-recommends \
 # We have our own version of initctl, tell dpkg to not overwrite it.
 rootfs_chroot dpkg-divert --local --rename --add /sbin/initctl
 
-# Reset the apt sources from SNAPSHOT to real ones, based on the distro, for a final upgrade.
+# Add the SNAPSHOT security and updates mirrors, for a final upgrade.
 cat << EOF > $WORKDIR/etc/apt/sources.list
 deb http://snapshot.debian.org/archive/debian/$SNAPSHOT $DIST main
 deb http://snapshot.debian.org/archive/debian/$SNAPSHOT $DIST-updates main
@@ -50,6 +50,13 @@ rootfs_chroot apt-get -y -q upgrade
 
 # Clean some apt artifacts
 rootfs_chroot apt-get clean
+
+# Reset the mirrors to distro-based ones
+cat << EOF > $WORKDIR/etc/apt/sources.list
+deb http://httpredir.debian.org/debian $DIST main
+deb http://httpredir.debian.org/debian $DIST-updates main
+deb http://security.debian.org $DIST/updates main
+EOF
 
 # Delete dirs we don't need, leaving the entries.
 rm -rf "$WORKDIR"/dev "$WORKDIR"/proc
