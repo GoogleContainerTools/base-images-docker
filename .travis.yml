@@ -28,3 +28,4 @@ install:
 script:
  - find . -name "*.sh" | grep -v "third_party/" | xargs shellcheck
  - make test
+ - bazel test //reproducible:all
