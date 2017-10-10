@@ -98,4 +98,5 @@ def debootstrap_image(name, variant="minbase", distro="jessie", overlay_tar="", 
         name=name,
         tars=tars,
         env=env,
+        cmd="/bin/bash",
     )
