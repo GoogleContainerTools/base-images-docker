@@ -1,12 +1,31 @@
-# How to build this base image
+# How to build these base images
 
-`make all` will generate the builder image and create a fresh debootstrap rootfs
-for the debian version specified by `DEBIAN_SUITE` (defaults to jessie). The
-bzipped tarball which results is then used to create a bare debian docker image.
+We use `bazel` to build most of the images in this repository, so that we can build them reproducibly.
+To learn about how we generate reproducible images, see [the design doc](./reproducible/README.md).
 
+To build all images, use:
+
+```shell
+bazel build //...
 ```
-# Generate the jessie image
-make all DEBIAN_SUITE=jessie
+
+This can be slow the first time, but future builds are incremental and very fast.
+
+Tests are implemented using the [structure_test](https://www.github.com/GoogleCloudPlatform/runtimes-common/structure_test) library.
+The tests are defined as YAML files in the `tests` directory.
+
+To run tests, use:
+
+```shell
+bazel test //...
+```
+
+We also have a set of formatting and style tests, which should be run before sending PRs.
+To run these, use:
+
+```shell
+make test
+```
 
 # How to become a contributor and submit your own code
 
