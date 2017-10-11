@@ -16,4 +16,3 @@ To use this image in your application, create a Dockerfile that starts with this
 ```
 FROM launcher.gcr.io/google/debian8:latest
 ```
-
