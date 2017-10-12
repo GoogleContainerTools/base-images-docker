@@ -38,64 +38,26 @@ DEBIAN_ENV = {
     "PORT": "8080",
 }
 
-debootstrap_image(
-    name = "debian8",
-    distro = "jessie",
-    env = DEBIAN_ENV,
-    overlay_tar = ":overlay.tar",
-)
-
-debootstrap_image(
-    name = "debian9",
-    distro = "stretch",
-    env = DEBIAN_ENV,
-    overlay_tar = ":overlay.tar",
-)
-
-debootstrap_image(
-    name = "debian10",
-    distro = "buster",
-    env = DEBIAN_ENV,
-    overlay_tar = ":overlay.tar",
-)
-
-structure_test(
-    name = "debian8_test",
-    config = "//tests:debian_test.yaml",
-    image = ":debian8",
-)
-
-structure_test(
-    name = "debian8_version_test",
-    config = "//tests:debian_8_test.yaml",
-    image = ":debian8",
-)
-
-structure_test(
-    name = "debian9_test",
-    config = "//tests:debian_test.yaml",
-    image = ":debian9",
-)
-
-structure_test(
-    name = "debian9_version_test",
-    config = "//tests:debian_9_test.yaml",
-    image = ":debian9",
-)
-
-UBUNTU_ENV = {
-    "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+DEBIAN_MAP = {
+    8: "jessie",
+    9: "stretch",
 }
 
-docker_build(
-    name = "ubuntu",
-    tars = ["@ubuntu_tar_download//file"],
-    env = UBUNTU_ENV,
-    cmd = "/bin/bash",
-)
+[debootstrap_image(
+    name = "debian%s" % num,
+    distro = distro,
+    env = DEBIAN_ENV,
+    overlay_tar = ":overlay.tar",
+) for num, distro in DEBIAN_MAP.items()]
 
-structure_test(
-    name = "ubuntu_test",
-    config = "//tests:ubuntu_test.yaml",
-    image = ":ubuntu",
-)
+[structure_test(
+    name = "debian%s_test" % num,
+    config = "//tests:debian_test.yaml",
+    image = ":debian%s" % num,
+) for num, distro in DEBIAN_MAP.items()]
+
+[structure_test(
+    name = "debian%s_version_test" % num,
+    config = "//tests:debian_%s_test.yaml" % num,
+    image = ":debian%s" % num,
+) for num, distro in DEBIAN_MAP.items()]
