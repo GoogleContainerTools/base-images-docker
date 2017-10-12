@@ -61,3 +61,20 @@ DEBIAN_MAP = {
     config = "//tests:debian_%s_test.yaml" % num,
     image = ":debian%s" % num,
 ) for num, distro in DEBIAN_MAP.items()]
+
+UBUNTU_ENV = {
+    "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+}
+
+docker_build(
+    name = "ubuntu",
+    tars = ["@ubuntu_tar_download//file"],
+    env = UBUNTU_ENV,
+    cmd = "/bin/bash",
+)
+
+structure_test(
+    name = "ubuntu_test",
+    config = "//tests:ubuntu_test.yaml",
+    image = ":ubuntu",
+)
