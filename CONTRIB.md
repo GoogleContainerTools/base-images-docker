@@ -1,3 +1,13 @@
+# Environment Setup
+
+To build and test these images you will need to install `bazel`.
+
+To install a pre-commit hook that will automatically run tests, run the following command:
+
+```shell
+ln -s $(pwd)/hack/hooks/* .git/hooks/
+```
+
 # How to build these base images
 
 We use `bazel` to build most of the images in this repository, so that we can build them reproducibly.
