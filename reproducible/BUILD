@@ -68,9 +68,9 @@ UBUNTU_ENV = {
 
 docker_build(
     name = "ubuntu",
-    tars = ["@ubuntu_tar_download//file"],
-    env = UBUNTU_ENV,
     cmd = "/bin/bash",
+    env = UBUNTU_ENV,
+    tars = ["@ubuntu_tar_download//file"],
 )
 
 structure_test(

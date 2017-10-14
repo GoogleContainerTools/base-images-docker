@@ -3,7 +3,7 @@ workspace(name = "debian_docker")
 # Docker rules.
 git_repository(
     name = "io_bazel_rules_docker",
-    commit = "9a1a7cba78d790cd94d3a04f5291fbcc53181bff",
+    commit = "8bbe2a8abd382641e65ff7127a3700a8530f02ce",
     remote = "https://github.com/bazelbuild/rules_docker.git",
 )
 
@@ -84,14 +84,16 @@ git_repository(
     remote = "https://github.com/bazelbuild/rules_go.git",
     tag = "0.5.5",
 )
+
 load(
     "@io_bazel_rules_go//go:def.bzl",
     "go_repositories",
 )
+
 go_repositories()
 
 http_file(
     name = "ubuntu_tar_download",
-    url = "https://partner-images.canonical.com/core/xenial/20171006/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
     sha256 = "e43f802f876505c0cee1759fbc545f65b2d59c4dd33835e93afea3fa124b5799",
+    url = "https://partner-images.canonical.com/core/xenial/20171006/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
 )
