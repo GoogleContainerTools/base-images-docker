@@ -23,7 +23,6 @@ def _impl(ctx):
     dockerfile_path = ctx.file.dockerfile.path
     context_path = ctx.file.context.path
 
-    unstripped_tar = ctx.new_file(ctx.label.name + ".unstripped")
     # Generate a shell script to run the build.
     build_contents = """\
 #!/bin/bash
@@ -49,7 +48,7 @@ docker save {tag} > {output}
             dockerfile=dockerfile_path,
             context=context_path,
             tag="bazel/%s:%s" % (ctx.label.package, ctx.label.name),
-            output=unstripped_tar.path)
+            output=ctx.outputs.out.path)
     script = ctx.new_file(ctx.label.name + ".build")
     ctx.file_action(
         output=script,
@@ -57,18 +56,10 @@ docker save {tag} > {output}
     )
 
     ctx.actions.run(
-        outputs=[unstripped_tar],
+        outputs=[ctx.outputs.out],
         inputs=ctx.attr.base.files.to_list() + ctx.attr.dockerfile.files.to_list() + ctx.attr.context.files.to_list() +
         ctx.attr.base.data_runfiles.files.to_list() + ctx.attr.base.default_runfiles.files.to_list(),
         executable=script,
-    )
-
-
-    ctx.actions.run(
-        outputs=[ctx.outputs.out],
-        inputs=[unstripped_tar],
-        executable=ctx.executable._config_stripper,
-        arguments=['--in_tar_path=%s' % unstripped_tar.path, '--out_tar_path=%s' % ctx.outputs.out.path],
     )
 
     return struct()
@@ -88,11 +79,6 @@ dockerfile_build = rule(
             allow_files = True,
             single_file = True,
             mandatory = True,
-        ),
-        "_config_stripper": attr.label(
-            cfg="host",
-            executable=True,
-            default="//dockerfile_build:config_stripper",
         ),
     },
     executable = False,

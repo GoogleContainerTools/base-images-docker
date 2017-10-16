@@ -6,7 +6,7 @@ fileExistenceTests:
   shouldExist: true
 - name: 'Baz'
   path: '/foo/bar/baz'
-  shouldExist: true  
+  shouldExist: true
 commandTests:
 fileContentTests:
 - name: 'Curl'
