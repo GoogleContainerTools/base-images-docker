@@ -21,3 +21,8 @@ structure_test(
     config = ":test.yaml",
     image_tar = ":test_image",
 )
+
+py_binary(
+    name = "config_stripper",
+    srcs = ["config_stripper.py"],
+)
