@@ -28,3 +28,10 @@ py_binary(
     name = "config_stripper",
     srcs = ["config_stripper.py"],
 )
+
+dockerfile_build(
+    name = "ubuntu_build",
+    base = "//reproducible:ubuntu.tar",
+    context = ":context.tar",
+    dockerfile = ":Dockerfile.ubuntu_build",
+)

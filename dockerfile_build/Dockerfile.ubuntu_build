@@ -1,0 +1,7 @@
+FROM bazel/reproducible:ubuntu
+RUN apt-get update && apt-get -y -q install build-essential python2.7
+
+# TODO(aaron-prindle) verify/ensure that this image is reproducible
+
+# TODO(aaron-prindle) see the proper way to setup python to build node
+RUN ln -s /usr/bin/python2.7 /usr/bin/python
