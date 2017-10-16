@@ -78,3 +78,50 @@ structure_test(
     config = "//tests:ubuntu_test.yaml",
     image = ":ubuntu",
 )
+
+docker_build(
+    name = "ubuntu_build",
+    cmd = "/bin/bash",
+    env = UBUNTU_ENV,
+    tars = ["//dockerfile_build:ubuntu_build.tar"]
+)
+
+load("//reproducible:nodebootstrap.bzl", "nodebootstrap_image")
+
+# TODO(aaron-prindle) add configurable params (node-version, etc)
+nodebootstrap_image(
+    name = "nodejs",
+)
+
+# TODO(aaron-prindle) add configurable params (node-version, etc)
+docker_build(
+    name = "nodejs_ubuntu",
+    base = "//reproducible:ubuntu",
+    env = UBUNTU_ENV,
+    tars =[
+        "//reproducible:nodejs"
+    ]
+)
+
+# TODO(aaron-prindle) add configurable params (node-version, etc)
+docker_build(
+    name = "nodejs_ubuntu_build",
+    base = "//dockerfile_build:ubuntu_build.tar",
+    env = UBUNTU_ENV,
+    tars =[
+        "//reproducible:nodejs"
+    ]
+)
+
+# TODO(aaron-prindle) pass in configurable params
+docker_build(
+    name = "nodejs_builder",
+    base = "//dockerfile_build:ubuntu_build.tar",
+    entrypoint = [
+        "/mknodeimage.sh",
+    ],
+    files = [
+        ":mknodeimage.sh",
+        "@nodejs_tar_download//file"
+        ],
+)
