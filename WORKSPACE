@@ -75,7 +75,7 @@ dpkg_list(
 
 git_repository(
     name = "runtimes_common",
-    commit = "dc8727dea384f799f2470ccf624e910fe0227ccd",
+    commit = "542faccd9df9fa631dcc18c0a55c815843965d5e",
     remote = "https://github.com/GoogleCloudPlatform/runtimes-common.git",
 )
 

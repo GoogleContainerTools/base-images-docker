@@ -40,13 +40,14 @@ tar -xf {context} -C "$tmpdir"
 cat {dockerfile} | sed "s|FROM.*|FROM {base_name}|g" > "$tmpdir"/Dockerfile
 
 # Perform the build in the context
-tag=$(docker build "$tmpdir" | awk '/Successfully built/{{print $NF}}')
+docker build -t {tag} "$tmpdir"
 # Copy out the rootfs.
-docker save "$tag" > {output}
+docker save {tag} > {output}
  """.format(base_tar=ctx.file.base.path,
             base_name=base_image_name,
             dockerfile=dockerfile_path,
             context=context_path,
+            tag="bazel/%s:%s" % (ctx.label.package, ctx.label.name),
             output=ctx.outputs.out.path)
     script = ctx.new_file(ctx.label.name + ".build")
     ctx.file_action(
