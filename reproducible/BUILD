@@ -66,6 +66,11 @@ UBUNTU_ENV = {
     "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
 }
 
+NODEJS_ENV = {
+    "PORT": "8080",
+    "NODE_ENV": "production"
+}
+
 docker_build(
     name = "ubuntu",
     cmd = "/bin/bash",
@@ -81,42 +86,46 @@ structure_test(
 
 docker_build(
     name = "ubuntu_build",
+    base = "//dockerfile_build:ubuntu_build.tar",
     cmd = "/bin/bash",
-    env = UBUNTU_ENV,
-    tars = ["//dockerfile_build:ubuntu_build.tar"]
 )
 
 load("//reproducible:nodebootstrap.bzl", "nodebootstrap_image")
 
-# TODO(aaron-prindle) add configurable params (node-version, etc)
+# nodebootstrap_image generates a .tar.gz rootfs that has has a nodejs
+# install compiled from source
 nodebootstrap_image(
     name = "nodejs",
 )
 
-# TODO(aaron-prindle) add configurable params (node-version, etc)
+# nodejs_ubuntu is a docker image that is a nodejs install compiled from source
+# on top of a vanilla ubuntu release
 docker_build(
     name = "nodejs_ubuntu",
     base = "//reproducible:ubuntu",
-    env = UBUNTU_ENV,
+    env = NODEJS_ENV,
+    ports = ["8080"],
     tars =[
         "//reproducible:nodejs"
     ]
 )
 
-# TODO(aaron-prindle) add configurable params (node-version, etc)
+# nodejs_ubuntu_build is a docker image that is a nodejs install compiled from
+# source on top of a vanilla ubuntu release + build_essential/python2.7
 docker_build(
     name = "nodejs_ubuntu_build",
-    base = "//dockerfile_build:ubuntu_build.tar",
-    env = UBUNTU_ENV,
+    base = ":ubuntu_build",
+    env = NODEJS_ENV,
     tars =[
         "//reproducible:nodejs"
     ]
 )
 
-# TODO(aaron-prindle) pass in configurable params
+# nodejs_builder is a docker image that is capable of building nodejs running
+# the mknodeimage.sh script on top of ubuntu + build_essential/python2.7
 docker_build(
     name = "nodejs_builder",
-    base = "//dockerfile_build:ubuntu_build.tar",
+    base = ":ubuntu_build",
     entrypoint = [
         "/mknodeimage.sh",
     ],

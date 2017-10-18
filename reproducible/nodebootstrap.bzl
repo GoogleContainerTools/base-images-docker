@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Rule for building nodebootstrap rootfs tarballs."""
+"""Rule for building nodejs installable tarball"""
 
 def _impl(ctx):
     # Strip off the '.tar'
@@ -30,8 +30,8 @@ docker load -i {0}
 # Run the builder image.
 cid=$(docker run -d --privileged {1})
 docker attach $cid
-# Copy out the rootfs.
-docker cp $cid:/workspace/rootfs.tar.gz {2}
+# Copy out the nodejs tar.
+docker cp $cid:/workspace/nodejs.tar.gz {2}
 
 # Cleanup
 docker rm $cid
@@ -73,17 +73,14 @@ load(
     "docker_build",
 )
 
-def nodebootstrap_image(name, overlay_tar="", env=None):
+def nodebootstrap_image(name, env=None):
     if not env:
         env = {}
-    rootfs = "%s.rootfs" % name
+    nodejs = "%s.nodejs" % name
     nodebootstrap(
-        name=rootfs,
+        name=nodejs,
     )
-    tars = [rootfs]
-    if overlay_tar:
-        # The overlay tar has to come first to actuall overwrite existing files.
-        tars.insert(0, overlay_tar)
+    tars = [nodejs]
     docker_build(
         name=name,
         tars=tars,
