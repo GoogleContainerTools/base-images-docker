@@ -1,7 +1,6 @@
 .PHONY: test
 test:
 	./check-fmt.sh
-	bazel clean
 	bazel build //...
   	bazel test --test_output=errors //...
 	# Check for issues with the format of our bazel config files.
