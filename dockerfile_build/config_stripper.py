@@ -15,6 +15,7 @@
 # limitations under the License.
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -45,12 +46,21 @@ def strip_tar(input, output):
     tempdir = tempfile.mkdtemp()
     with tarfile.open(name=input, mode='r') as it:
         it.extractall(tempdir)
-    
-    with open(os.path.join(tempdir, 'manifest.json'), 'r') as mf:
+
+    mf_path = os.path.join(tempdir, 'manifest.json')
+    with open(mf_path, 'r') as mf:
         manifest = json.load(mf)
     for image in manifest:
         config = image['Config']
-        strip_config(os.path.join(tempdir, config))
+        cfg_path = os.path.join(tempdir, config)
+        new_cfg_path = strip_config(cfg_path)
+        # Update the name of the config in the metadata object
+        # to match it's new digest.
+        image['Config'] = new_cfg_path
+
+    # Rewrite the manifest with the new config names.
+    with open(mf_path, 'w') as f:
+        json.dump(manifest, f, sort_keys=True)
 
     # Collect the files before adding, so we can sort them.
     files_to_add = []
@@ -68,15 +78,24 @@ def strip_tar(input, output):
     shutil.rmtree(tempdir)
     return 0
 
+
 def strip_config(path):
     with open(path, 'r') as f:
         config = json.load(f)
     config['created'] = _TIMESTAMP
     for entry in config['history']:
         entry['created'] = _TIMESTAMP
-    
+
+    config_str = json.dumps(config, sort_keys=True)
     with open(path, 'w') as f:
-        json.dump(config, f, sort_keys=True)
+        f.write(config_str)
+
+    # Calculate the new file path
+    sha = hashlib.sha256(config_str).hexdigest()
+    new_path = '%s.json' % sha
+    os.rename(path, os.path.join(os.path.dirname(path), new_path))
+    return new_path
+
 
 if __name__ == "__main__":
     sys.exit(main())
