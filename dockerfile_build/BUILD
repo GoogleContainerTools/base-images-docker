@@ -1,4 +1,4 @@
-package(default_visibility = ["//project:__subpackages__"])
+package(default_visibility = ["//:__subpackages__"])
 
 load(":dockerfile_build.bzl", "dockerfile_build")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
@@ -27,4 +27,11 @@ structure_test(
 py_binary(
     name = "config_stripper",
     srcs = ["config_stripper.py"],
+)
+
+dockerfile_build(
+    name = "ubuntu_build",
+    base = "//reproducible:ubuntu.tar",
+    context = ":context.tar",
+    dockerfile = ":Dockerfile.ubuntu_build",
 )

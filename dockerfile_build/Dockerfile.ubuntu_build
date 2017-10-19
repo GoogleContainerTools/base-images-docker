@@ -1,0 +1,7 @@
+FROM bazel/reproducible:ubuntu
+RUN apt-get update -y && \
+    apt-get install --no-install-recommends -y -q \
+      build-essential \
+      python2.7 && \
+    apt-get clean && \
+    rm /var/lib/apt/lists/*_*
