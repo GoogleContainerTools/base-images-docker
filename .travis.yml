@@ -9,7 +9,7 @@ jdk:
   - oraclejdk8
 
 language: go
-go: 1.7.1 
+go: 1.7.1
 install: true
 
 addons:
@@ -30,3 +30,4 @@ script:
  - make test
  - bazel test --test_output=errors //reproducible:all
  - bazel test --test_output=errors //dockerfile_build:all
+ - git verify-commit $(git log -n 1 --no-merges --pretty="%H")
