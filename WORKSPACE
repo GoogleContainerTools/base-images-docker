@@ -98,8 +98,14 @@ http_file(
     url = "https://partner-images.canonical.com/core/xenial/20171006/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
 )
 
-http_file(
-    name = "nodejs_tar_download",
-    sha256 = "94557aa1b9adaa71a424eb7efe8877d7e65bda6e496350c4bac5f64ec715bb1c",
-    url = "https://nodejs.org/dist/v6.11.4/node-v6.11.4.tar.gz",
-)
+NODE_MAP = {
+    "8.5.0": "dd5ac97074882ba62892bdb91ec5e624c338d772a6218da08c182231031a4446",
+    # "8.6.0": "80551d47440c602c5825a3f6611e13cb0c57d277234dbff693af433a88351a08",
+}
+
+[
+    http_file(
+    name = "node_%s" % version.replace(".", "_"),
+    sha256 = sha,
+    url = "https://nodejs.org/dist/v%s/node-v%s.tar.gz" % (version, version),
+) for version, sha in NODE_MAP.items()]

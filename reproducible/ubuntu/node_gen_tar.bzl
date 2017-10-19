@@ -16,9 +16,9 @@
 
 def _impl(ctx):
     # Strip off the '.tar'
-    image_name = ctx.attr._builder_image.label.name.split('.', 1)[0]
+    image_name = ctx.attr.builder_image.label.name.split('.', 1)[0]
     # docker_build rules always generate an image named 'bazel/$package:$name'.
-    builder_image_name = "bazel/%s:%s" % (ctx.attr._builder_image.label.package,
+    builder_image_name = "bazel/%s:%s" % (ctx.attr.builder_image.label.package,
                                           image_name)
 
     # Generate a shell script to run the build.
@@ -36,7 +36,7 @@ docker cp $cid:/workspace/nodejs.tar.gz {2}
 
 # Cleanup
 docker rm $cid
- """.format(ctx.executable._builder_image.path,
+ """.format(ctx.executable.builder_image.path,
             builder_image_name,
             ctx.outputs.out.path)
     script = ctx.new_file(ctx.label.name + ".build")
@@ -47,21 +47,21 @@ docker rm $cid
 
     ctx.actions.run(
         outputs=[ctx.outputs.out],
-        inputs=ctx.attr._builder_image.files.to_list() +
-        ctx.attr._builder_image.data_runfiles.files.to_list() + ctx.attr._builder_image.default_runfiles.files.to_list(),
+        inputs=ctx.attr.builder_image.files.to_list() +
+        ctx.attr.builder_image.data_runfiles.files.to_list() + ctx.attr.builder_image.default_runfiles.files.to_list(),
         executable=script,
     )
 
     return struct()
 
-nodebootstrap = rule(
+_node_gen_tar = rule(
     attrs = {
-        "_builder_image": attr.label(
-            default = Label("//reproducible/ubuntu:nodejs_builder"),
-            allow_files = True,
-            single_file = True,
+        "builder_image": attr.label(
             executable = True,
             cfg = "target",
+            allow_files = True,
+            single_file = True,
+            mandatory = True,
         ),
     },
     executable = False,
@@ -76,17 +76,23 @@ load(
     "docker_build",
 )
 
-def nodebootstrap_image(name, env=None):
+def node_gen_tar(name, env=None):
+    docker_build(
+        name = "%s_builder" % name,
+        base = ":ubuntu_build",
+        entrypoint = [
+            "/mknodeimage.sh",
+            name[len("node_"):].replace("_", "."),
+        ],
+        files = [
+            ":mknodeimage.sh",
+            "@%s//file" % name,
+            ],
+    )
+
     if not env:
         env = {}
-    nodejs = "%s.nodejs" % name
-    nodebootstrap(
-        name=nodejs,
-    )
-    tars = [nodejs]
-    docker_build(
+    _node_gen_tar(
         name=name,
-        tars=tars,
-        env=env,
-        cmd="/bin/bash",
+        builder_image = Label("//reproducible/ubuntu:%s_builder" % name),
     )

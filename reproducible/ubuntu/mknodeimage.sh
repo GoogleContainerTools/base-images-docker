@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ex
 
+VERSION=$1
+
 ln -s /usr/bin/python2.7 /usr/bin/python
 
 WORKDIR="/workspace/nodejs_build"
@@ -8,11 +10,15 @@ OUTPUTDIR="$WORKDIR/nodejs"
 mkdir -p "$OUTPUTDIR"
 cd "$WORKDIR"
 
-tar -xvf /node-v6.11.4.tar.gz
-cd node-v6.11.4
+NPROCS="$(grep -c ^processor /proc/cpuinfo)"
+MAX_PROCS="4"
+
+tar -xvf "/node-v$VERSION.tar.gz"
+cd "node-v$VERSION"
 ./configure --prefix="$OUTPUTDIR"
-make -j4
-make install
+# Sets number of cores to use for make, maximum of 4
+make -j$(($NPROCS>$MAX_PROCS?$NPROCS:$MAX_PROCS)) &> /dev/null
+make install &> /dev/null
 
 # pass -n to gzip to strip timestamps
 # strip the '.' with --transform thatp tar includes at the root to build nodejs
