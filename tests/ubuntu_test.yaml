@@ -13,3 +13,5 @@ fileExistenceTests:
   path: '/'
   shouldExist: true
   permissions: 'drwxr-xr-x'
+metadataTest:
+  cmd: ["/bin/bash"]
