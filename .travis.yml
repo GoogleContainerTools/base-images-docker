@@ -31,3 +31,7 @@ script:
  - bazel test --test_output=errors //reproducible:all
  - bazel test --test_output=errors //reproducible/ubuntu/test:all
  - bazel test --test_output=errors //dockerfile_build/test:all
+
+cache:
+  directories:
+  - $HOME/.cache/bazel
