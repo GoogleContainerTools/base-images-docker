@@ -26,7 +26,8 @@ def _impl(ctx):
 #!/bin/bash
 set -ex
 
-docker load -i {0}
+# Execute the loader script.
+{0}
 # Run the builder image.
 cid=$(docker run -d --privileged {1} {2} {3})
 docker attach $cid
@@ -35,7 +36,7 @@ docker cp $cid:/workspace/rootfs.tar.gz {4}
 
 # Cleanup
 docker rm $cid
- """.format(ctx.file._builder_image.path,
+ """.format(ctx.executable._builder_image.path,
             builder_image_name,
             ctx.attr.variant,
             ctx.attr.distro,
@@ -64,9 +65,11 @@ debootstrap = rule(
             default = "jessie",
         ),
         "_builder_image": attr.label(
-            default = Label("//reproducible:builder.tar"),
+            default = Label("//reproducible:builder"),
             allow_files = True,
             single_file = True,
+            executable = True,
+            cfg = "target",
         ),
     },
     executable = False,

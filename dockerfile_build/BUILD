@@ -12,7 +12,7 @@ pkg_tar(
 
 dockerfile_build(
     name = "test_image",
-    base = "//reproducible:debian8.tar",
+    base = "//reproducible:debian8",
     context = ":context.tar",
     dockerfile = ":Dockerfile",
 )
@@ -24,7 +24,7 @@ py_binary(
 
 dockerfile_build(
     name = "ubuntu_build",
-    base = "//reproducible/ubuntu:ubuntu.tar",
+    base = "//reproducible/ubuntu:ubuntu",
     context = ":context.tar",
     dockerfile = ":Dockerfile.ubuntu_build",
 )
