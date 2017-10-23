@@ -26,7 +26,8 @@ def _impl(ctx):
 #!/bin/bash
 set -ex
 
-docker load -i {0}
+# Execute the image loader
+{0}
 # Run the builder image.
 cid=$(docker run -d --privileged {1})
 docker attach $cid
@@ -35,7 +36,7 @@ docker cp $cid:/workspace/nodejs.tar.gz {2}
 
 # Cleanup
 docker rm $cid
- """.format(ctx.file._builder_image.path,
+ """.format(ctx.executable._builder_image.path,
             builder_image_name,
             ctx.outputs.out.path)
     script = ctx.new_file(ctx.label.name + ".build")
@@ -56,9 +57,11 @@ docker rm $cid
 nodebootstrap = rule(
     attrs = {
         "_builder_image": attr.label(
-            default = Label("//reproducible/ubuntu:nodejs_builder.tar"),
+            default = Label("//reproducible/ubuntu:nodejs_builder"),
             allow_files = True,
             single_file = True,
+            executable = True,
+            cfg = "target",
         ),
     },
     executable = False,

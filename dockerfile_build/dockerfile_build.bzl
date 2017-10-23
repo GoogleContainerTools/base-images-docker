@@ -30,7 +30,7 @@ def _impl(ctx):
 set -ex
 
 # Load the base image
-docker load -i {base_tar}
+{base_loader}
 
 
 # Setup a tmpdir context
@@ -44,7 +44,7 @@ cat {dockerfile} | sed "s|FROM.*|FROM {base_name}|g" > "$tmpdir"/Dockerfile
 docker build -t {tag} "$tmpdir"
 # Copy out the rootfs.
 docker save {tag} > {output}
- """.format(base_tar=ctx.file.base.path,
+ """.format(base_loader=ctx.executable.base.path,
             base_name=base_image_name,
             dockerfile=dockerfile_path,
             context=context_path,
@@ -78,6 +78,8 @@ dockerfile_build = rule(
         "base": attr.label(
             allow_files = True,
             single_file = True,
+            executable = True,
+            cfg = "target",
         ),
         "dockerfile": attr.label(
             allow_files = True,
@@ -90,9 +92,9 @@ dockerfile_build = rule(
             mandatory = True,
         ),
         "_config_stripper": attr.label(
-            cfg="host",
-            executable=True,
-            default="//dockerfile_build:config_stripper",
+            cfg = "host",
+            executable = True,
+            default = "//dockerfile_build:config_stripper",
         ),
     },
     executable = False,
