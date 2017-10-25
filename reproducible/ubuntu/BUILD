@@ -11,17 +11,24 @@ NODEJS_ENV = {
     "NODE_ENV": "production",
 }
 
+# 'ubuntu_vanilla' is docker image derived from a snapshot ubuntu rootfs
 docker_build(
-    name = "ubuntu",
+    name = "ubuntu_vanilla",
     cmd = "/bin/bash",
     env = UBUNTU_ENV,
     tars = ["@ubuntu_tar_download//file"],
 )
 
+# 'ubuntu' is a ubuntu rootfs w/ ca-certificates, curl, and netbase
+docker_build(
+    name = "ubuntu",
+    base = "//dockerfile_build:ubuntu.tar",
+)
+
+# 'ubuntu_build' is the 'ubuntu' image w/ build-essential and python2.7
 docker_build(
     name = "ubuntu_build",
     base = "//dockerfile_build:ubuntu_build.tar",
-    cmd = "/bin/bash",
 )
 
 NODE_VERSIONS = [
@@ -41,7 +48,7 @@ sh_binary(
 # on top of a vanilla ubuntu release
 [docker_build(
     name = "node_%s_ubuntu" % version,
-    base = "//reproducible/ubuntu:ubuntu",
+    base = "//dockerfile_build:ubuntu",
     env = NODEJS_ENV,
     ports = ["8080"],
     tars = [
