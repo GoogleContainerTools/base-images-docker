@@ -8,7 +8,7 @@ UBUNTU_ENV = {
 
 NODEJS_ENV = {
     "PORT": "8080",
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
 }
 
 docker_build(
@@ -39,9 +39,9 @@ docker_build(
     base = "//reproducible/ubuntu:ubuntu",
     env = NODEJS_ENV,
     ports = ["8080"],
-    tars =[
-        "//reproducible/ubuntu:nodejs"
-    ]
+    tars = [
+        "//reproducible/ubuntu:nodejs",
+    ],
 )
 
 # nodejs_ubuntu_build is a docker image that is a nodejs install compiled from
@@ -50,9 +50,9 @@ docker_build(
     name = "nodejs_ubuntu_build",
     base = ":ubuntu_build",
     env = NODEJS_ENV,
-    tars =[
-        "//reproducible/ubuntu:nodejs"
-    ]
+    tars = [
+        "//reproducible/ubuntu:nodejs",
+    ],
 )
 
 # nodejs_builder is a docker image that is capable of building nodejs running
@@ -65,6 +65,6 @@ docker_build(
     ],
     files = [
         ":mknodeimage.sh",
-        "@nodejs_tar_download//file"
-        ],
+        "@nodejs_tar_download//file",
+    ],
 )

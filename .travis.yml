@@ -26,5 +26,4 @@ install:
   - go get -u github.com/bazelbuild/buildifier/buildifier
 
 script:
- - find . -name "*.sh" | grep -v "third_party/" | xargs shellcheck
  - make test
