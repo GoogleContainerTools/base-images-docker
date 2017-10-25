@@ -2,6 +2,10 @@
 set -ex
 # shellcheck source=/dev/null
 source "$KOKORO_GFILE_DIR/common.sh"
+sudo chmod +x "$KOKORO_GFILE_DIR/verify-commits.sh"
+"$KOKORO_GFILE_DIR"/verify-commits.sh
+
 cd github/debian-docker
-test_tag="debian-kokoro-presubmit-$KOKORO_BUILD_NUMBER"
-TAG=$test_tag ./build.sh -r gcr.io/gcp-runtimes -v "$DEBIAN_SUITE"
+# This is what travis currently does. Let's test what's faster.
+find . -name "*.sh" | grep -v "third_party/" | xargs shellcheck
+make test
