@@ -1,6 +1,6 @@
 #!/bin/bash
 set -ex
-# shellcheck source=/dev/null
+# shellcheck disable=SC1090
 source "$KOKORO_GFILE_DIR/common.sh"
 sudo chmod +x "$KOKORO_GFILE_DIR/verify-commits.sh"
 "$KOKORO_GFILE_DIR"/verify-commits.sh

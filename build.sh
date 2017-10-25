@@ -73,4 +73,5 @@ else
   usage
 fi
 
+# shellcheck disable=SC2140
 gcloud container builds submit . --config="$CONFIG" --verbosity=info --substitutions=_REPO="$REPO",_TAG="$TAG",_VERSION_NUMBER="$VERSION_NUMBER"
