@@ -97,9 +97,3 @@ http_file(
     sha256 = "e43f802f876505c0cee1759fbc545f65b2d59c4dd33835e93afea3fa124b5799",
     url = "https://partner-images.canonical.com/core/xenial/20171006/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
 )
-
-http_file(
-    name = "nodejs_tar_download",
-    sha256 = "94557aa1b9adaa71a424eb7efe8877d7e65bda6e496350c4bac5f64ec715bb1c",
-    url = "https://nodejs.org/dist/v6.11.4/node-v6.11.4.tar.gz",
-)

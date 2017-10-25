@@ -24,47 +24,38 @@ docker_build(
     cmd = "/bin/bash",
 )
 
-load("//reproducible/ubuntu:nodebootstrap.bzl", "nodebootstrap_image")
+NODE_VERSIONS = [
+    "8_5_0",
+]
 
-# nodebootstrap_image generates a .tar.gz rootfs that has has a nodejs
-# install compiled from source
-nodebootstrap_image(
-    name = "nodejs",
+sh_binary(
+    name = "node_gen_tar",
+    srcs = ["node_gen_tar.sh"],
+    data = [
+        "mknodeimage.sh",
+        "//dockerfile_build:ubuntu_build.tar",
+    ],
 )
 
-# nodejs_ubuntu is a docker image that is a nodejs install compiled from source
+# node_%s_ubuntu is a docker image that is a nodejs install compiled from src
 # on top of a vanilla ubuntu release
-docker_build(
-    name = "nodejs_ubuntu",
+[docker_build(
+    name = "node_%s_ubuntu" % version,
     base = "//reproducible/ubuntu:ubuntu",
     env = NODEJS_ENV,
     ports = ["8080"],
     tars = [
-        "//reproducible/ubuntu:nodejs",
+        "node_v%s_compiled.tar.gz" % version.replace("_", "."),
     ],
-)
+) for version in NODE_VERSIONS]
 
-# nodejs_ubuntu_build is a docker image that is a nodejs install compiled from
-# source on top of a vanilla ubuntu release + build_essential/python2.7
-docker_build(
-    name = "nodejs_ubuntu_build",
+# node_%s_ubuntu_build is a docker image that is a nodejs install compiled from
+# src on top of a vanilla ubuntu release + build_essential/python2.7
+[docker_build(
+    name = "node_%s_ubuntu_build" % version,
     base = ":ubuntu_build",
     env = NODEJS_ENV,
     tars = [
-        "//reproducible/ubuntu:nodejs",
+        "node_v%s_compiled.tar.gz" % version.replace("_", "."),
     ],
-)
-
-# nodejs_builder is a docker image that is capable of building nodejs running
-# the mknodeimage.sh script on top of ubuntu + build_essential/python2.7
-docker_build(
-    name = "nodejs_builder",
-    base = ":ubuntu_build",
-    entrypoint = [
-        "/mknodeimage.sh",
-    ],
-    files = [
-        ":mknodeimage.sh",
-        "@nodejs_tar_download//file",
-    ],
-)
+) for version in NODE_VERSIONS]

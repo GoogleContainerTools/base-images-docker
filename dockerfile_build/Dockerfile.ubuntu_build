@@ -2,6 +2,10 @@ FROM bazel/reproducible:ubuntu
 RUN apt-get update -y && \
     apt-get install --no-install-recommends -y -q \
       build-essential \
+      curl \
+      ca-certificates \
       python2.7 && \
     apt-get clean && \
     rm /var/lib/apt/lists/*_*
+
+RUN ln -s /usr/bin/python2.7 /usr/bin/python
