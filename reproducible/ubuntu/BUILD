@@ -24,18 +24,18 @@ docker_build(
     cmd = "/bin/bash",
 )
 
-load("//reproducible/ubuntu:node_gen_tar.bzl", "node_gen_tar")
+NODE_VERSIONS = [
+    "8_5_0",
+]
 
-NODE_MAP = {
-    "8_5_0": "dd5ac97074882ba62892bdb91ec5e624c338d772a6218da08c182231031a4446",
-    # "8_6_0": "80551d47440c602c5825a3f6611e13cb0c57d277234dbff693af433a88351a08",
-}
-
-# node_gen_tar generates a .tar.gz rootfs that has has a nodejs
-# install compiled from src
-[node_gen_tar(
-    name = "node_%s" % version,
-) for version, sha in NODE_MAP.items()]
+sh_binary(
+    name = "node_gen_tar",
+    srcs = ["node_gen_tar.sh"],
+    data = [
+        "mknodeimage.sh",
+        "//dockerfile_build:ubuntu_build.tar",
+    ],
+)
 
 # node_%s_ubuntu is a docker image that is a nodejs install compiled from src
 # on top of a vanilla ubuntu release
@@ -44,10 +44,10 @@ NODE_MAP = {
     base = "//reproducible/ubuntu:ubuntu",
     env = NODEJS_ENV,
     ports = ["8080"],
-    tars =[
-        "//reproducible/ubuntu:node_%s" % version,
-    ]
-) for version, sha in NODE_MAP.items()]
+    tars = [
+        "node_v%s_compiled.tar.gz" % version.replace("_", "."),
+    ],
+) for version in NODE_VERSIONS]
 
 # node_%s_ubuntu_build is a docker image that is a nodejs install compiled from
 # src on top of a vanilla ubuntu release + build_essential/python2.7
@@ -55,7 +55,7 @@ NODE_MAP = {
     name = "node_%s_ubuntu_build" % version,
     base = ":ubuntu_build",
     env = NODEJS_ENV,
-    tars =[
-        "//reproducible/ubuntu:node_%s" % version,
-    ]
-) for version, sha in NODE_MAP.items()]
+    tars = [
+        "node_v%s_compiled.tar.gz" % version.replace("_", "."),
+    ],
+) for version in NODE_VERSIONS]
