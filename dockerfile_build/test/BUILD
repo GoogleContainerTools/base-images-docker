@@ -9,6 +9,12 @@ structure_test(
     image_tar = "//dockerfile_build:test_image",
 )
 
+structure_test(
+    name = "dockerfile_build_test_2",
+    config = ":test2.yaml",
+    image_tar = "//dockerfile_build:test_image_2",
+)
+
 py_binary(
     name = "config_stripper",
     srcs = ["//dockerfile_build:config_stripper.py"],
