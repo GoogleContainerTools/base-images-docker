@@ -6,7 +6,8 @@ sudo chmod +x "$KOKORO_GFILE_DIR/verify-commits.sh"
 "$KOKORO_GFILE_DIR"/verify-commits.sh
 
 # Grab the latest version of shellcheck and add it to PATH
-cp "$KOKORO_GFILE_DIR"/shellcheck-latest.linux /usr/local/bin/shellcheck
+sudo cp "$KOKORO_GFILE_DIR"/shellcheck-latest.linux /usr/local/bin/shellcheck
+sudo chmod +x /usr/local/bin/shellcheck
 
 cd github/debian-docker
 # This is what travis currently does. Let's test what's faster.
