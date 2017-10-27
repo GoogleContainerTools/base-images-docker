@@ -29,6 +29,13 @@ py_binary(
 )
 
 dockerfile_build(
+    name = "ubuntu",
+    base = "//reproducible/ubuntu:ubuntu_vanilla",
+    context = ":context.tar",
+    dockerfile = ":Dockerfile.ubuntu",
+)
+
+dockerfile_build(
     name = "ubuntu_build",
     base = "//reproducible/ubuntu:ubuntu",
     dockerfile = ":Dockerfile.ubuntu_build",

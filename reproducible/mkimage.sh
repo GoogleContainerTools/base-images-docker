@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2115
 set -ex
 
 usage() {
