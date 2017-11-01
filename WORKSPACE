@@ -94,6 +94,6 @@ go_repositories()
 
 http_file(
     name = "ubuntu_tar_download",
-    sha256 = "e43f802f876505c0cee1759fbc545f65b2d59c4dd33835e93afea3fa124b5799",
-    url = "https://partner-images.canonical.com/core/xenial/20171006/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
+    sha256 = "51a8c466269bdebf232cac689aafad8feacd64804b13318c01096097a186d051",
+    url = "https://storage.googleapis.com/ubuntu_tar/20171028/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
 )
