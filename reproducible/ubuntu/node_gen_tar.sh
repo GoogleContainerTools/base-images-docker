@@ -19,7 +19,7 @@ fi
 VERSION=$1
 NODE_OUTPUT_PATH=$2
 
-IMG_NAME=$("docker load -i $(pwd)/dockerfile_build/ubuntu_build.tar | awk '{print $3}'")
+IMG_NAME=$("docker load -i $(pwd)/dockerfile_build/ubuntu_16_0_4_build.tar | awk '{print $3}'")
 
 # Run the base image.
 CID=$("docker run -d -v $(pwd)/reproducible/ubuntu/mknodeimage.sh:/mknodeimage.sh $IMG_NAME /mknodeimage.sh $VERSION")

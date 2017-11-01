@@ -1,0 +1,6 @@
+steps:
+  - name: 'gcr.io/cloud-builders/bazel'
+    args: ['run', '//reproducible/ubuntu:${_IMAGE}']
+  - name: gcr.io/cloud-builders/docker:latest
+    args: ['tag', 'bazel/reproducible/ubuntu:${_IMAGE}', 'gcr.io/gcp-runtimes/${_IMAGE}:${COMMIT_SHA}']
+images: ['gcr.io/gcp-runtimes/${_IMAGE}']

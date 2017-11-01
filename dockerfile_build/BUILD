@@ -28,15 +28,18 @@ py_binary(
     srcs = ["config_stripper.py"],
 )
 
-dockerfile_build(
-    name = "ubuntu",
-    base = "//reproducible/ubuntu:ubuntu_vanilla",
-    context = ":context.tar",
-    dockerfile = ":Dockerfile.ubuntu",
-)
+UBUNTU_VERSIONS = [
+    "16_0_4",
+]
 
-dockerfile_build(
-    name = "ubuntu_build",
-    base = "//reproducible/ubuntu:ubuntu",
+[dockerfile_build(
+    name = "ubuntu_%s" % version,
+    base = "//reproducible/ubuntu:ubuntu_%s_vanilla" % version,
+    dockerfile = ":Dockerfile.ubuntu",
+) for version in UBUNTU_VERSIONS]
+
+[dockerfile_build(
+    name = "ubuntu_%s_build" % version,
+    base = "//reproducible/ubuntu:ubuntu_%s" % version,
     dockerfile = ":Dockerfile.ubuntu_build",
-)
+) for version in UBUNTU_VERSIONS]
