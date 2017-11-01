@@ -20,33 +20,39 @@ pkg_tar(
     strip_prefix = "overlay/",
 )
 
-# 'ubuntu_16_0_4_vanilla' is docker image derived from a snapshot ubuntu_16_0_4 rootfs
-docker_build(
-    name = "ubuntu_16_0_4_vanilla",
+UBUNTU_VERSIONS = [
+    "16_0_4",
+]
+
+# 'ubuntu_%s_vanilla' is docker image derived from a snapshot ubuntu_%s rootfs
+[docker_build(
+    name = "ubuntu_%s_vanilla" % version,
     cmd = "/bin/bash",
     env = UBUNTU_ENV,
-    tars = ["@ubuntu_16_0_4_tar_download//file"],
-)
+    tars = ["@ubuntu_%s_tar_download//file" % version],
+) for version in UBUNTU_VERSIONS]
 
-# 'ubuntu_16_0_4' is a ubuntu_16_0_4 rootfs w/ ca-certificates, curl, and netbase
-docker_build(
-    name = "ubuntu_16_0_4",
-    base = "//dockerfile_build:ubuntu_16_0_4.tar",
+# 'ubuntu_%s' is a ubuntu_%s rootfs w/ ca-certificates, curl, and netbase
+[docker_build(
+    name = "ubuntu_%s" % version,
+    base = "//dockerfile_build:ubuntu_%s.tar" % version,
     tars = [
         ":overlay.tar",
     ],
-)
+) for version in UBUNTU_VERSIONS]
 
-# 'ubuntu_16_0_4_build' is the 'ubuntu_16_0_4' image w/ build-essential and python2.7
-docker_build(
-    name = "ubuntu_16_0_4_build",
-    base = "//dockerfile_build:ubuntu_16_0_4_build.tar",
-)
+# 'ubuntu_%s_build' is the 'ubuntu_%s' image w/ build-essential and python2.7
+[docker_build(
+    name = "ubuntu_%s_build" % version,
+    base = "//dockerfile_build:ubuntu_%s_build.tar" % version,
+) for version in UBUNTU_VERSIONS]
 
 NODE_VERSIONS = [
     "8_5_0",
 ]
 
+# TODO(aaron-prindle) right now the compilation of node is tied to 16_0_4
+# verify this is okay
 sh_binary(
     name = "node_gen_tar",
     srcs = ["node_gen_tar.sh"],
@@ -56,25 +62,25 @@ sh_binary(
     ],
 )
 
-# node_%s_ubuntu_16_0_4 is a docker image that is a nodejs install compiled from src
-# on top of a vanilla ubuntu_16_0_4 release
-[docker_build(
-    name = "node_%s_ubuntu" % version,
-    base = "//dockerfile_build:ubuntu_16_0_4",
+# node_%s_ubuntu_%s is a docker image that is a nodejs install compiled from src
+# on top of a vanilla ubuntu_%s release
+[[docker_build(
+    name = "node_%s_ubuntu_%s" % (node_version, ubuntu_version),
+    base = "//dockerfile_build:ubuntu_%s" % ubuntu_version,
     env = NODEJS_ENV,
     ports = ["8080"],
     tars = [
-        "node_v%s_compiled.tar.gz" % version.replace("_", "."),
+        "node_v%s_compiled.tar.gz" % node_version.replace("_", "."),
     ],
-) for version in NODE_VERSIONS]
+) for node_version in NODE_VERSIONS] for ubuntu_version in UBUNTU_VERSIONS]
 
-# node_%s_ubuntu_16_0_4_build is a docker image that is a nodejs install compiled from
-# src on top of a vanilla ubuntu_16_0_4 release + build_essential/python2.7
-[docker_build(
-    name = "node_%s_ubuntu_build" % version,
-    base = ":ubuntu_16_0_4_build",
+# node_%s_ubuntu_%s_build is a docker image that is a nodejs install compiled from
+# src on top of a vanilla ubuntu_%s release + build_essential/python2.7
+[[docker_build(
+    name = "node_%s_ubuntu_%s_build" % (node_version, ubuntu_version),
+    base = ":ubuntu_%s_build" % ubuntu_version,
     env = NODEJS_ENV,
     tars = [
-        "node_v%s_compiled.tar.gz" % version.replace("_", "."),
+        "node_v%s_compiled.tar.gz" % node_version.replace("_", "."),
     ],
-) for version in NODE_VERSIONS]
+) for node_version in NODE_VERSIONS] for ubuntu_version in UBUNTU_VERSIONS]

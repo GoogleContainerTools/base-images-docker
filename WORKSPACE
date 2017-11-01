@@ -92,8 +92,15 @@ load(
 
 go_repositories()
 
-http_file(
-    name = "ubuntu_16_0_4_tar_download",
-    sha256 = "e43f802f876505c0cee1759fbc545f65b2d59c4dd33835e93afea3fa124b5799",
-    url = "https://partner-images.canonical.com/core/xenial/20171006/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
-)
+UBUNTU_MAP = {
+    "16_0_4": {
+        "sha256": "e43f802f876505c0cee1759fbc545f65b2d59c4dd33835e93afea3fa124b5799",
+        "url": "https://partner-images.canonical.com/core/xenial/20171006/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
+    },
+}
+
+[http_file(
+    name = "ubuntu_%s_tar_download" % version,
+    sha256 = map["sha256"],
+    url = map["url"],
+) for version, map in UBUNTU_MAP.items()]
