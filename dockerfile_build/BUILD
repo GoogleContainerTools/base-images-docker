@@ -1,4 +1,4 @@
-package(default_visibility = ["//:__subpackages__"])
+package(default_visibility = ["//visibility:public"])
 
 load(":dockerfile_build.bzl", "dockerfile_build")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
@@ -10,21 +10,3 @@ pkg_tar(
     strip_prefix = "context/",
 )
 
-dockerfile_build(
-    name = "test_image",
-    base = "//reproducible:debian8",
-    context = ":context.tar",
-    dockerfile = ":Dockerfile",
-)
-
-py_binary(
-    name = "config_stripper",
-    srcs = ["config_stripper.py"],
-)
-
-dockerfile_build(
-    name = "ubuntu_build",
-    base = "//reproducible/ubuntu:ubuntu",
-    context = ":context.tar",
-    dockerfile = ":Dockerfile.ubuntu_build",
-)

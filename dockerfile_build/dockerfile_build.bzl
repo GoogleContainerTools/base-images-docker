@@ -94,7 +94,7 @@ dockerfile_build = rule(
         "_config_stripper": attr.label(
             cfg = "host",
             executable = True,
-            default = "//dockerfile_build:config_stripper",
+            default = "//util:config_stripper",
         ),
     },
     executable = False,

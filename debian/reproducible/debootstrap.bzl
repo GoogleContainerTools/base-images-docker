@@ -65,7 +65,7 @@ debootstrap = rule(
             default = "jessie",
         ),
         "_builder_image": attr.label(
-            default = Label("//reproducible:builder"),
+            default = Label("//debian/reproducible:builder"),
             allow_files = True,
             single_file = True,
             executable = True,

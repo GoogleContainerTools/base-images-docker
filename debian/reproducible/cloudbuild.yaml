@@ -6,7 +6,7 @@ steps:
   # We have to build and load the builder image first, so it can be used in the next step.
   # Using "run" instead of "build" loads the built image into the daemon.
   - name: gcr.io/cloud-builders/bazel
-    args: ['run', '//reproducible:debian${_VERSION_NUMBER}']
+    args: ['run', '//debian/reproducible:debian${_VERSION_NUMBER}']
   
   # Give the image the right tag, and let CloudBuild push it.
   - name: gcr.io/cloud-builders/docker
