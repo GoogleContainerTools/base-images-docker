@@ -4,6 +4,21 @@ commandTests:
   command: 'sh'
   args: ['-c', 'echo $PATH']
   expectedOutput: ['/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin']
+commandTests:
+- name: 'curl installed'
+  command: 'dpkg'
+  args: ['-l', 'curl']
+  excludedOutput: ['.*no packages found matching.*']
+commandTests:
+- name: 'ca-certificates installed'
+  command: 'dpkg'
+  args: ['-l', 'ca-certificates']
+  excludedOutput: ['.*no packages found matching.*']
+commandTests:
+- name: 'netbase installed'
+  command: 'dpkg'
+  args: ['-l', 'netbase']
+  excludedOutput: ['.*no packages found matching.*']
 fileContentTests:
 - name: 'Ubuntu Distro Check'
   expectedContents: ['.*ubuntu.*']
@@ -13,3 +28,5 @@ fileExistenceTests:
   path: '/'
   shouldExist: true
   permissions: 'drwxr-xr-x'
+metadataTest:
+  cmd: ["/bin/bash"]

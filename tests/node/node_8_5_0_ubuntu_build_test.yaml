@@ -1,0 +1,13 @@
+schemaVersion: '2.0.0'
+commandTests:
+- name: 'node version'
+  command: 'node'
+  args: ['--version']
+  expectedOutput: ['v8.5.0']
+metadataTest:
+  env:
+    - key : PORT
+      value: 8080
+    - key: NODE_ENV
+      value: production
+  exposedPorts: ["8080"]

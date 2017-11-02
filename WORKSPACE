@@ -92,14 +92,15 @@ load(
 
 go_repositories()
 
-http_file(
-    name = "ubuntu_tar_download",
-    sha256 = "e43f802f876505c0cee1759fbc545f65b2d59c4dd33835e93afea3fa124b5799",
-    url = "https://partner-images.canonical.com/core/xenial/20171006/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
-)
+UBUNTU_MAP = {
+    "16_0_4": {
+        "sha256": "51a8c466269bdebf232cac689aafad8feacd64804b13318c01096097a186d051",
+        "url": "https://storage.googleapis.com/ubuntu_tar/20171028/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
+    },
+}
 
-http_file(
-    name = "nodejs_tar_download",
-    sha256 = "94557aa1b9adaa71a424eb7efe8877d7e65bda6e496350c4bac5f64ec715bb1c",
-    url = "https://nodejs.org/dist/v6.11.4/node-v6.11.4.tar.gz",
-)
+[http_file(
+    name = "ubuntu_%s_tar_download" % version,
+    sha256 = map["sha256"],
+    url = map["url"],
+) for version, map in UBUNTU_MAP.items()]

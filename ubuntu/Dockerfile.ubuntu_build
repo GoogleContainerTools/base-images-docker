@@ -5,3 +5,5 @@ RUN apt-get update -y && \
       python2.7 && \
     apt-get clean && \
     rm /var/lib/apt/lists/*_*
+
+RUN ln -s /usr/bin/python2.7 /usr/bin/python

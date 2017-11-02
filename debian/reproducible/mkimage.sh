@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2115
 set -ex
 
 usage() {
@@ -59,7 +60,7 @@ deb http://security.debian.org $DIST/updates main
 EOF
 
 # Delete dirs we don't need, leaving the entries.
-rm -rf "$WORKDIR:?"/dev "$WORKDIR:?"/proc
+rm -rf "${WORKDIR:?}"/dev "$WORKDIR"/proc
 mkdir -p "$WORKDIR"/dev "$WORKDIR"/proc
 
 rm -rf "$WORKDIR"/var/lib/apt/lists/snapshot*
