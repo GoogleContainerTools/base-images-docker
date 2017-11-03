@@ -1,5 +1,3 @@
-load("//node/reproducible:nodebootstrap.bzl", "nodebootstrap_image")
-load("//ubuntu/reproducible/BUILD", "UBUNTU_VERSIONS")
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 
 NODEJS_ENV = {
@@ -9,6 +7,10 @@ NODEJS_ENV = {
 
 NODE_VERSIONS = [
     "8_5_0",
+]
+
+UBUNTU_VERSIONS = [
+    "16_0_4",
 ]
 
 # TODO(aaron-prindle) right now the compilation of node is tied to 16_0_4
@@ -38,7 +40,7 @@ sh_binary(
 # src on top of a vanilla ubuntu_%s release + build_essential/python2.7
 [[docker_build(
     name = "node_%s_ubuntu_%s_build" % (node_version, ubuntu_version),
-file    base = "//ubuntu/reproducible:ubuntu_%s_build" % ubuntu_version,
+    base = "//ubuntu/reproducible:ubuntu_%s_build" % ubuntu_version,
     env = NODEJS_ENV,
     tars = [
         "node_v%s_compiled.tar.gz" % node_version.replace("_", "."),
