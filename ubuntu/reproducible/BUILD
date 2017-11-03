@@ -1,6 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
+load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 
 UBUNTU_ENV = {
     "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
@@ -9,7 +10,7 @@ UBUNTU_ENV = {
 # The overlay directory contains files that should be overlaid into the rootfs at /.
 pkg_tar(
     name = "overlay",
-    files = glob(["overlay/**/*"]),
+    srcs = glob(["overlay/**/*"]),
     package_dir = "/",
     strip_prefix = "overlay/",
 )

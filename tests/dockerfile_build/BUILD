@@ -21,7 +21,7 @@ dockerfile_build(
 structure_test(
     name = "dockerfile_build_test",
     config = ":test.yaml",
-    image_tar = "//tests/dockerfile_build:test_image",
+    image_tar = ":test_image",
 )
 
 dockerfile_build(
@@ -33,5 +33,5 @@ dockerfile_build(
 structure_test(
     name = "dockerfile_build_test_2",
     config = ":test2.yaml",
-    image_tar = "//dockerfile_build:test_image_2",
+    image_tar = ":test_image_2",
 )

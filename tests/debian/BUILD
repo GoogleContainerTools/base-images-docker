@@ -12,12 +12,11 @@ DEBIAN_MAP = {
 [structure_test(
     name = "debian%s_test" % num,
     config = ":debian_test.yaml",
-    image = ":debian%s" % num,
+    image = "//debian/reproducible:debian%s" % num,
 ) for num, distro in DEBIAN_MAP.items()]
 
 [structure_test(
     name = "debian%s_version_test" % num,
     config = ":debian_%s_test.yaml" % num,
-    image = ":debian%s" % num,
+    image = "//debian/reproducible:debian%s" % num,
 ) for num, distro in DEBIAN_MAP.items()]
-

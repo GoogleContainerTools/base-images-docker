@@ -25,7 +25,7 @@ docker_build(
 # The overlay directory contains files that should be overlaid into the rootfs at /.
 pkg_tar(
     name = "overlay",
-    files = glob(["overlay/**/*"]),
+    srcs = glob(["overlay/**/*"]),
     package_dir = "/",
     strip_prefix = "overlay/",
 )
@@ -48,4 +48,3 @@ DEBIAN_MAP = {
     env = DEBIAN_ENV,
     overlay_tar = ":overlay.tar",
 ) for num, distro in DEBIAN_MAP.items()]
-

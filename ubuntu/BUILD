@@ -2,7 +2,6 @@ package(default_visibility = ["//visibility:public"])
 
 load("//dockerfile_build:dockerfile_build.bzl", "dockerfile_build")
 
-
 UBUNTU_VERSIONS = [
     "16_0_4",
 ]
@@ -18,4 +17,3 @@ UBUNTU_VERSIONS = [
     base = "//ubuntu/reproducible:ubuntu_%s" % version,
     dockerfile = ":Dockerfile.ubuntu_build",
 ) for version in UBUNTU_VERSIONS]
-

@@ -1,3 +1,5 @@
+package(default_visibility = ["//visibility:public"])
+
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 
 NODEJS_ENV = {
