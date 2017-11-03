@@ -1,18 +1,14 @@
-debian-docker
-=============
+base-images-docker
+===================
+Source for the Google-maintained reproducible docker images.
 
-Source for the Google-maintained Debian container image: a [docker](https://docker.io) image bundling the stable [debian](https://www.debian.org) distribution suite.
+Usage
+=======
+Please navigate to respective base-image dir to read more on how to use to these
+base images.
 
-This image is available at `launcher.gcr.io/google/debian8` and `gcr.io/google-appengine/debian8`.
+Contribution Guidelines
+=========================
+For details on how to contribute to this image, see our [contribution
+guidelines](CONTRIB.md).
 
-The image is built using docker's [`mkimage.sh`](https://github.com/docker/docker/blob/master/contrib/mkimage.sh).
-
-For details on how to contribute to this image, see our [contribution guidelines](CONTRIB.md).
-
-## Usage
-
-To use this image in your application, create a Dockerfile that starts with this FROM line:
-
-```
-FROM launcher.gcr.io/google/debian8:latest
-```

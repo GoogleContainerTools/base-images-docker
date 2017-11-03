@@ -5,7 +5,8 @@ To build and test these images you will need to install `bazel`.
 To install a pre-commit hook that will automatically run tests, run the following command:
 
 ```shell
-ln -s $(pwd)/hack/hooks/* .git/hooks/
+cd .git/hooks/
+ln -s ../../hacks/hooks/* .
 ```
 
 # How to build these base images

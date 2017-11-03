@@ -17,7 +17,7 @@ then
   export TAG
 fi
 
-CONFIG=reproducible/cloudbuild.yaml
+CONFIG=debian/reproducible/cloudbuild.yaml
 
 while test $# -gt 0; do
   case "$1" in

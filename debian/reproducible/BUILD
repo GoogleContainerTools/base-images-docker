@@ -5,7 +5,6 @@ load(
     "@package_bundle//file:packages.bzl",
     builder_packages = "packages",
 )
-load("@runtimes_common//structure_tests:tests.bzl", "structure_test")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 
 # TODO: Try to reuse this variable from WORKSPACE.
@@ -26,12 +25,12 @@ docker_build(
 # The overlay directory contains files that should be overlaid into the rootfs at /.
 pkg_tar(
     name = "overlay",
-    files = glob(["overlay/**/*"]),
+    srcs = glob(["overlay/**/*"]),
     package_dir = "/",
     strip_prefix = "overlay/",
 )
 
-load("//reproducible:debootstrap.bzl", "debootstrap_image")
+load("//debian/reproducible:debootstrap.bzl", "debootstrap_image")
 
 DEBIAN_ENV = {
     "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
@@ -48,16 +47,4 @@ DEBIAN_MAP = {
     distro = distro,
     env = DEBIAN_ENV,
     overlay_tar = ":overlay.tar",
-) for num, distro in DEBIAN_MAP.items()]
-
-[structure_test(
-    name = "debian%s_test" % num,
-    config = "//tests:debian_test.yaml",
-    image = ":debian%s" % num,
-) for num, distro in DEBIAN_MAP.items()]
-
-[structure_test(
-    name = "debian%s_version_test" % num,
-    config = "//tests:debian_%s_test.yaml" % num,
-    image = ":debian%s" % num,
 ) for num, distro in DEBIAN_MAP.items()]

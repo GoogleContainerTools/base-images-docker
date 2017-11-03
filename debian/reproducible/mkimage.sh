@@ -27,8 +27,8 @@ debootstrap --variant="$VARIANT" "$DIST" "$WORKDIR" http://snapshot.debian.org/a
 
 rootfs_chroot() {
 
-	PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' \
-		chroot "$WORKDIR" "$@"
+    PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' \
+        chroot "$WORKDIR" "$@"
 }
 
 
