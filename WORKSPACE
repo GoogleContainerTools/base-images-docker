@@ -7,6 +7,7 @@ git_repository(
     remote = "https://github.com/bazelbuild/rules_docker.git",
 )
 
+
 load(
     "@io_bazel_rules_docker//docker:docker.bzl",
     "docker_repositories",

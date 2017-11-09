@@ -13,11 +13,11 @@
 # limitations under the License.
 
 """Rule for downloading apt packages and tar them in a .tar file."""
+
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load("//package_managers/apt:apt_get.bzl", "apt_get")
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 load("@io_bazel_rules_docker//skylib:filetype.bzl", "container")
-
 
 def _impl(ctx):
     # build the docker image using docker build
@@ -56,21 +56,19 @@ def _impl(ctx):
 
     return struct()
 
-
 download_pkgs = rule(
     attrs = {
         "base": attr.label(allow_files = container),
         "bootstrap_packages": attr.string_list(),
         "package_manager": attr.label(
-             default = Label("//package_managers/apt_get:apt_get"),
-             executable = True,
-             cfg = "target",
+            default = Label("//package_managers/apt_get:apt_get"),
+            executable = True,
+            cfg = "target",
         ),
     },
     executable = True,
     outputs = {
-        "out": "%name.tar"
+        "out": "%name.tar",
     },
     implementation = _impl,
 )
-
