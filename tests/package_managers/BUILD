@@ -24,12 +24,12 @@ rule_test(
 
 file_test(
     name = "test_download_pkgs_docker_run",
-    regexp = ".*docker run -d --privileged bazel/tests/package_managers:test_download_pkgs_build /bin/bash.*",
     file = ":test_download_pkgs",
+    regexp = ".*docker run -d --privileged bazel/tests/package_managers:test_download_pkgs_build /bin/bash.*",
 )
 
 file_test(
     name = "test_download_pkgs_docker_cp",
-    regexp = ".*docker cp .*:test_download_pkgs_packages.tar tests/package_managers/test_download_pkgs.tar.*",
     file = ":test_download_pkgs",
+    regexp = ".*docker cp .*:test_download_pkgs_packages.tar tests/package_managers/test_download_pkgs.tar.*",
 )
