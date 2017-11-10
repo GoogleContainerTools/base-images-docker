@@ -17,7 +17,19 @@ download_image_pkgs(
 )
 
 rule_test(
-    name = "test_tar_name",
+    name = "test_download_pkgs_script",
     generates = ["test_download_pkgs"],
     rule = "test_download_pkgs",
+)
+
+file_test(
+    name = "test_download_pkgs_docker_run",
+    regexp = ".*docker run -d --privileged bazel/tests/package_managers:test_download_pkgs_build /bin/bash.*",
+    file = ":test_download_pkgs",
+)
+
+file_test(
+    name = "test_download_pkgs_docker_cp",
+    regexp = ".*docker cp .*:test_download_pkgs_packages.tar tests/package_managers/test_download_pkgs.tar.*",
+    file = ":test_download_pkgs",
 )
