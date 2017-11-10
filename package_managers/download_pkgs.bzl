@@ -1,4 +1,4 @@
-# Copyright 2017 Google Inc. All rights reserved.
+#Copyright 2017 Google Inc. All rights reserved.
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,41 +20,26 @@ load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 load("@io_bazel_rules_docker//skylib:filetype.bzl", "container")
 
 def _impl(ctx):
-    image_name = ctx.attr.base.label.name.split('.', 1)[0]
     # docker_build rules always generate an image named 'bazel/$package:$name'.
     builder_image_name = "bazel/%s:%s" % (ctx.attr.base.label.package,
-                                          image_name)
+                                          ctx.attr.base.label.name)
     # Generate a shell script to run apt_get inside this docker image.
     # TODO(tejaldesai): Replace this by docker_run rule
-
     build_contents = """\
 #!/bin/bash
 set -ex
-# Execute the loader script.
-{loader_script}
-command=$(cat {package_manager_script})
 # Run the builder image.
-cid=$(docker run -d --privileged -w /workspace {image_name} /bin/bash -c "$command")
-docker cp $cid:/workspace/installables.tar {output}
+cid=$(docker run -d --privileged {image_name} /bin/bash)
+docker attach $cid
+docker cp $cid:{installables}.tar {output}.tar
 # Cleanup
 docker rm $cid
- """.format(loader_script=ctx.executable.base.path,
-            image_name=builder_image_name,
-            package_manager_script=ctx.executable.package_manager_generator.path,
-            script_output=ctx.attr.package_manager_generator.label.name,
-            output=ctx.outputs.out.path)
-    script = ctx.new_file(ctx.label.name + ".build")
-    ctx.file_action(
-        output=script,
-        content=build_contents
-    )
-
-    ctx.action(
-        outputs=[ctx.outputs.out],
-        inputs=ctx.attr.base.files.to_list() +
-        ctx.attr.base.data_runfiles.files.to_list() + ctx.attr.base.default_runfiles.files.to_list() +
-        ctx.attr.package_manager_generator.files.to_list(),
-        executable=script,
+ """.format(image_name=builder_image_name,
+            installables=ctx.attr.package_manager_generator.label.name,
+            output="{0}/{1}".format(ctx.label.package, ctx.attr.name))
+    ctx.actions.write(
+        output=ctx.outputs.executable,
+        content=build_contents,
     )
 
 download_pkgs = rule(
@@ -74,10 +59,33 @@ download_pkgs = rule(
             single_file = True,
         ),
     },
-    executable = False,
-    outputs = {
-        #        "out": "%{name}.tar",
-        "out": "%{name}.file",
-    },
+    executable = True,
     implementation = _impl,
 )
+
+def download_image_pkgs(name, base, packages=[]):
+   pkg_manager_target_name = "{0}_packages".format(name)
+   generate_apt_get(
+        name = "{0}_packages".format(name),
+        cache_dir = "install",
+        archive_dir = ".",
+        download_only = True,
+        packages = packages,
+   )
+
+   img_target_name = "{0}_build".format(name)
+
+   docker_build(
+        name = img_target_name,
+        base = base,
+        entrypoint = [
+            "/{0}".format(pkg_manager_target_name),
+        ],
+        files = [":{0}".format(pkg_manager_target_name)],
+   )
+
+   download_pkgs(
+       name = "{0}".format(name),
+       base = ":{0}".format(img_target_name),
+       package_manager_generator = ":{0}".format(pkg_manager_target_name)
+   )

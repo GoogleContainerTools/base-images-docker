@@ -15,10 +15,17 @@
 """ Rules that create an output script to install packages via apt-get."""
 
 def _impl(ctx):
+    shell_file_contents = []
     apt_get_commands = []
+
+    #Shell file commands
+    shell_file_contents.append('#!/bin/bash')
+    shell_file_contents.append('set -ex')
+
     #Fetch Index
     apt_get_commands.append('apt-get update -y')
-
+    #Make partial dir
+    apt_get_commands.append('mkdir -p {0}/{1}/partial'.format(ctx.attr.cache_dir, ctx.attr.archive_dir))
     install_command = 'apt-get install --no-install-recommends -y -q -o Dir::Cache="{0}" -o Dir::Cache::archives="{1}" {2}'.format(
         ctx.attr.cache_dir,
         ctx.attr.archive_dir,
@@ -27,14 +34,15 @@ def _impl(ctx):
         install_command += ' --download-only'
     #Install command
     apt_get_commands.append(install_command)
-    tar_command = "tar -cf {0}.tar {1}/{2}/*.deb".format(
-        ctx.attr.installables_name,
-        ctx.attr.cache_dir,
-        ctx.attr.archive_dir,
+    tar_command = "tar -cpf {output}.tar --directory {cache}/{archive} `cd {cache}/{archive} && ls *.deb`".format(
+        output=ctx.attr.name,
+        cache=ctx.attr.cache_dir,
+        archive=ctx.attr.archive_dir,
     )
     apt_get_commands.append(tar_command)
+    shell_file_contents.append( ' && '.join(apt_get_commands))
     ctx.file_action(output = ctx.outputs.executable,
-                    content = ' && '.join(apt_get_commands),
+                    content = '\n'.join(shell_file_contents),
                     executable = True)
 
 generate_apt_get = rule(
@@ -52,7 +60,6 @@ generate_apt_get = rule(
             default = False,
             doc = "Set true if you only want to download the package",
         ),
-        "installables_name": attr.string(default = "installables"),
     },
     executable = True,
     implementation = _impl,
