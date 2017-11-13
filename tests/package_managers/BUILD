@@ -33,3 +33,9 @@ file_test(
     file = ":test_download_pkgs",
     regexp = ".*docker cp .*:test_download_pkgs_packages.tar tests/package_managers/test_download_pkgs.tar.*",
 )
+
+sh_test(
+   name = "download_pkgs_run_test",
+   srcs = ["download_pkgs_run_test.sh"],
+   data = [":test_download_pkgs"],
+)

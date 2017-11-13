@@ -1,7 +1,0 @@
-chemaVersion: '2.0.0'
-commandTests:
-fileContentTests:
-- name: 'test_one_package'
-  expectedContents: ['apt-get update -y && apt-get install --no-install-recommends -y -q -o Dir::Cache="/var/cache/apt/" -o Dir::Cache::archives="archives" foo test --download-only && tar -cf installables.tar /var/cache/apt//archives/*.deb']
-  path: '.'
-
