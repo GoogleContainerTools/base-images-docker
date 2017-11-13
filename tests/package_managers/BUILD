@@ -35,7 +35,7 @@ file_test(
 )
 
 sh_test(
-   name = "download_pkgs_run_test",
-   srcs = ["download_pkgs_run_test.sh"],
-   data = [":test_download_pkgs"],
+    name = "download_pkgs_run_test",
+    srcs = ["download_pkgs_run_test.sh"],
+    data = [":test_download_pkgs"],
 )

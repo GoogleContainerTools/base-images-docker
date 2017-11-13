@@ -14,34 +14,37 @@
 
 """Rule for downloading apt packages and tar them in a .tar file."""
 
-load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load("//package_managers/apt_get:apt_get.bzl", "generate_apt_get")
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
-load("@io_bazel_rules_docker//skylib:filetype.bzl", "container")
 
 def _impl(ctx):
     # docker_build rules always generate an image named 'bazel/$package:$name'.
     builder_image_name = "bazel/%s:%s" % (ctx.attr.image_tar.label.package,
                                           ctx.attr.image_tar.label.name.split(".tar")[0])
+
     # Generate a shell script to run apt_get inside this docker image.
     # TODO(tejaldesai): Replace this by docker_run rule
     build_contents = """\
 #!/bin/bash
 set -ex
-$(docker load --input {image_tar})
+docker load --input {image_tar}
 # Run the builder image.
 cid=$(docker run -d --privileged {image_name} /bin/bash)
 docker attach $cid
 docker cp $cid:{installables}.tar {output}.tar
 # Cleanup
 docker rm $cid
- """.format(image_tar=ctx.attr.image_tar.files.to_list()[0].path,
+ """.format(image_tar="{0}/{1}".format(ctx.label.package,ctx.attr.image_tar.label.name),
             image_name=builder_image_name,
             installables=ctx.attr.package_manager_generator.label.name,
             output="{0}/{1}".format(ctx.label.package, ctx.attr.name))
     ctx.actions.write(
         output=ctx.outputs.executable,
         content=build_contents,
+    )
+    return struct(
+        runfiles = ctx.runfiles(files = ctx.attr.image_tar.files.to_list()),
+        files = depset([ctx.outputs.executable])
     )
 
 download_pkgs = rule(
@@ -50,7 +53,7 @@ download_pkgs = rule(
             default = Label("//ubuntu:ubuntu_16_0_4_vanilla.tar"),
             allow_files = True,
             executable = True,
-            cfg = "target",        
+            cfg = "target",
         ),
         "package_manager_generator": attr.label(
             default = Label("//package_managers/apt_get:default_docker_packages"),

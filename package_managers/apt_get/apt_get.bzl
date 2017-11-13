@@ -41,9 +41,10 @@ def _impl(ctx):
     )
     apt_get_commands.append(tar_command)
     shell_file_contents.append( ' && '.join(apt_get_commands))
-    ctx.file_action(output = ctx.outputs.executable,
-                    content = '\n'.join(shell_file_contents),
-                    executable = True)
+    ctx.actions.write(
+        output = ctx.outputs.executable,
+        content = '\n'.join(shell_file_contents),
+    )
 
 generate_apt_get = rule(
     attrs = {
