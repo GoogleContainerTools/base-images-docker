@@ -17,8 +17,10 @@ download_image_pkgs(
 )
 
 rule_test(
-    name = "test_download_pkgs_script",
-    generates = ["test_download_pkgs"],
+    name = "test_download_pkgs_rule",
+    generates = [
+        "test_download_pkgs",
+    ],
     rule = "test_download_pkgs",
 )
 

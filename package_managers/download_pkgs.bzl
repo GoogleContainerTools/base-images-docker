@@ -47,7 +47,9 @@ docker rm $cid
         files = depset([ctx.outputs.executable])
     )
 
-download_pkgs = rule(
+#TODO(tejaldesai): Make this rule public once we have docker run rule which can run
+#package_manager_generator script within a image_tar.
+_download_pkgs = rule(
     attrs = {
         "image_tar": attr.label(
             default = Label("//ubuntu:ubuntu_16_0_4_vanilla.tar"),
@@ -67,28 +69,51 @@ download_pkgs = rule(
     implementation = _impl,
 )
 
+"""Downloads image packages within a container
+
+This rule creates a script to download packages within a container.
+The script bunldes all the packages in a tarball.
+
+Args:
+  name: A unique name for this rule.
+  image_tar: The image tar for the container used to download packages.
+  package_manager_genrator: A target which generates a script using
+       package management tool e.g apt-get, dpkg to downloads packages.
+  packages: list of packages to download. e.g. ['curl', 'netbase']
+"""
+
 def download_image_pkgs(name, base, packages=[]):
-   pkg_manager_target_name = "{0}_packages".format(name)
-   generate_apt_get(
+  """Downloads image packages using download_pkgs rule
+
+  This rule creates a script to download packages within a container.
+  The script bunldes all the packages in a tarball.
+
+  Args:
+    name: A unique name for this rule.
+    image_tar: The image tar for the container used to download packages.
+    package_manager_genrator: A target which generates a script using
+      package management tool e.g apt-get, dpkg to downloads packages.
+    packages: list of packages to download. e.g. ['curl', 'netbase']
+  """
+  pkg_manager_target_name = "{0}_packages".format(name)
+  generate_apt_get(
         name = "{0}_packages".format(name),
-        cache_dir = "install",
-        archive_dir = ".",
         download_only = True,
         packages = packages,
-   )
+  )
 
-   img_target_name = "{0}_build".format(name)
-   docker_build(
+  img_target_name = "{0}_build".format(name)
+  docker_build(
         name = img_target_name,
         base = base,
         entrypoint = [
             "/{0}".format(pkg_manager_target_name),
         ],
         files = [":{0}".format(pkg_manager_target_name)],
-   )
+  )
 
-   download_pkgs(
+  _download_pkgs(
        name = "{0}".format(name),
        package_manager_generator = ":{0}".format(pkg_manager_target_name),
        image_tar = ":{0}.tar".format(img_target_name),
-   )
+  )

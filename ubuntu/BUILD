@@ -40,6 +40,7 @@ pkg_tar(
 ) for version in UBUNTU_VERSIONS]
 
 # 'ubuntu_%s' is a ubuntu_%s rootfs w/ ca-certificates, curl, and netbase
+# This image is used for node images. Look node/reproducible/BUILD#L31
 [docker_build(
     name = "ubuntu_%s" % version,
     base = "//ubuntu:ubuntu_%s_dockerbuild.tar" % version,
@@ -49,6 +50,7 @@ pkg_tar(
 ) for version in UBUNTU_VERSIONS]
 
 # 'ubuntu_%s_build' is the 'ubuntu_%s' image w/ build-essential and python2.7
+#  This image is used for node images. Look node/reproducible/BUILD#L41
 [docker_build(
     name = "ubuntu_%s_build" % version,
     base = "//ubuntu:ubuntu_%s_build_dockerbuild.tar" % version,

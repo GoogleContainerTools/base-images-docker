@@ -26,23 +26,6 @@ rule_test(
 
 file_test(
     name = "test_script",
-    content = ("apt-get1 update -y && apt-get install --no-install-recommends -y -q -o Dir::Cache=\"/var/cache/apt\" -o Dir::Cache::archives=\"archives\" foo test --download-only && tar -cf installables.tar /var/cache/apt/archives/*.deb"),
+    content = "#!/bin/bash\nset -ex\napt-get update -y && mkdir -p /install/./partial && apt-get install --no-install-recommends -y -q -o Dir::Cache=\"/install\" -o Dir::Cache::archives=\".\" foo test --download-only && tar -cpf test_apt_get.tar --directory /install/. `cd /install/. && ls *.deb`",
     file = ":test_apt_get",
-)
-
-generate_apt_get(
-    name = "test_cache_dir_attr",
-    archive_dir = ".",
-    cache_dir = "installables",
-    download_only = True,
-    packages = [
-        "foo",
-        "test",
-    ],
-)
-
-file_test(
-    name = "test_script_cache_dir",
-    content = ("apt-get update -y && apt-get install --no-install-recommends -y -q -o Dir::Cache=\"installables\" -o Dir::Cache::archives=\".\" foo test --download-only && tar -cf installables.tar installables/./*.deb"),
-    file = ":test_cache_dir_attr",
 )

@@ -14,6 +14,10 @@
 
 """ Rules that create an output script to install packages via apt-get."""
 
+CACHE_DIR = "/install"
+
+ARCHIVE_DIR = "."
+
 def _impl(ctx):
     shell_file_contents = []
     apt_get_commands = []
@@ -25,19 +29,20 @@ def _impl(ctx):
     #Fetch Index
     apt_get_commands.append('apt-get update -y')
     #Make partial dir
-    apt_get_commands.append('mkdir -p {0}/{1}/partial'.format(ctx.attr.cache_dir, ctx.attr.archive_dir))
+    apt_get_commands.append('mkdir -p {0}/{1}/partial'.format(CACHE_DIR, ARCHIVE_DIR))
     install_command = 'apt-get install --no-install-recommends -y -q -o Dir::Cache="{0}" -o Dir::Cache::archives="{1}" {2}'.format(
-        ctx.attr.cache_dir,
-        ctx.attr.archive_dir,
+        CACHE_DIR,
+        ARCHIVE_DIR,
         ' '.join(ctx.attr.packages))
     if ctx.attr.download_only:
         install_command += ' --download-only'
     #Install command
     apt_get_commands.append(install_command)
+    # Tar command to only include all the *.deb files and ignore other directories placed in the cache dir.
     tar_command = "tar -cpf {output}.tar --directory {cache}/{archive} `cd {cache}/{archive} && ls *.deb`".format(
         output=ctx.attr.name,
-        cache=ctx.attr.cache_dir,
-        archive=ctx.attr.archive_dir,
+        cache=CACHE_DIR,
+        archive=ARCHIVE_DIR,
     )
     apt_get_commands.append(tar_command)
     shell_file_contents.append( ' && '.join(apt_get_commands))
@@ -49,14 +54,6 @@ def _impl(ctx):
 generate_apt_get = rule(
     attrs = {
         "packages": attr.string_list(doc = "list of packages to download"),
-        "cache_dir": attr.string(
-            default = "/var/cache/apt",
-            doc = "apt-get cache directory",
-        ),
-        "archive_dir": attr.string(
-            default = "archives",
-            doc = "apt-get archive directory relative to cache dir",
-        ),
         "download_only": attr.bool(
             default = False,
             doc = "Set true if you only want to download the package",
@@ -65,3 +62,12 @@ generate_apt_get = rule(
     executable = True,
     implementation = _impl,
 )
+
+"""Installs or Download packages via apt-get.
+
+This rule Installs or Download packages via apt-get.
+
+Args:
+  packages: List of packages to download.
+  download_only: Boolean flag to only download packages.
+"""
