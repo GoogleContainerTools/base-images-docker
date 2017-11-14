@@ -30,7 +30,7 @@ sh_binary(
 # on top of a vanilla ubuntu_%s release
 [[docker_build(
     name = "node_%s_ubuntu_%s" % (node_version, ubuntu_version),
-    base = "//ubuntu:ubuntu_%s" % ubuntu_version,
+    base = "//ubuntu:ubuntu_%s_dockerbuild" % ubuntu_version,
     env = NODEJS_ENV,
     ports = ["8080"],
     tars = [
@@ -42,7 +42,7 @@ sh_binary(
 # src on top of a vanilla ubuntu_%s release + build_essential/python2.7
 [[docker_build(
     name = "node_%s_ubuntu_%s_build" % (node_version, ubuntu_version),
-    base = "//ubuntu/reproducible:ubuntu_%s_build" % ubuntu_version,
+    base = "//ubuntu:ubuntu_%s_build" % ubuntu_version,
     env = NODEJS_ENV,
     tars = [
         "node_v%s_compiled.tar.gz" % node_version.replace("_", "."),
