@@ -97,8 +97,7 @@ def download_image_pkgs(name, base, packages=[]):
   """
   pkg_manager_target_name = "{0}_packages".format(name)
   generate_apt_get(
-        name = "{0}_packages".format(name),
-        download_only = True,
+        name = pkg_manager_target_name,
         packages = packages,
   )
 

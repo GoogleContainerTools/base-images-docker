@@ -55,8 +55,8 @@ generate_apt_get = rule(
     attrs = {
         "packages": attr.string_list(doc = "list of packages to download"),
         "download_only": attr.bool(
-            default = False,
-            doc = "Set true if you only want to download the package",
+            default = True,
+            doc = "Set false if you only want to install the package",
         ),
     },
     executable = True,
