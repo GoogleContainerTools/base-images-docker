@@ -1,11 +1,12 @@
 #!/bin/bash
 
 usage() {
-  echo "Usage: $0 [-r repository] [-v version] [-c config]"
+  echo "Usage: $0 [-r repository] [-v version] [-c config] [-o os]"
   echo
   echo "[repository]: remote repository to push the debian image to (e.g. 'gcr.io/gcp-runtimes/debian')"
   echo "[version]: version of debian to build (e.g. 'jessie')"
   echo "[config]: the yaml file defining the steps of the build, defaults to cloudbuild.yaml"
+  echo "[os]: which image to build, either debian or ubuntu. defaults to debian."
   echo
   exit 1
 }
@@ -16,8 +17,6 @@ then
   TAG=$(date +%Y-%m-%d-%H%M%S)
   export TAG
 fi
-
-CONFIG=reproducible/cloudbuild.yaml
 
 while test $# -gt 0; do
   case "$1" in
@@ -48,12 +47,29 @@ while test $# -gt 0; do
                   fi
                   shift
                   ;;
+          --os|-o)
+                  shift
+                  if test $# -gt 0; then
+                          OS=$1
+                  else
+                          usage
+                  fi
+                  shift
+                  ;;
           *)
                   usage
                   shift
                   ;;
   esac
 done
+
+if [ -z "$OS" ]; then
+  OS=debian
+fi
+
+if [ -z "$CONFIG" ]; then
+  CONFIG=$OS/reproducible/cloudbuild.yaml
+fi
 
 if [ -z "$REPO" ] || [ -z "$VERSION" ]; then
   usage
