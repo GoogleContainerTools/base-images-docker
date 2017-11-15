@@ -10,6 +10,6 @@ steps:
   
   # Give the image the right tag, and let CloudBuild push it.
   - name: gcr.io/cloud-builders/docker
-    args: ['tag', 'bazel/reproducible:debian${_VERSION_NUMBER}', '${_REPO}/debian${_VERSION_NUMBER}:${_TAG}']
+    args: ['tag', 'bazel/debian/reproducible:debian${_VERSION_NUMBER}', '${_REPO}/debian${_VERSION_NUMBER}:${_TAG}']
 
 images: ['${_REPO}/debian${_VERSION_NUMBER}:${_TAG}']
