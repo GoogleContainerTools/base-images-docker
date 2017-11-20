@@ -1,13 +1,9 @@
-Reproducible Node Images
+Reproducible Node.js Image
 =========================
-This node image is build from compiled node_v8.5.0 version.
-The node source is fetched from https://nodejs.org/dist and compiled.
-The compiled node binary is then install in ubuntu image.
+Source for the Google-curated Node.js base image.
+This image is built using node version v8.5.0.
+The source is fetched from https://nodejs.org/dist, compiled into a binary,
+and then installed in the Ubuntu image.
 
-## Usage
-To use this image in your application, create a Dockerfile that starts with this
-FROM line:
-```
-#TODO Add image name.
-```
-
+This image is still a work in progress, and will be available in GCR soon.
+Check back here for the latest updates.
