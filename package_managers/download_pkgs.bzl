@@ -47,8 +47,8 @@ docker rm $cid
         files = depset([ctx.outputs.executable])
     )
 
-#TODO(tejaldesai): Make this rule public once we have docker run rule which can run
-#package_manager_generator script within a image_tar.
+# TODO(tejaldesai): Make this rule public once we have docker run rule which can run
+# package_manager_generator script within a image_tar.
 _download_pkgs = rule(
     attrs = {
         "image_tar": attr.label(

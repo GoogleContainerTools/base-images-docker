@@ -14,60 +14,64 @@
 
 """Rule for installing apt packages from a tar file into a docker image."""
 
+load("//util:config_stripper.py", "config_stripper")
+
 def _impl(ctx):
   builder_image_name = "bazel/%s:%s" % (ctx.attr.image_tar.label.package,
                                         ctx.attr.image_tar.label.name.split(".tar")[0])
-  
+
   build_contents = """\
 #!/bin/bash
-set -ex 
+set -ex
 docker load --input {image_tar}
 
 cid=$(docker run -d --privileged {image_name} /bin/bash)
-docker attach $cid
 docker cp {installables}.tar $cid:/
 
-tar -tvf {installables}.tar
-dpkg -i {installables}/*.deb
-apt-get install -file
-docker commit $cid
-ubuntu:{sha}
-docker save {sha} > {output}
-""".format(image_tar=,
-           installables=,
-           sha=,
-           output=
+docker attach $cid
+tar -xvf {installables}.tar
+rm {installables}.tar
+dpkg -i *.deb
+apt-get install -f
+docker commit $cid ubuntu:{sha}
+docker save ubuntu:{sha} > {output_image}
+""".format(image_tar="{0}/{1}".format(ctx.label.package, ctx.attr.image_tar.label.name),
+           installables=ctx.attr.installables_tar.label.name,
+           sha=ctx.attr.sha.label.name,
+           output_image="{0}/{1}".format("ubuntu", sha)
   )
-  
+
   ctx.actions.write(
     output=ctx.outputs.executable,
     content=build_contents,
   )
   return struct(
-  
+    runfiles = ctx.runfiles(files = ctx.attr.image_tar.files.to_list()),
+    files = depset([ctx.outputs.executable])
   )
-
-
 
 
 _install_pkgs = rule(
   attrs = {
     "image_tar": attr_label(
-      default = Label("//ubuntu:ubuntu_16_0_4_vanilla.tar")
-      allow_files = True,
-      executable = True,
-      cfg = "target",
+        default = Label("//ubuntu:ubuntu_16_0_4_vanilla.tar"),
+        allow_files = True,
+        executable = True,
+        cfg = "target",
     ),
     "installables_tar": attr_label(
-      default = Label("//package_managers:download_pkgs")
-      allow_files = True,
-      executable = True,
-      cfg = "target",
+        default = Label("//package_managers:download_pkgs"),
+        allow_files = True,
+        executable = True,
+        cfg = "target",
+    ),
+    "sha": attr_label(
+        default = "default"
     )
   },
   executable = True,
   implementation = _impl,
 )
 
-def download_image_pkgs(name, base, installables):
+def download_image_pkgs(name, base, installables, sha):
   
