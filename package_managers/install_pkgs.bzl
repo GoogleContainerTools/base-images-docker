@@ -59,35 +59,34 @@ docker save {output_image_name} > {output_file_name}
   return struct ()
 
 install_pkgs = rule(
-  attrs = {
-    "image_tar": attr.label(
-        default = Label("//ubuntu:ubuntu_16_0_4_vanilla.tar"),
-        allow_files = True,
-        single_file = True,
-        mandatory = True
-    ),
-    "installables_tar": attr.label(
-        allow_files = True,
-        single_file = True,
-        mandatory = True
-    ),
-    "output_image_name": attr.string(
-        mandatory = True
-    ),
-    "_installer_script": attr.label(
-        default = Label("//package_managers:installer.sh"),
-        single_file = True,
-        allow_files = True
-    ),
-    "_config_stripper": attr.label(
-        default = "//util:config_stripper",
-        executable = True,
-        cfg = "host"
-    ),
-  },
-  outputs = {
-      "out": "%{name}.tar",
-  },
-  implementation = _impl,
+    attrs = {
+        "image_tar": attr.label(
+            default = Label("//ubuntu:ubuntu_16_0_4_vanilla.tar"),
+            allow_files = True,
+            single_file = True,
+            mandatory = True,
+        ),
+        "installables_tar": attr.label(
+            allow_files = True,
+            single_file = True,
+            mandatory = True,
+        ),
+        "output_image_name": attr.string(
+            mandatory = True,
+        ),
+        "_installer_script": attr.label(
+            default = Label("//package_managers:installer.sh"),
+            single_file = True,
+            allow_files = True,
+        ),
+        "_config_stripper": attr.label(
+            default = "//util:config_stripper",
+            executable = True,
+            cfg = "host",
+        ),
+    },
+    outputs = {
+        "out": "%{name}.tar",
+    },
+    implementation = _impl,
 )
-
