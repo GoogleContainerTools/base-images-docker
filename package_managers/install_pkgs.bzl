@@ -22,19 +22,18 @@ def _impl(ctx):
   build_contents = """\
 #!/bin/bash
 set -ex
-find .
-docker load --input {image_tar}
+docker load --input {base_image_tar}
 
-cid=$(docker run -d -v $(pwd)/{installables}:/tmp/installables.tar -v $(pwd)/{installer}:/tmp/installer.sh --privileged {image_name} /tmp/installer.sh)
+cid=$(docker run -d -v $(pwd)/{installables_tar}:/tmp/installables.tar -v $(pwd)/{installer_script}:/tmp/installer.sh --privileged {base_image_name} /tmp/installer.sh)
 
 docker attach $cid
 docker commit -c 'CMD /bin/bash' $cid {output_image_name}
 docker save {output_image_name} > {output_file_name}
-""".format(image_tar=ctx.file.image_tar.path,
-           installables=ctx.file.installables_tar.path,
+""".format(base_image_tar=ctx.file.image_tar.path,
+           base_image_name=builder_image_name,
+           installables_tar=ctx.file.installables_tar.path,
+           installer_script=ctx.file._installer_script.path,
            output_file_name=unstripped_tar.path,
-           installer=ctx.file._installer_script.path,
-           image_name=builder_image_name,
            output_image_name=ctx.attr.output_image_name
   )
 
