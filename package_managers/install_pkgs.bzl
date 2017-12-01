@@ -17,29 +17,46 @@
 def _impl(ctx):
   builder_image_name = "bazel/%s:%s" % (ctx.attr.image_tar.label.package,
                                         ctx.attr.image_tar.label.name.split(".tar")[0])
+  unstripped_tar = ctx.actions.declare_file(ctx.outputs.out.basename + ".unstripped")
 
   build_contents = """\
 #!/bin/bash
 set -ex
+find .
 docker load --input {image_tar}
 
-cid=$(docker run -d -v {installables}.tar:/tmp/installables.tar,{installer}:/tmp/installer.sh --privileged {image_name} /tmp/installer.sh)
+cid=$(docker run -d -v $(pwd)/{installables}:/tmp/installables.tar -v $(pwd)/{installer}:/tmp/installer.sh --privileged {image_name} /tmp/installer.sh)
 
 docker attach $cid
-docker commit $cid {output_image_name}
-docker save {output_image_name} > {output_file_name}.tar
-""".format(image_tar="{0}/{1}".format(ctx.label.package, ctx.attr.image_tar.label.name),
-           installables=ctx.attr.installables_tar.label.name,
-           output_file_name=ctx.attr.name,
-           installer=ctx.attr._installer_script.label.name,
+docker commit -c 'CMD /bin/bash' $cid {output_image_name}
+docker save {output_image_name} > {output_file_name}
+""".format(image_tar=ctx.file.image_tar.path,
+           installables=ctx.file.installables_tar.path,
+           output_file_name=unstripped_tar.path,
+           installer=ctx.file._installer_script.path,
            image_name=builder_image_name,
-           output_image_name="installed_package_image_thing"
+           output_image_name=ctx.attr.output_image_name
   )
 
+  script=ctx.actions.declare_file(ctx.label.name + ".build")
   ctx.actions.write(
-    output=ctx.outputs.executable,
+    output=script,
     content=build_contents,
   )
+  ctx.actions.run(
+    outputs=[unstripped_tar],
+    inputs=[ctx.file.image_tar, ctx.file.installables_tar, ctx.file._installer_script],
+    executable=script,
+  )
+
+  ctx.actions.run(
+    outputs=[ctx.outputs.out],
+    inputs=[unstripped_tar],
+    executable=ctx.executable._config_stripper,
+    arguments=['--in_tar_path=%s' % unstripped_tar.path, '--out_tar_path=%s' % ctx.outputs.out.path],
+  )
+
+
   return struct ()
 
 install_pkgs = rule(
@@ -60,9 +77,18 @@ install_pkgs = rule(
     ),
     "_installer_script": attr.label(
         default = Label("//package_managers:installer.sh"),
+        single_file = True,
         allow_files = True
-    )
+    ),
+    "_config_stripper": attr.label(
+        default = "//util:config_stripper",
+        executable = True,
+        cfg = "host"
+    ),
   },
-  executable = True,
+  outputs = {
+      "out": "%{name}.tar",
+  },
   implementation = _impl,
 )
+
