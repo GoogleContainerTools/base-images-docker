@@ -56,5 +56,5 @@ rule_test(
     generates = [
         "test_install_pkgs.tar",
     ],
-    rule = "test_install_pkgs"
+    rule = "test_install_pkgs",
 )
