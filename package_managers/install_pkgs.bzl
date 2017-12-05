@@ -24,10 +24,17 @@ def _impl(ctx):
 set -ex
 docker load --input {base_image_tar}
 
+old_cmd=$(docker inspect -f "{{{{.Config.Cmd}}}}" {base_image_name})
+# If CMD wasn't set, set it to a sane default.
+if [ "$old_cmd" = "[]" ];
+then
+  old_cmd=["/bin/sh"]
+fi
+
 cid=$(docker run -d -v $(pwd)/{installables_tar}:/tmp/installables.tar -v $(pwd)/{installer_script}:/tmp/installer.sh --privileged {base_image_name} /tmp/installer.sh)
 
 docker attach $cid
-docker commit -c 'CMD /bin/bash' $cid {output_image_name}
+docker commit -c "CMD $old_cmd" $cid {output_image_name}
 docker save {output_image_name} > {output_file_name}
 """.format(base_image_tar=ctx.file.image_tar.path,
            base_image_name=builder_image_name,
