@@ -41,3 +41,20 @@ sh_test(
     srcs = ["download_pkgs_run_test.sh"],
     data = [":test_download_pkgs"],
 )
+
+load("//package_managers:install_pkgs.bzl", "install_pkgs")
+
+install_pkgs(
+    name = "test_install_pkgs",
+    image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
+    installables_tar = ":test_download_pkgs.tar",
+    output_image_name = "test_install_pkgs",
+)
+
+rule_test(
+    name = "test_install_pkgs_rule",
+    generates = [
+        "test_install_pkgs.tar",
+    ],
+    rule = "test_install_pkgs",
+)
