@@ -37,9 +37,8 @@ def _extract_impl(ctx):
           "%{load_statement}": load_statement,
           "%{flags}": " ".join(ctx.attr.flags),
           "%{image}": ctx.attr.image_name,
-          "%{command}": _process_command(ctx.attr.command),
+          "%{commands}": _process_commands(ctx.attr.commands),
           "%{extract_file}": ctx.attr.extract_file,
-          "%{target}": ctx.attr.target,
         },
         is_executable=True,
     )
@@ -55,6 +54,7 @@ def _extract_impl(ctx):
 def _commit_impl(ctx):
     # Since we're always bundling/renaming the image in the macro, this is valid.
     load_statement = 'docker load -i %s' % ctx.file.image_tar.short_path
+    output_image = '%s_commit.tar' % ctx.attr.name
 
     # Generate a shell script to execute the run statement
     ctx.actions.expand_template(
@@ -65,7 +65,8 @@ def _commit_impl(ctx):
           "%{flags}": " ".join(ctx.attr.flags),
           "%{image}": ctx.attr.image_name,
           "%{original_image}": ctx.attr.original_image,
-          "%{command}": _process_command(ctx.attr.command),
+          "%{commands}": _process_commands(ctx.attr.commands),
+          "%{output_image}": output_image,
         },
         is_executable=True,
     )
@@ -99,8 +100,8 @@ _run_and_commit = rule(
             doc = "name of image to run commands on",
             mandatory = True,
         ),
-        "command": attr.string_list(
-            doc = "command to run",
+        "commands": attr.string_list(
+            doc = "commands to run",
             mandatory = True,
             non_empty = True,
         ),
@@ -131,18 +132,14 @@ _run_and_extract = rule(
             doc = "name of image to run commands on",
             mandatory = True,
         ),
-        "command": attr.string_list(
-            doc = "command to run",
+        "commands": attr.string_list(
+            doc = "commands to run",
             mandatory = True,
             non_empty = True,
         ),
         "extract_file": attr.string(
             doc = "path to file to extract from container",
             mandatory = True,
-        ),
-        "target": attr.string(
-            doc = "path to extract file to on host machine",
-            default = ".",
         ),
         "_extract_tpl": attr.label(
             default = Label("//util:extract.sh.tpl"),
@@ -154,7 +151,7 @@ _run_and_extract = rule(
     implementation = _extract_impl,
 )
 
-def container_run_and_commit(name, image, command, flags=None):
+def container_run_and_commit(name, image, commands, flags=None):
     image_tar, intermediate_image = _rename_image(image, name)
 
     _run_and_commit(
@@ -163,10 +160,10 @@ def container_run_and_commit(name, image, command, flags=None):
         image_name = intermediate_image,
         image_tar = image_tar + ".tar",
         flags = flags,
-        command = command,
+        commands = commands,
     )
 
-def container_run_and_extract(name, image, command, extract_file, target, flags=None):
+def container_run_and_extract(name, image, commands, extract_file, flags=None):
     image_tar, intermediate_image = _rename_image(image, name)
 
     _run_and_extract(
@@ -174,18 +171,18 @@ def container_run_and_extract(name, image, command, extract_file, target, flags=
         image_name = intermediate_image,
         image_tar = image_tar + ".tar",
         flags = flags,
-        command = command,
+        commands = commands,
         extract_file = extract_file,
-        target = target,
     )
 
-def _process_command(command_list):
+def _process_commands(command_list):
     # Use the $ to allow escape characters in string
     return 'sh -c $\"{0}\"'.format(" && ".join(command_list))
 
 def _rename_image(image, name):
-    """A macro to predictably rename the image under test before threading
-    it to the container test rule."""
+    # TODO: this should live in rules_docker
+
+    """A macro to predictably rename the image under test."""
     intermediate_image_name = "%s:intermediate" % image.replace(':', '').replace('@', '').replace('/', '')
     image_tar_name = "intermediate_bundle_%s" % name
 
