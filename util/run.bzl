@@ -25,7 +25,6 @@ load(
     "container_bundle",
 )
 
-
 def _extract_impl(ctx):
     # Since we're always bundling/renaming the image in the macro, this is valid.
     load_statement = 'docker load -i %s' % ctx.file.image_tar.short_path
@@ -53,7 +52,6 @@ def _extract_impl(ctx):
         ),
     )
 
-
 def _commit_impl(ctx):
     # Since we're always bundling/renaming the image in the macro, this is valid.
     load_statement = 'docker load -i %s' % ctx.file.image_tar.short_path
@@ -79,7 +77,6 @@ def _commit_impl(ctx):
             ctx.attr.image_tar.data_runfiles.files.to_list()
         ),
     )
-
 
 _run_and_commit = rule(
     attrs = {
@@ -116,7 +113,6 @@ _run_and_commit = rule(
     executable = True,
     implementation = _commit_impl,
 )
-
 
 _run_and_extract = rule(
     attrs = {
@@ -158,7 +154,6 @@ _run_and_extract = rule(
     implementation = _extract_impl,
 )
 
-
 def container_run_and_commit(name, image, command, flags=None):
     image_tar, intermediate_image = _rename_image(image, name)
 
@@ -170,7 +165,6 @@ def container_run_and_commit(name, image, command, flags=None):
         flags = flags,
         command = command,
     )
-
 
 def container_run_and_extract(name, image, command, extract_file, target, flags=None):
     image_tar, intermediate_image = _rename_image(image, name)
@@ -185,11 +179,9 @@ def container_run_and_extract(name, image, command, extract_file, target, flags=
         target = target,
     )
 
-
 def _process_command(command_list):
     # Use the $ to allow escape characters in string
     return 'sh -c $\"{0}\"'.format(" && ".join(command_list))
-
 
 def _rename_image(image, name):
     """A macro to predictably rename the image under test before threading

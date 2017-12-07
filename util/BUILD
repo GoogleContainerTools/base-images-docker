@@ -11,4 +11,5 @@ py_binary(
 )
 
 exports_files(["commit.sh.tpl"])
+
 exports_files(["extract.sh.tpl"])
