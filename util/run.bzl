@@ -25,12 +25,6 @@ load(
     "container_bundle",
 )
 
-load(
-    "//util:md5.bzl",
-    _tools = "tools",
-    _md5 = "md5"
-)
-
 
 def _extract_impl(ctx):
     # Since we're always bundling/renaming the image in the macro, this is valid.
@@ -72,9 +66,8 @@ def _commit_impl(ctx):
           "%{load_statement}": load_statement,
           "%{flags}": " ".join(ctx.attr.flags),
           "%{image}": ctx.attr.image_name,
+          "%{original_image}": ctx.attr.original_image,
           "%{command}": _process_command(ctx.attr.command),
-          # "%{output_image}": ctx.attr.md5_hash,
-          "%{output_image}": _compute_hash(ctx, ctx.attr.image_name),
         },
         is_executable=True,
     )
@@ -101,6 +94,10 @@ _run_and_commit = rule(
             single_file = True,
             cfg = "target",
         ),
+        "original_image": attr.string(
+            doc = "name of original image (for computing sha)",
+            mandatory = True,
+        ),
         "image_name": attr.string(
             doc = "name of image to run commands on",
             mandatory = True,
@@ -115,7 +112,7 @@ _run_and_commit = rule(
             allow_files = True,
             single_file = True,
         ),
-    } + _tools,
+    },
     executable = True,
     implementation = _commit_impl,
 )
@@ -167,6 +164,7 @@ def container_run_and_commit(name, image, command, flags=None):
 
     _run_and_commit(
         name = name,
+        original_image = image,
         image_name = intermediate_image,
         image_tar = image_tar + ".tar",
         flags = flags,
@@ -191,11 +189,6 @@ def container_run_and_extract(name, image, command, extract_file, target, flags=
 def _process_command(command_list):
     # Use the $ to allow escape characters in string
     return 'sh -c $\"{0}\"'.format(" && ".join(command_list))
-
-
-def _compute_hash(ctx, image):
-    return _md5(ctx, image)
-    # return "placeholderhash"
 
 
 def _rename_image(image, name):
