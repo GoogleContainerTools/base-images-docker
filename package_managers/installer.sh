@@ -4,9 +4,7 @@
 # installables.tar.
 set -ex
 pushd /tmp
-tar -xvf installables.tar
-dpkg -i ./*.deb
-apt-get install -f
+{apt_get_install_commands}
 popd
 umount -l /tmp/installer.sh
 umount -l /tmp/installables.tar

@@ -5,15 +5,12 @@ load(
     "rule_test",
     "file_test",
 )
-load("//package_managers:download_pkgs.bzl", "download_image_pkgs")
+load("//package_managers:download_pkgs.bzl", "download_pkgs")
 
-download_image_pkgs(
+download_pkgs(
     name = "test_download_pkgs",
-    base = "//ubuntu:ubuntu_16_0_4_vanilla",
-    packages = [
-        "curl",
-        "netbase",
-    ],
+    image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
+    package_manager_generator = "//package_managers/apt_get:default_docker_packages",
 )
 
 rule_test(
@@ -27,13 +24,13 @@ rule_test(
 file_test(
     name = "test_download_pkgs_docker_run",
     file = ":test_download_pkgs",
-    regexp = ".*docker run -d --privileged bazel/tests/package_managers:test_download_pkgs_build /bin/bash.*",
+    regexp = ".*docker run -d --privileged bazel/ubuntu:ubuntu_16_0_4_vanilla sh -c $'.*'",
 )
 
 file_test(
     name = "test_download_pkgs_docker_cp",
     file = ":test_download_pkgs",
-    regexp = ".*docker cp .*:test_download_pkgs_packages.tar tests/package_managers/test_download_pkgs.tar.*",
+    regexp = ".*docker cp .*:default_docker_packages.tar tests/package_managers/test_download_pkgs.tar.*",
 )
 
 sh_test(

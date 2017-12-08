@@ -14,7 +14,21 @@
 
 """Rule for installing apt packages from a tar file into a docker image."""
 
+load("//package_managers:package_manager_provider.bzl", "package_manager_provider")
+
 def _impl(ctx):
+  package_manager_provider = ctx.attr.package_manager_generator.package_manager_provider
+  # Generate the installer.sh script
+  out = ctx.new_file("%s.install" % (ctx.label.name))
+  ctx.template_action(
+      template=ctx.file._installer_tpl,
+      substitutions= {
+          "%{apt_get_install_commands}": '\n'.join(package_manager_provider.install_commands),
+      },
+      output = out,
+      executable = True,
+  )
+
   builder_image_name = "bazel/%s:%s" % (ctx.attr.image_tar.label.package,
                                         ctx.attr.image_tar.label.name.split(".tar")[0])
   unstripped_tar = ctx.actions.declare_file(ctx.outputs.out.basename + ".unstripped")
@@ -39,7 +53,7 @@ docker save {output_image_name} > {output_file_name}
 """.format(base_image_tar=ctx.file.image_tar.path,
            base_image_name=builder_image_name,
            installables_tar=ctx.file.installables_tar.path,
-           installer_script=ctx.file._installer_script.path,
+           installer_script=out.path,
            output_file_name=unstripped_tar.path,
            output_image_name=ctx.attr.output_image_name
   )
@@ -51,7 +65,7 @@ docker save {output_image_name} > {output_file_name}
   )
   ctx.actions.run(
     outputs=[unstripped_tar],
-    inputs=[ctx.file.image_tar, ctx.file.installables_tar, ctx.file._installer_script],
+    inputs=[ctx.file.image_tar, ctx.file.installables_tar, out],
     executable=script,
   )
 
@@ -78,11 +92,19 @@ install_pkgs = rule(
             single_file = True,
             mandatory = True,
         ),
+        "package_manager_generator": attr.label(
+            default = Label("//package_managers/apt_get:default_docker_packages"),
+            executable = True,
+            cfg = "target",
+            allow_files = True,
+            single_file = True,
+            providers = [package_manager_provider],
+        ),
         "output_image_name": attr.string(
             mandatory = True,
         ),
-        "_installer_script": attr.label(
-            default = Label("//package_managers:installer.sh"),
+        "_installer_tpl": attr.label(
+            default = Label("//package_managers:installer.sh.tpl"),
             single_file = True,
             allow_files = True,
         ),
