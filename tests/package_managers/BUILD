@@ -6,6 +6,7 @@ load(
     "file_test",
 )
 load("//package_managers:download_pkgs.bzl", "download_pkgs")
+load("//package_managers/apt_get:apt_get.bzl", "generate_apt_get")
 
 download_pkgs(
     name = "test_download_pkgs",
@@ -41,11 +42,16 @@ sh_test(
 
 load("//package_managers:install_pkgs.bzl", "install_pkgs")
 
+generate_apt_get(
+    name = "apt_get_from_tar",
+    tar = ":test_download_pkgs.tar",
+)
+
 install_pkgs(
     name = "test_install_pkgs",
     image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
-    installables_tar = ":test_download_pkgs.tar",
     output_image_name = "test_install_pkgs",
+    package_manager_generator = ":apt_get_from_tar",
 )
 
 rule_test(

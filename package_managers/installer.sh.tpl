@@ -4,8 +4,9 @@
 # installables.tar.
 set -ex
 pushd /tmp
-{apt_get_install_commands}
+%{apt_get_install_commands}
 popd
 umount -l /tmp/installer.sh
-umount -l /tmp/installables.tar
+umount -l /tmp/%{installables_tar}
 rm -rf /tmp
+echo "hello"

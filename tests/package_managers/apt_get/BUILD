@@ -11,8 +11,9 @@ load(
 generate_apt_get(
     name = "test_apt_get",
     packages = [
-        "foo",
-        "test",
+#        "foo",
+#        "test",
+        "curl"
     ],
 )
 

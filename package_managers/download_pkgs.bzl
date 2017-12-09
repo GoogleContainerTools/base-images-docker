@@ -20,7 +20,7 @@ load("//package_managers:package_manager_provider.bzl", "package_manager_provide
 
 
 def _impl(ctx):
-    package_manager_provider = ctx.attr.package_manager_generator.package_manager_provider
+    package_manager = ctx.attr.package_manager_generator[package_manager_provider]
     # docker_build rules always generate an image named 'bazel/$package:$name'.
     builder_image_name = "bazel/%s:%s" % (ctx.attr.image_tar.label.package,
                                           ctx.attr.image_tar.label.name.split(".tar")[0])
@@ -41,7 +41,7 @@ docker rm $cid
  """.format(image_tar=ctx.file.image_tar.short_path,
             image_name=builder_image_name,
             installables=ctx.attr.package_manager_generator.label.name,
-            download_commands=' && '.join(package_manager_provider.download_commands),
+            download_commands=' && '.join(package_manager.download_commands),
             output="{0}/{1}".format(ctx.label.package, ctx.attr.name),
             )
 

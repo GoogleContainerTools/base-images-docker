@@ -17,15 +17,19 @@
 load("//package_managers:package_manager_provider.bzl", "package_manager_provider")
 
 def _impl(ctx):
-  package_manager_provider = ctx.attr.package_manager_generator.package_manager_provider
+  package_manager = ctx.attr.package_manager_generator[package_manager_provider]
+  # The defualt order for depset is deterministic and hence we should always see the tar
+  # at index 0.  See https://docs.bazel.build/versions/master/skylark/lib/depset.html
+  installables_tar = ctx.attr.package_manager_generator.default_runfiles.files.to_list()[0]
   # Generate the installer.sh script
-  out = ctx.new_file("%s.install" % (ctx.label.name))
+  install_script = ctx.new_file("%s.install" % (ctx.label.name))
   ctx.template_action(
       template=ctx.file._installer_tpl,
       substitutions= {
-          "%{apt_get_install_commands}": '\n'.join(package_manager_provider.install_commands),
+          "%{apt_get_install_commands}": '\n'.join(package_manager.install_commands),
+          "%{installables_tar}": installables_tar.path,
       },
-      output = out,
+      output = install_script,
       executable = True,
   )
 
@@ -45,15 +49,15 @@ then
   old_cmd=["/bin/sh"]
 fi
 
-cid=$(docker run -d -v $(pwd)/{installables_tar}:/tmp/installables.tar -v $(pwd)/{installer_script}:/tmp/installer.sh --privileged {base_image_name} /tmp/installer.sh)
+cid=$(docker run -d -v $(pwd)/{installables_tar}:/tmp/{installables_tar} -v $(pwd)/{installer_script}:/tmp/installer.sh --privileged {base_image_name} /tmp/installer.sh)
 
 docker attach $cid
 docker commit -c "CMD $old_cmd" $cid {output_image_name}
 docker save {output_image_name} > {output_file_name}
 """.format(base_image_tar=ctx.file.image_tar.path,
            base_image_name=builder_image_name,
-           installables_tar=ctx.file.installables_tar.path,
-           installer_script=out.path,
+           installables_tar=installables_tar.path,
+           installer_script=install_script.path,
            output_file_name=unstripped_tar.path,
            output_image_name=ctx.attr.output_image_name
   )
@@ -65,7 +69,7 @@ docker save {output_image_name} > {output_file_name}
   )
   ctx.actions.run(
     outputs=[unstripped_tar],
-    inputs=[ctx.file.image_tar, ctx.file.installables_tar, out],
+    inputs=[ctx.file.image_tar, install_script, installables_tar],
     executable=script,
   )
 
@@ -87,17 +91,10 @@ install_pkgs = rule(
             single_file = True,
             mandatory = True,
         ),
-        "installables_tar": attr.label(
-            allow_files = True,
-            single_file = True,
-            mandatory = True,
-        ),
         "package_manager_generator": attr.label(
-            default = Label("//package_managers/apt_get:default_docker_packages"),
             executable = True,
             cfg = "target",
             allow_files = True,
-            single_file = True,
             providers = [package_manager_provider],
         ),
         "output_image_name": attr.string(

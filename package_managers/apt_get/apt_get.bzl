@@ -74,7 +74,8 @@ def _impl(ctx):
     shell_file_contents.append('set -x')
 
     download_commands = _generate_download_commands(ctx) if ctx.attr.packages else []
-    tar_name = "{0}.tar".format(ctx.attr.name) if ctx.attr.packages else "{0}".format(ctx.file.tar.short_path)
+    tar_name = ("{0}.tar".format(ctx.attr.name) if ctx.attr.packages
+                else ctx.file.tar.short_path)
     install_commands = _generate_install_commands(ctx, tar_name)
 
     apt_get = package_manager_provider(
@@ -93,10 +94,10 @@ def _impl(ctx):
     runfiles = ctx.runfiles(files=[])
     if ctx.attr.tar:
       runfiles = ctx.runfiles(files=ctx.attr.tar.files.to_list())
+
     return struct(
         files = depset([ctx.outputs.executable]),
         runfiles = runfiles,
-        package_manager_provider = apt_get,
         providers = [apt_get],
     )
 
