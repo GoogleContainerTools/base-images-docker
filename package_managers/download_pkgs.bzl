@@ -15,6 +15,7 @@
 """Rule for downloading apt packages and tar them in a .tar file."""
 
 load("//package_managers/apt_get:apt_get.bzl", "generate_apt_get")
+load("//package_managers/apt_get:repos.bzl", "generate_additional_repos")
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 
 def _impl(ctx):
@@ -82,7 +83,7 @@ Args:
   packages: list of packages to download. e.g. ['curl', 'netbase']
 """
 
-def download_image_pkgs(name, base, packages=[]):
+def download_image_pkgs(name, base, packages=[], additional_repos=[]):
   """Downloads image packages using download_pkgs rule
 
   This rule creates a script to download packages within a container.
@@ -94,12 +95,23 @@ def download_image_pkgs(name, base, packages=[]):
     package_manager_genrator: A target which generates a script using
       package management tool e.g apt-get, dpkg to downloads packages.
     packages: list of packages to download. e.g. ['curl', 'netbase']
+    additional_repos: list of additional debian package repos to use, in sources.list format
   """
   pkg_manager_target_name = "{0}_packages".format(name)
   generate_apt_get(
         name = pkg_manager_target_name,
         packages = packages,
   )
+
+  tars = []
+  if additional_repos:
+    repo_name="{0}_repos".format(name)
+    generate_additional_repos(
+        name = repo_name,
+        repos = additional_repos
+    )
+    tars.append("%s.tar" % repo_name)
+
 
   img_target_name = "{0}_build".format(name)
   docker_build(
@@ -109,6 +121,7 @@ def download_image_pkgs(name, base, packages=[]):
             "/{0}".format(pkg_manager_target_name),
         ],
         files = [":{0}".format(pkg_manager_target_name)],
+        tars = tars
   )
 
   _download_pkgs(
