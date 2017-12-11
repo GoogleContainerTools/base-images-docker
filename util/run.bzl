@@ -72,7 +72,6 @@ def _commit_impl(ctx):
           "%{load_statement}": load_statement,
           "%{flags}": " ".join(ctx.attr.flags),
           "%{image}": ctx.attr.image_name,
-          "%{original_image}": ctx.attr.original_image,
           "%{commands}": _process_commands(ctx.attr.commands),
           "%{output_tar}": ctx.outputs.out.path,
         },
@@ -103,10 +102,6 @@ _run_and_commit = rule(
             single_file = True,
             cfg = "target",
         ),
-        "original_image": attr.string(
-            doc = "name of original image (for computing sha)",
-            mandatory = True,
-        ),
         "image_name": attr.string(
             doc = "name of image to run commands on",
             mandatory = True,
@@ -128,6 +123,20 @@ _run_and_commit = rule(
     },
     implementation = _commit_impl,
 )
+
+"""Runs commands in a container and commits the container to a new image.
+
+This rule runs a set of commands in a given image, waits for the commands
+to finish, and then commits the container to a new image.
+
+
+Args:
+    image_name: Name of the image to run commands on.
+    image_tar: Tarball of image to run commands on.
+    commands: A list of commands to run (sequentially) in the container.
+    flags: (optional) A list of flags to pass to "docker run".
+    _run_tpl: Template for generated script to run docker commands.
+"""
 
 _run_and_extract = rule(
     attrs = {
@@ -171,12 +180,37 @@ _run_and_extract = rule(
     implementation = _extract_impl,
 )
 
+"""Runs commands in a container and extracts a target file from the container.
+
+This rule runs a set of commands in a given image, waits for the commands
+to finish, and then extracts a given file from the container.
+
+Args:
+    image_name: Name of the image to run commands on
+    image_tar: Tarball of image to run commands on
+    commands: A list of commands to run (sequentially) in the container.
+    extract_file: The file to extract from the container.
+    flags: (optional) A list of flags to pass to "docker run".
+    output_file: Path to output file extracted from container.
+    _extract_tpl: Template for generated script to run docker commands.
+"""
+
 def container_run_and_commit(name, image, commands, flags=None):
+    """Macro to wrap the run_and_commit implementation.
+
+    This rule runs a set of commands in a given image, waits for the commands
+    to finish, and then commits the container to a new image.
+
+    Args:
+        name: A unique name for this rule.
+        image: The image to run the commands in.
+        commands: A list of commands to run (sequentially) in the container.
+        flags: (optional) A list of flags to pass to "docker run".
+    """
     image_tar, intermediate_image = _rename_image(image, name)
 
     _run_and_commit(
         name = name,
-        original_image = image,
         image_name = intermediate_image,
         image_tar = image_tar + ".tar",
         flags = flags,
@@ -184,6 +218,18 @@ def container_run_and_commit(name, image, commands, flags=None):
     )
 
 def container_run_and_extract(name, image, commands, extract_file, flags=None):
+    """Macro to wrap the run_and_extract implementation.
+
+    This rule runs a set of commands in a given image, waits for the commands
+    to finish, and then extracts a given file from the container.
+
+    Args:
+        name: A unique name for this rule.
+        image: The image to run the commands in.
+        commands: A list of commands to run (sequentially) in the container.
+        extract_file: The file to extract from the container.
+        flags: (optional) A list of flags to pass to "docker run".
+    """
     image_tar, intermediate_image = _rename_image(image, name)
 
     _run_and_extract(
