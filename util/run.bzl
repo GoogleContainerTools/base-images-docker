@@ -16,8 +16,6 @@
 Rules to run a command inside a container, and either commit the result
 to new container image, or extract specified targets to a directory on
 the host machine.
-
-Both return the image id of the committed container.
 """
 
 load(
@@ -27,57 +25,71 @@ load(
 
 def _extract_impl(ctx):
     # Since we're always bundling/renaming the image in the macro, this is valid.
-    load_statement = 'docker load -i %s' % ctx.file.image_tar.short_path
+    load_statement = 'docker load -i %s' % ctx.file.image_tar.path
+
+    script = ctx.new_file(ctx.label.name + ".build")
 
     # Generate a shell script to execute the run statement
     ctx.actions.expand_template(
         template=ctx.file._extract_tpl,
-        output=ctx.outputs.executable,
+        output=script,
         substitutions={
           "%{load_statement}": load_statement,
           "%{flags}": " ".join(ctx.attr.flags),
           "%{image}": ctx.attr.image_name,
           "%{commands}": _process_commands(ctx.attr.commands),
           "%{extract_file}": ctx.attr.extract_file,
+          "%{output}": ctx.outputs.out.path,
         },
         is_executable=True,
     )
 
-    return struct(runfiles=ctx.runfiles(files = [
-            ctx.executable.image_tar,
-            ctx.file.image_tar] + 
-            ctx.attr.image_tar.files.to_list() + 
-            ctx.attr.image_tar.data_runfiles.files.to_list()
-        ),
+    runfiles = [ctx.file.image_tar] + \
+                ctx.attr.image_tar.files.to_list() + \
+                ctx.attr.image_tar.data_runfiles.files.to_list()
+
+    ctx.actions.run(
+        outputs=[ctx.outputs.out],
+        inputs=runfiles,
+        executable=script,
     )
+
+    return struct()
 
 def _commit_impl(ctx):
     # Since we're always bundling/renaming the image in the macro, this is valid.
-    load_statement = 'docker load -i %s' % ctx.file.image_tar.short_path
-    output_image = '%s_commit.tar' % ctx.attr.name
+    load_statement = 'docker load -i %s' % ctx.file.image_tar.path
+
+    script = ctx.new_file(ctx.label.name + ".build")
 
     # Generate a shell script to execute the run statement
     ctx.actions.expand_template(
         template=ctx.file._run_tpl,
-        output=ctx.outputs.executable,
+        output=script,
         substitutions={
+          "%{output_image}": 'bazel/%s:%s' % (ctx.label.package or 'default',
+                                              ctx.attr.name),
           "%{load_statement}": load_statement,
           "%{flags}": " ".join(ctx.attr.flags),
           "%{image}": ctx.attr.image_name,
           "%{original_image}": ctx.attr.original_image,
           "%{commands}": _process_commands(ctx.attr.commands),
-          "%{output_image}": output_image,
+          "%{output_tar}": ctx.outputs.out.path,
         },
         is_executable=True,
     )
 
-    return struct(runfiles=ctx.runfiles(files = [
-            ctx.executable.image_tar,
-            ctx.file.image_tar] + 
-            ctx.attr.image_tar.files.to_list() + 
-            ctx.attr.image_tar.data_runfiles.files.to_list()
-        ),
+    runfiles = [ctx.file.image_tar] + \
+                ctx.attr.image_tar.files.to_list() + \
+                ctx.attr.image_tar.data_runfiles.files.to_list()
+
+    ctx.actions.run(
+        outputs=[ctx.outputs.out],
+        inputs=runfiles,
+        executable=script,
     )
+
+    return struct()
 
 _run_and_commit = rule(
     attrs = {
@@ -86,7 +98,6 @@ _run_and_commit = rule(
             default = [],
         ),
         "image_tar": attr.label(
-            executable = True,
             allow_files = True,
             mandatory = True,
             single_file = True,
@@ -111,7 +122,10 @@ _run_and_commit = rule(
             single_file = True,
         ),
     },
-    executable = True,
+    executable = False,
+    outputs = {
+        "out": "%{name}_commit.tar",
+    },
     implementation = _commit_impl,
 )
 
@@ -146,8 +160,14 @@ _run_and_extract = rule(
             allow_files = True,
             single_file = True,
         ),
+        "output_file": attr.string(
+            mandatory = True,
+        ),
     },
-    executable = True,
+    executable = False,
+    outputs = {
+        "out": "%{output_file}",
+    },
     implementation = _extract_impl,
 )
 
@@ -173,6 +193,7 @@ def container_run_and_extract(name, image, commands, extract_file, flags=None):
         flags = flags,
         commands = commands,
         extract_file = extract_file,
+        output_file = extract_file.lstrip("/"),
     )
 
 def _process_commands(command_list):
@@ -180,7 +201,7 @@ def _process_commands(command_list):
     return 'sh -c $\"{0}\"'.format(" && ".join(command_list))
 
 def _rename_image(image, name):
-    # TODO: this should live in rules_docker
+    # TODO(nkubala): this should live in rules_docker
 
     """A macro to predictably rename the image under test."""
     intermediate_image_name = "%s:intermediate" % image.replace(':', '').replace('@', '').replace('/', '')
