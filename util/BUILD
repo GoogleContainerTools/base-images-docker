@@ -5,4 +5,7 @@ py_binary(
     srcs = ["config_stripper.py"],
 )
 
-exports_files(["commit.sh.tpl", "extract.sh.tpl"])
+exports_files([
+    "commit.sh.tpl",
+    "extract.sh.tpl",
+])

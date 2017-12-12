@@ -35,7 +35,6 @@ def _extract_impl(ctx):
         output=script,
         substitutions={
           "%{load_statement}": load_statement,
-          "%{flags}": " ".join(ctx.attr.flags),
           "%{image}": ctx.attr.image_name,
           "%{commands}": _process_commands(ctx.attr.commands),
           "%{extract_file}": ctx.attr.extract_file,
@@ -70,7 +69,6 @@ def _commit_impl(ctx):
           "%{output_image}": 'bazel/%s:%s' % (ctx.label.package or 'default',
                                               ctx.attr.name),
           "%{load_statement}": load_statement,
-          "%{flags}": " ".join(ctx.attr.flags),
           "%{image}": ctx.attr.image_name,
           "%{commands}": _process_commands(ctx.attr.commands),
           "%{output_tar}": ctx.outputs.out.path,
@@ -92,10 +90,6 @@ def _commit_impl(ctx):
 
 _run_and_commit = rule(
     attrs = {
-        "flags": attr.string_list(
-            doc = "list of flags to pass to run command",
-            default = [],
-        ),
         "image_tar": attr.label(
             allow_files = True,
             mandatory = True,
@@ -134,16 +128,11 @@ Args:
     image_name: Name of the image to run commands on.
     image_tar: Tarball of image to run commands on.
     commands: A list of commands to run (sequentially) in the container.
-    flags: (optional) A list of flags to pass to "docker run".
     _run_tpl: Template for generated script to run docker commands.
 """
 
 _run_and_extract = rule(
     attrs = {
-        "flags": attr.string_list(
-            doc = "list of flags to pass to run command",
-            default = [],
-        ),
         "image_tar": attr.label(
             executable = True,
             allow_files = True,
@@ -190,12 +179,11 @@ Args:
     image_tar: Tarball of image to run commands on
     commands: A list of commands to run (sequentially) in the container.
     extract_file: The file to extract from the container.
-    flags: (optional) A list of flags to pass to "docker run".
     output_file: Path to output file extracted from container.
     _extract_tpl: Template for generated script to run docker commands.
 """
 
-def container_run_and_commit(name, image, commands, flags=None):
+def container_run_and_commit(name, image, commands):
     """Macro to wrap the run_and_commit implementation.
 
     This rule runs a set of commands in a given image, waits for the commands
@@ -205,7 +193,6 @@ def container_run_and_commit(name, image, commands, flags=None):
         name: A unique name for this rule.
         image: The image to run the commands in.
         commands: A list of commands to run (sequentially) in the container.
-        flags: (optional) A list of flags to pass to "docker run".
     """
     image_tar, intermediate_image = _rename_image(image, name)
 
@@ -213,11 +200,10 @@ def container_run_and_commit(name, image, commands, flags=None):
         name = name,
         image_name = intermediate_image,
         image_tar = image_tar + ".tar",
-        flags = flags,
         commands = commands,
     )
 
-def container_run_and_extract(name, image, commands, extract_file, flags=None):
+def container_run_and_extract(name, image, commands, extract_file):
     """Macro to wrap the run_and_extract implementation.
 
     This rule runs a set of commands in a given image, waits for the commands
@@ -228,7 +214,6 @@ def container_run_and_extract(name, image, commands, extract_file, flags=None):
         image: The image to run the commands in.
         commands: A list of commands to run (sequentially) in the container.
         extract_file: The file to extract from the container.
-        flags: (optional) A list of flags to pass to "docker run".
     """
     image_tar, intermediate_image = _rename_image(image, name)
 
@@ -236,7 +221,6 @@ def container_run_and_extract(name, image, commands, extract_file, flags=None):
         name = name,
         image_name = intermediate_image,
         image_tar = image_tar + ".tar",
-        flags = flags,
         commands = commands,
         extract_file = extract_file,
         output_file = extract_file.lstrip("/"),
