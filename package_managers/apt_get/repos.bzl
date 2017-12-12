@@ -47,5 +47,5 @@ def generate_additional_repos(name, repos):
 """Generates /etc/apt/sources.list.d/ files with the specified repos.
 
 Args:
-  repos: List of repos to add.
+  repos: List of repos to add in sources.list format.
 """

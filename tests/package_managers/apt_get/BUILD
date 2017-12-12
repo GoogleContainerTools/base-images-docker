@@ -39,11 +39,10 @@ generate_additional_repos(
     ],
 )
 
-genrule(
-    name = "expand_test_repos",
-    srcs = [":test_repos.tar"],
-    outs = ["test_repo_contents.txt"],
-    cmd = "tar -tf $(<) > $(@)",
+sh_test(
+    name = "assert_repos_created",
+    srcs = ["assert_repos_created.sh"],
+    data = [":test_repos.tar"],
 )
 
 rule_test(
@@ -52,16 +51,4 @@ rule_test(
         "test_repos.tar",
     ],
     rule = "test_repos",
-)
-
-file_test(
-    name = "assert_repo_one_created",
-    file = ":test_repo_contents.txt",
-    regexp = "./etc/apt/sources.list.d/test_repos_0.list",
-)
-
-file_test(
-    name = "assert_repo_two_created",
-    file = ":test_repo_contents.txt",
-    regexp = "./etc/apt/sources.list.d/test_repos_1.list",
 )
