@@ -17,7 +17,7 @@
 load("//package_managers/apt_get:apt_get.bzl", "generate_apt_get")
 load("//package_managers/apt_get:repos.bzl", "generate_additional_repos")
 load("//package_managers:package_manager_provider.bzl", "package_manager_provider")
-
+load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 
 def _impl(ctx):
     package_manager = ctx.attr.package_manager_generator[package_manager_provider]
@@ -54,7 +54,7 @@ docker rm $cid
         files = depset([ctx.outputs.executable])
     )
 
-download_pkgs = rule(
+_download_pkgs = rule(
     attrs = {
         "image_tar": attr.label(
             default = Label("//ubuntu:ubuntu_16_0_4_vanilla.tar"),
@@ -68,11 +68,6 @@ download_pkgs = rule(
             allow_files = True,
             single_file = True,
             providers = [package_manager_provider],
-        ),
-        "additional_repos": attr.label(
-            allow_files = True,
-            single_files = True,
-            cfg = "target",
         ),
     },
     executable = True,
@@ -92,3 +87,36 @@ Args:
   additional_repos: list of additional debian package repos to use, in sources.list format
 """
 
+def download_pkgs(name, image_tar, package_manager_generator, additional_repos=[]):
+  """Downloads packages within a container
+  This rule creates a script to download packages within a container.
+  The script bunldes all the packages in a tarball.
+  Args:
+    name: A unique name for this rule.
+    image_tar: The image tar for the container used to download packages.
+    package_manager_genrator: A target which generates a script using
+      package management tool e.g apt-get, dpkg to downloads packages.
+    packages: list of packages to download. e.g. ['curl', 'netbase']
+    additional_repos: list of additional debian package repos to use, in sources.list format
+  """
+  tars = []
+  if additional_repos:
+    repo_name="{0}_repos".format(name)
+    generate_additional_repos(
+        name = repo_name,
+        repos = additional_repos
+    )
+    tars.append("%s.tar" % repo_name)
+
+
+  img_target_name = "{0}_build".format(name)
+  docker_build(
+        name = img_target_name,
+        base = image_tar,
+        tars = tars,
+  )
+  _download_pkgs(
+       name = "{0}".format(name),
+       package_manager_generator = package_manager_generator,
+       image_tar = ":{0}.tar".format(img_target_name),
+  )
