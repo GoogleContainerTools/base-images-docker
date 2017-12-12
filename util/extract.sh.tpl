@@ -4,7 +4,7 @@ set -ex
 
 %{load_statement}
 
-id=$(docker run -d --privileged %{flags} %{image} %{commands})
+id=$(docker run -d %{flags} %{image} %{commands})
 
 docker wait $id
 docker cp $id:%{extract_file} %{output}
