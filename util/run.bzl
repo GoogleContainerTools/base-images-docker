@@ -207,7 +207,8 @@ def container_run_and_extract(name, image, commands, extract_file):
     """Macro to wrap the run_and_extract implementation.
 
     This rule runs a set of commands in a given image, waits for the commands
-    to finish, and then extracts a given file from the container.
+    to finish, and then extracts a given file from the container to the
+    bazel-out directory.
 
     Args:
         name: A unique name for this rule.
