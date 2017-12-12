@@ -28,39 +28,30 @@ load(
 )
 
 def _generate_download_commands(ctx):
+    command_str = """# Fetch Index
+apt-get update -y
+# Make partial dir
+mkdir -p {cache}/{archive}/partial
+# Install command
+apt-get install --no-install-recommends -y -q -o Dir::Cache="{cache}" -o Dir::Cache::archives="{archive}" {packages} --download-only
+# Tar command to only include all the *.deb files and ignore other directories placed in the cache dir.
+tar -cpf {output}.tar --directory {cache}/{archive} `cd {cache}/{archive} && ls *.deb`""".format(
+    output=ctx.attr.name,
+    cache=CACHE_DIR,
+    archive=ARCHIVE_DIR,
+    packages=' '.join(ctx.attr.packages))
     commands = []
-    # Fetch Index
-    commands.append('apt-get update -y')
-    # Make partial dir
-    commands.append('mkdir -p {0}/{1}/partial'.format(CACHE_DIR, ARCHIVE_DIR))
-    install_command = ('apt-get install --no-install-recommends -y -q -o ' +
-                       'Dir::Cache="{0}" -o Dir::Cache::archives="{1}" {2} ' +
-                       '--download-only'
-                      ).format(
-                          CACHE_DIR,
-                          ARCHIVE_DIR,
-                          ' '.join(ctx.attr.packages)
-                      )
-    # Install command
-    commands.append(install_command)
-    # Tar command to only include all the *.deb files and ignore other
-    # directories placed in the cache dir.
-    tar_command = ('tar -cpf {output}.tar --directory {cache}/{archive} ' +
-                   '`cd {cache}/{archive} && ls *.deb`'
-                  ).format(
-                      output=ctx.attr.name,
-                      cache=CACHE_DIR,
-                      archive=ARCHIVE_DIR
-                  )
-    commands.append(tar_command)
+    # filter all comments from command_str
+    for cmd in command_str.split('\n'):
+      if cmd and not cmd.startswith('#'):
+        commands.append(cmd)
     return commands
 
 def _generate_install_commands(ctx, tar):
-    commands = []
-    commands.append('tar -xvf {output}'.format(output=tar))
-    commands.append('dpkg -i ./*.deb')
-    commands.append('apt-get install -f')
-    return commands
+    command_str = """tar -xvf {output}
+dpkg -i ./*.deb
+apt-get install -f""".format(output=tar)
+    return command_str.split('\n')
 
 def _impl(ctx):
     if not ctx.attr.packages and not ctx.attr.tar:

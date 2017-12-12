@@ -18,7 +18,7 @@ load("//package_managers:package_manager_provider.bzl", "package_manager_provide
 
 def _impl(ctx):
   package_manager = ctx.attr.package_manager_generator[package_manager_provider]
-  # The defualt order for depset is deterministic and hence we should always see the tar
+  # The default order for depset is deterministic and hence we should always see the tar
   # at index 0.  See https://docs.bazel.build/versions/master/skylark/lib/depset.html
   installables_tar = ctx.attr.package_manager_generator.default_runfiles.files.to_list()[0]
   # Generate the installer.sh script
@@ -26,7 +26,7 @@ def _impl(ctx):
   ctx.template_action(
       template=ctx.file._installer_tpl,
       substitutions= {
-          "%{apt_get_install_commands}": '\n'.join(package_manager.install_commands),
+          "%{install_commands}": '\n'.join(package_manager.install_commands),
           "%{installables_tar}": installables_tar.path,
       },
       output = install_script,
