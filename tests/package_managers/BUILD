@@ -25,7 +25,7 @@ rule_test(
 file_test(
     name = "test_download_pkgs_docker_run",
     file = ":test_download_pkgs",
-    regexp = ".*docker run -d --privileged bazel/tests/package_managers:test_download_pkgs_build sh -c $'.*'",
+    regexp = ".*docker run -d --privileged bazel/tests/package_managers:test_download_pkgs_build sh -c $'.*",
 )
 
 file_test(
