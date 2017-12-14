@@ -12,6 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-package(default_visibility = ["//visibility:public"])
+"""Define package_manager_provider"""
 
-exports_files(["installer.sh.tpl"])
+package_manager_provider = provider()
