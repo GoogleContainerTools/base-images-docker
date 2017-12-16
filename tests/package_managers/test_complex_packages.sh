@@ -1,0 +1,69 @@
+#!/bin/bash
+
+set -ex
+# Build new BUILD file with download_pkgs target
+touch BUILD.bazel
+cat > BUILD.bazel <<- EOM
+load("//package_managers:download_pkgs.bzl", "download_pkgs")
+load("//package_managers/apt_get:apt_get.bzl", "generate_apt_get")
+generate_apt_get(
+    name = "complex_packages",
+    packages = [
+        "curl",
+        "netbase",
+        "ca-certificates",
+    ],
+
+)
+
+download_pkgs(
+    name = "test_complex_download_pkgs",
+    image_tar = "//ubuntu:ubuntu_16_0_4_vanilla",
+    package_manager_generator = ":complex_packages",
+)
+EOM
+
+# Run download_pkgs and grab the resulting installables tar file
+rm -f test_download_complex_pkgs.tar
+bazel run //tests/package_managers:test_complex_download_pkgs
+cp  ../../bazel-bin/tests/package_managers/test_complex_download_pkgs.runfiles/debian_docker/tests/package_managers/test_complex_download_pkgs.tar .
+
+# Add install_pkgs target to generated BUILD file
+cat >> BUILD.bazel <<- EOM
+load("//package_managers:install_pkgs.bzl", "install_pkgs")
+
+generate_apt_get(
+    name = "complex_packages_tar",
+    tar = ":test_complex_download_pkgs.tar",
+)
+
+install_pkgs(
+    name = "test_complex_install_pkgs",
+    image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
+    output_image_name = "test_complex_install_pkgs",
+    package_manager_generator = ":complex_packages_tar",
+)
+EOM
+
+# Run install_pkgs and grab the build docker image tar
+yes | rm -f test_complex_install_pkgs.tar
+bazel build //tests/package_managers:test_complex_install_pkgs
+cp ../../bazel-bin/tests/package_managers/test_complex_install_pkgs.tar .
+
+# Generate a Dockerfile with the same apt packages and build the docker image
+bazel build //ubuntu:ubuntu_16_0_4_vanilla
+touch Dockerfile.test
+cat > Dockerfile.test <<- EOM
+FROM bazel/ubuntu:ubuntu_16_0_4_vanilla
+
+RUN apt-get update && \
+  apt-get install -y curl netbase ca-certificates
+EOM
+
+cid=$(docker build -q - < Dockerfile.test)
+
+docker save $cid > test_complex_pkgs.dockerfile.tar
+
+
+# Compare it with the tar file built with install_pkgs using container diff
+container-diff diff test_complex_install_pkgs.tar test_complex_pkgs.dockerfile.tar

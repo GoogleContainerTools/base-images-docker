@@ -1,0 +1,5 @@
+BUILD.bazel
+Dockerfile.test
+test_complex_download_pkgs.tar
+test_complex_install_pkgs.tar
+test_complex_pkgs.dockerfile.tar
