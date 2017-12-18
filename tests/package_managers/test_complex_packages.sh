@@ -2,7 +2,6 @@
 
 set -ex
 # Build new BUILD file with download_pkgs target
-touch BUILD.bazel
 cat > BUILD.bazel <<- EOM
 load("//package_managers:download_pkgs.bzl", "download_pkgs")
 load("//package_managers/apt_get:apt_get.bzl", "generate_apt_get")
@@ -52,7 +51,6 @@ cp ../../bazel-bin/tests/package_managers/test_complex_install_pkgs.tar .
 
 # Generate a Dockerfile with the same apt packages and build the docker image
 bazel build //ubuntu:ubuntu_16_0_4_vanilla
-touch Dockerfile.test
 cat > Dockerfile.test <<- EOM
 FROM bazel/ubuntu:ubuntu_16_0_4_vanilla
 
@@ -62,8 +60,6 @@ EOM
 
 cid=$(docker build -q - < Dockerfile.test)
 
-docker save $cid > test_complex_pkgs.dockerfile.tar
-
 
 # Compare it with the tar file built with install_pkgs using container diff
-container-diff diff test_complex_install_pkgs.tar test_complex_pkgs.dockerfile.tar
+container-diff diff test_complex_install_pkgs.tar daemon://$cid
