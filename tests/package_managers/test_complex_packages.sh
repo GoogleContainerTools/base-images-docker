@@ -60,6 +60,5 @@ EOM
 
 cid=$(docker build -q - < Dockerfile.test)
 
-
 # Compare it with the tar file built with install_pkgs using container diff
 container-diff diff test_complex_install_pkgs.tar daemon://$cid

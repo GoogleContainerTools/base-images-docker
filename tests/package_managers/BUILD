@@ -61,4 +61,3 @@ rule_test(
     ],
     rule = "test_install_pkgs",
 )
-
