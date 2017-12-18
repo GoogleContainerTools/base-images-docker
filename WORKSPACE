@@ -65,7 +65,7 @@ dpkg_src(
     name = "debian_jessie",
     arch = "amd64",
     distro = "jessie",
-    sha256 = "142cceae78a1343e66a0d27f1b142c406243d7940f626972c2c39ef71499ce61",
+    sha256 = "20720c9367e9454dee3d173e4d3fd85ab5530292f4ec6654feb5a810b6bb37ce",
     snapshot = DEB_SNAPSHOT,
     url = "http://snapshot.debian.org/archive",
 )
