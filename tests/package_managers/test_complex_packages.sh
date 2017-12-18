@@ -45,7 +45,7 @@ install_pkgs(
 EOM
 
 # Run install_pkgs and grab the build docker image tar
-yes | rm -f test_complex_install_pkgs.tar
+rm -f test_complex_install_pkgs.tar
 bazel build //tests/package_managers:test_complex_install_pkgs
 cp ../../bazel-bin/tests/package_managers/test_complex_install_pkgs.tar .
 
@@ -61,4 +61,4 @@ EOM
 cid=$(docker build -q - < Dockerfile.test)
 
 # Compare it with the tar file built with install_pkgs using container diff
-container-diff diff test_complex_install_pkgs.tar daemon://$cid
+container-diff diff test_complex_install_pkgs.tar daemon://"$cid"
