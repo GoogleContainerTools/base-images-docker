@@ -59,14 +59,14 @@ load(
 package_manager_repositories()
 
 # The Debian snapshot datetime to use. See http://snapshot.debian.org/ for more information.
-SNAPSHOT = "20171218T034107Z"
+DEB_SNAPSHOT = "20171218T034107Z"
 
 dpkg_src(
     name = "debian_jessie",
     arch = "amd64",
     distro = "jessie",
     sha256 = "142cceae78a1343e66a0d27f1b142c406243d7940f626972c2c39ef71499ce61",
-    snapshot = SNAPSHOT,
+    snapshot = DEB_SNAPSHOT,
     url = "http://snapshot.debian.org/archive",
 )
 
