@@ -55,7 +55,7 @@ cat > Dockerfile.test <<- EOM
 FROM bazel/ubuntu:ubuntu_16_0_4_vanilla
 
 RUN apt-get update && \
-  apt-get install -y curl netbase ca-certificates
+  apt-get install --no-install-recommends -y curl netbase ca-certificates
 EOM
 
 cid=$(docker build -q - < Dockerfile.test)
