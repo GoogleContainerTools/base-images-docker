@@ -19,6 +19,22 @@ load("//package_managers/apt_get:repos.bzl", "generate_additional_repos")
 load("//package_managers:package_manager_provider.bzl", "package_manager_provider")
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 
+def _run_download_script(ctx, output, build_contents):
+    download_script = ctx.actions.declare_file("{0}_download".format(ctx.attr.name))
+    contents = build_contents.replace(ctx.file.image_tar.short_path, ctx.file.image_tar.path)
+    contents = contents.replace(ctx.outputs.pkg_tar.short_path, ctx.outputs.pkg_tar.path)
+
+    ctx.actions.write(
+        output = download_script,
+        content = contents,
+    )
+
+    ctx.actions.run(
+        outputs = [ctx.outputs.pkg_tar],
+        executable = download_script,
+        inputs = [ctx.file.image_tar],
+    )
+
 def _impl(ctx):
     package_manager = ctx.attr.package_manager_generator[package_manager_provider]
     # docker_build rules always generate an image named 'bazel/$package:$name'.
@@ -35,22 +51,23 @@ docker load --input {image_tar}
 # Run the builder image.
 cid=$(docker run -d --privileged {image_name} sh -c $'{download_commands}')
 docker attach $cid
-docker cp $cid:{installables}.tar {output}.tar
+docker cp $cid:{installables}.tar {output}
 # Cleanup
 docker rm $cid
  """.format(image_tar=ctx.file.image_tar.short_path,
             image_name=builder_image_name,
             installables=ctx.attr.package_manager_generator.label.name,
             download_commands='\n'.join(package_manager.download_commands),
-            output="{0}/{1}".format(ctx.label.package, ctx.attr.name),
+            output= ctx.outputs.pkg_tar.short_path,
             )
-
+    _run_download_script(ctx, ctx.outputs.pkg_tar, build_contents)
     ctx.actions.write(
-        output=ctx.outputs.executable,
-        content=build_contents,
+        output = ctx.outputs.executable,
+        content = build_contents,
     )
+
     return struct(
-        runfiles = ctx.runfiles(files = [ctx.file.image_tar,]),
+        runfiles = ctx.runfiles(files = [ctx.file.image_tar]),
         files = depset([ctx.outputs.executable])
     )
 
@@ -71,6 +88,9 @@ _download_pkgs = rule(
         ),
     },
     executable = True,
+    outputs = {
+        "pkg_tar": "%{name}.tar",
+    },
     implementation = _impl,
 )
 
