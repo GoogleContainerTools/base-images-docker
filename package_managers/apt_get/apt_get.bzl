@@ -29,6 +29,7 @@ load(
 
 def _generate_download_commands(ctx):
     command_str = """# Fetch Index
+set -ex
 apt-get update -y
 # Make partial dir
 mkdir -p {cache}/{archive}/partial
@@ -48,7 +49,9 @@ tar -cpf {output}.tar --directory {cache}/{archive} `cd {cache}/{archive} && ls 
     return commands
 
 def _generate_install_commands(ctx, tar):
-    command_str = """tar -xvf {output}
+    command_str = """#!/bin/bash
+set -ex
+tar -xvf {output}
 dpkg -i ./*.deb
 apt-get install -f""".format(output=tar)
     return command_str.split('\n')
@@ -62,7 +65,7 @@ def _impl(ctx):
     shell_file_contents = []
     # Shell file commands
     shell_file_contents.append('#!/bin/bash')
-    shell_file_contents.append('set -x')
+    shell_file_contents.append('set -ex')
 
     download_commands = _generate_download_commands(ctx) if ctx.attr.packages else []
     tar_name = ("{0}.tar".format(ctx.attr.name) if ctx.attr.packages
@@ -74,8 +77,8 @@ def _impl(ctx):
         install_commands = install_commands,
     )
 
-    shell_file_contents.append(' && '.join(download_commands))
-    shell_file_contents.append(' && '.join(install_commands))
+    shell_file_contents.append('\n'.join(download_commands))
+    shell_file_contents.append('\n'.join(install_commands))
 
     ctx.actions.write(
         output = ctx.outputs.executable,
