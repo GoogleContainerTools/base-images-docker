@@ -15,6 +15,8 @@
 """ Rules that create additional apt-get repo files."""
 
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
+load("//util:run.bzl", "container_run_and_commit")
+load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 
 def _impl(ctx):
     ctx.actions.write(ctx.outputs.out, content="%s\n" % ctx.attr.repo)
@@ -49,3 +51,16 @@ def generate_additional_repos(name, repos):
 Args:
   repos: List of repos to add in sources.list format.
 """
+
+def add_gpg_key_from_url(name, image, gpg_url):
+    intermediate = "%s.intermediate" % name
+    container_run_and_commit(
+        name=intermediate,
+        image=image,
+        commands=["curl {gpg_url} | apt-key add -".format(gpg_url=gpg_url)],
+    )
+    # Export as an actual docker_image rule for compatibility.
+    docker_build(
+        name=name,
+        base=intermediate,
+    )
