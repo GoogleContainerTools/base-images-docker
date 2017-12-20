@@ -1,6 +1,6 @@
 .PHONY: test
 test:
-	#./check-fmt.sh
+	./check-fmt.sh
 	bazel build //...
 	bazel test --test_output=errors //...
 	tests/package_managers/test_complex_packages.sh
