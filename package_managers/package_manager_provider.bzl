@@ -14,4 +14,9 @@
 
 """Define package_manager_provider"""
 
-package_manager_provider = provider()
+package_manager_provider = provider(
+    fields = [
+        "download_commands",
+        "install_commands",
+    ],
+)
