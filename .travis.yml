@@ -27,5 +27,4 @@ install:
   - curl -LO https://storage.googleapis.com/container-diff/latest/container-diff-linux-amd64 && chmod +x container-diff-linux-amd64 && sudo mv container-diff-linux-amd64 /usr/local/bin/container-diff
 
 script:
- - cd tests/package_managers && ./test_complex_packages.sh
  - make test
