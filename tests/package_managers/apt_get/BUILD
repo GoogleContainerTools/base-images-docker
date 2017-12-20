@@ -78,6 +78,13 @@ rule_test(
 
 file_test(
     name = "test_install_from_tar_script",
+    content = """#!/bin/bash
+set -ex
+
+#!/bin/bash
+set -ex
+tar -xvf tests/package_managers/test_download_pkgs.tar
+dpkg -i ./*.deb
+apt-get install -f""",
     file = ":test_apt_get_from_tar",
-    regexp = "tar -xvf .*tests/package_managers/test_download_pkgs.tar",
 )

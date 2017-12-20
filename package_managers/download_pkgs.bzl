@@ -23,7 +23,8 @@ def _run_download_script(ctx, output, build_contents):
     download_script = ctx.actions.declare_file("{0}_download".format(ctx.attr.name))
     contents = build_contents.replace(ctx.file.image_tar.short_path, ctx.file.image_tar.path)
     contents = contents.replace(ctx.outputs.pkg_tar.short_path, ctx.outputs.pkg_tar.path)
-
+    # The paths for running within bazel build are different and hence replace short_path
+    # by full path
     ctx.actions.write(
         output = download_script,
         content = contents,
@@ -58,7 +59,7 @@ docker rm $cid
             image_name=builder_image_name,
             installables=ctx.attr.package_manager_generator.label.name,
             download_commands='\n'.join(package_manager.download_commands),
-            output= ctx.outputs.pkg_tar.short_path,
+            output=ctx.outputs.pkg_tar.short_path,
             )
     _run_download_script(ctx, ctx.outputs.pkg_tar, build_contents)
     ctx.actions.write(
@@ -67,7 +68,7 @@ docker rm $cid
     )
 
     return struct(
-        runfiles = ctx.runfiles(files = [ctx.file.image_tar]),
+        runfiles = ctx.runfiles(files = [ctx.file.image_tar,]),
         files = depset([ctx.outputs.executable])
     )
 
@@ -97,6 +98,7 @@ _download_pkgs = rule(
 """Downloads packages within a container
 
 This rule creates a script to download packages within a container.
+It also run the script and produces the tarball if requested.
 The script bunldes all the packages in a tarball.
 
 Args:
