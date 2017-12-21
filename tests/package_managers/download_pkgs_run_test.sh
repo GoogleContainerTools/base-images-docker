@@ -2,7 +2,6 @@
 
 set -ex
 BASEDIR=$(dirname "$0")
-"$BASEDIR/test_download_pkgs"
 
 EXIT_CODE=0
 

@@ -51,7 +51,7 @@ fi
 
 cid=$(docker run -d -v $(pwd)/{installables_tar}:/tmp/{installables_tar} -v $(pwd)/{installer_script}:/tmp/installer.sh --privileged {base_image_name} /tmp/installer.sh)
 
-docker attach $cid
+docker attach $cid || true
 docker commit -c "CMD $old_cmd" $cid {output_image_name}
 docker save {output_image_name} > {output_file_name}
 """.format(base_image_tar=ctx.file.image_tar.path,
