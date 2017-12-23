@@ -28,15 +28,14 @@ file_test(
     name = "test_script",
     content = """#!/bin/bash
 set -ex
-set -ex
 apt-get update -y
 mkdir -p /tmp/install/./partial
 apt-get install --no-install-recommends -y -q -o Dir::Cache=\"/tmp/install\" -o Dir::Cache::archives=\".\" foo test --download-only
 tar -cpf test_apt_get.tar --directory /tmp/install/. `cd /tmp/install/. && ls *.deb`
-#!/bin/bash
-set -ex
+
 tar -xvf test_apt_get.tar
-dpkg -i ./*.deb
+dpkg -i  --force-depends ./*.deb
+dpkg --configure -a command
 apt-get install -f""",
     file = ":test_apt_get",
 )
@@ -81,10 +80,10 @@ file_test(
     content = """#!/bin/bash
 set -ex
 
-#!/bin/bash
-set -ex
+
 tar -xvf tests/package_managers/test_download_pkgs.tar
-dpkg -i ./*.deb
+dpkg -i  --force-depends ./*.deb
+dpkg --configure -a command
 apt-get install -f""",
     file = ":test_apt_get_from_tar",
 )
