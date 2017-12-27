@@ -48,8 +48,7 @@ tar -cpf {output}.tar --directory {cache}/{archive} `cd {cache}/{archive} && ls 
     return commands
 
 def _generate_install_commands(ctx, tar):
-    command_str = """#!/bin/bash
-set -ex
+    command_str = """
 tar -xvf {output}
 dpkg -i  --force-depends ./*.deb
 dpkg --configure -a command
@@ -66,7 +65,7 @@ def _impl(ctx):
 
     download_commands = _generate_download_commands(ctx) if ctx.attr.packages else []
     tar_name = ("{0}.tar".format(ctx.attr.name) if ctx.attr.packages
-                else ctx.file.tar.short_path)
+                else ctx.file.tar.path)
     install_commands = _generate_install_commands(ctx, tar_name)
 
     apt_get = package_manager_provider(
