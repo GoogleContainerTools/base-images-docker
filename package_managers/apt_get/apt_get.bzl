@@ -48,8 +48,11 @@ tar -cpf {output}.tar --directory {cache}/{archive} `cd {cache}/{archive} && ls 
     return commands
 
 def _generate_install_commands(ctx, tar):
-    command_str = """tar -xvf {output}
-dpkg -i ./*.deb
+    command_str = """#!/bin/bash
+set -ex
+tar -xvf {output}
+dpkg -i  --force-depends ./*.deb
+dpkg --configure -a command
 apt-get install -f""".format(output=tar)
     return command_str.split('\n')
 
