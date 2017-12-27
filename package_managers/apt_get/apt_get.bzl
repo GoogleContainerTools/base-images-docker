@@ -29,7 +29,6 @@ load(
 
 def _generate_download_commands(ctx):
     command_str = """# Fetch Index
-set -ex
 apt-get update -y
 # Make partial dir
 mkdir -p {cache}/{archive}/partial
@@ -49,8 +48,7 @@ tar -cpf {output}.tar --directory {cache}/{archive} `cd {cache}/{archive} && ls 
     return commands
 
 def _generate_install_commands(ctx, tar):
-    command_str = """#!/bin/bash
-set -ex
+    command_str = """
 tar -xvf {output}
 dpkg -i  --force-depends ./*.deb
 dpkg --configure -a command
