@@ -68,7 +68,7 @@ def _impl(ctx):
 
     download_commands = _generate_download_commands(ctx) if ctx.attr.packages else []
     tar_name = ("{0}.tar".format(ctx.attr.name) if ctx.attr.packages
-                else ctx.file.tar.short_path)
+                else ctx.file.tar.path)
     install_commands = _generate_install_commands(ctx, tar_name)
 
     apt_get = package_manager_provider(
