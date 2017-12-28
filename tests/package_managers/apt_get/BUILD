@@ -35,7 +35,7 @@ tar -cpf test_apt_get.tar --directory /tmp/install/. `cd /tmp/install/. && ls *.
 
 tar -xvf test_apt_get.tar
 dpkg -i  --force-depends ./*.deb
-dpkg --configure -a command
+dpkg --configure -a
 apt-get install -f""",
     file = ":test_apt_get",
 )
@@ -80,9 +80,10 @@ file_test(
     content = """#!/bin/bash
 set -ex
 
-tar -xvf tests/package_managers/test_download_pkgs.tar
+
+tar -xvf bazel-out/k8-fastbuild/bin/tests/package_managers/test_download_pkgs.tar
 dpkg -i  --force-depends ./*.deb
-dpkg --configure -a command
+dpkg --configure -a
 apt-get install -f""",
     file = ":test_apt_get_from_tar",
 )
