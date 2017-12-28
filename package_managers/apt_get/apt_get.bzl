@@ -51,7 +51,7 @@ def _generate_install_commands(ctx, tar):
     command_str = """
 tar -xvf {output}
 dpkg -i  --force-depends ./*.deb
-dpkg --configure -a command
+dpkg --configure -a
 apt-get install -f""".format(output=tar)
     return command_str.split('\n')
 
