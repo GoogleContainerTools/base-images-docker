@@ -58,7 +58,7 @@ docker rm $cid
  """.format(image_tar=ctx.file.image_tar.short_path,
             image_name=builder_image_name,
             installables=ctx.attr.package_manager_generator.label.name,
-            download_commands='\n'.join(package_manager.download_commands),
+            download_commands='; '.join(package_manager.download_commands),
             output=ctx.outputs.pkg_tar.short_path,
             )
     _run_download_script(ctx, ctx.outputs.pkg_tar, build_contents)
