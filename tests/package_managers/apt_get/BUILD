@@ -1,7 +1,10 @@
 package(default_visibility = ["//visibility:public"])
 
+load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 load("//package_managers/apt_get:apt_get.bzl", "generate_apt_get")
-load("//package_managers/apt_get:repos.bzl", "generate_additional_repos")
+load("//package_managers/apt_get:repos.bzl", "generate_additional_repos", "add_gpg_key_from_url")
+load("//util:run.bzl", "container_run_and_commit")
+load("@runtimes_common//structure_tests:tests.bzl", "structure_test")
 load(
     "@bazel_tools//tools/build_rules:test_rules.bzl",
     "rule_test",
@@ -86,4 +89,28 @@ dpkg -i  --force-depends ./*.deb
 dpkg --configure -a
 apt-get install -f""",
     file = ":test_apt_get_from_tar",
+)
+
+# The gpg rules need a base image with curl and gnupg2.
+container_run_and_commit(
+    name = "test_gpg_base",
+    commands = ["apt-get update && apt-get install -y curl gnupg2"],
+    image = "//debian/reproducible:debian9",
+)
+
+docker_build(
+    name = "test_gpg_base_image",
+    base = ":test_gpg_base",
+)
+
+add_gpg_key_from_url(
+    name = "test_gpg_image",
+    gpg_url = "https://bazel.build/bazel-release.pub.gpg",
+    image = ":test_gpg_base_image",
+)
+
+structure_test(
+    name = "test_gpg",
+    config = ":gpg.yaml",
+    image = ":test_gpg_image",
 )
