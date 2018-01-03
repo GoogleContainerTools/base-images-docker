@@ -16,18 +16,22 @@
 
 load("//package_managers:package_manager_provider.bzl", "package_manager_provider")
 
+def _generate_install_commands(tar):
+  return """
+tar -xvf {}
+dpkg -i --force-depends ./*.deb
+dpkg --configure -a
+apt-get install -f""".format(tar)
+
 def _impl(ctx):
-  package_manager = ctx.attr.package_manager_generator[package_manager_provider]
-  # The default order for depset is deterministic and hence we should always see the tar
-  # at index 0.  See https://docs.bazel.build/versions/master/skylark/lib/depset.html
-  installables_tar = ctx.attr.package_manager_generator.default_runfiles.files.to_list()[0]
+  installables_tar = ctx.file.installables_tar.path
   # Generate the installer.sh script
   install_script = ctx.new_file("%s.install" % (ctx.label.name))
   ctx.template_action(
       template=ctx.file._installer_tpl,
       substitutions= {
-          "%{install_commands}": '\n'.join(package_manager.install_commands),
-          "%{installables_tar}": installables_tar.path,
+          "%{install_commands}": _generate_install_commands(installables_tar),
+          "%{installables_tar}": installables_tar,
       },
       output = install_script,
       executable = True,
@@ -56,7 +60,7 @@ docker commit -c "CMD $old_cmd" $cid {output_image_name}
 docker save {output_image_name} > {output_file_name}
 """.format(base_image_tar=ctx.file.image_tar.path,
            base_image_name=builder_image_name,
-           installables_tar=installables_tar.path,
+           installables_tar=installables_tar,
            installer_script=install_script.path,
            output_file_name=unstripped_tar.path,
            output_image_name=ctx.attr.output_image_name
@@ -69,7 +73,7 @@ docker save {output_image_name} > {output_file_name}
   )
   ctx.actions.run(
     outputs=[unstripped_tar],
-    inputs=[ctx.file.image_tar, install_script, installables_tar],
+    inputs=[ctx.file.image_tar, install_script, ctx.file.installables_tar],
     executable=script,
   )
 
@@ -91,11 +95,10 @@ install_pkgs = rule(
             single_file = True,
             mandatory = True,
         ),
-        "package_manager_generator": attr.label(
-            executable = True,
-            cfg = "target",
+        "installables_tar": attr.label(
             allow_files = True,
-            providers = [package_manager_provider],
+            single_file = True,
+            mandatory = True
         ),
         "output_image_name": attr.string(
             mandatory = True,
