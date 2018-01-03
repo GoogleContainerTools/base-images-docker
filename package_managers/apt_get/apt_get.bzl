@@ -19,10 +19,6 @@ CACHE_DIR = "/tmp/install"
 ARCHIVE_DIR = "."
 
 load(
-    "//package_managers:package_manager_provider.bzl",
-    "package_manager_provider",
-)
-load(
     "@io_bazel_rules_docker//skylib:filetype.bzl",
     tar_filetype = "tar",
 )
@@ -56,25 +52,15 @@ apt-get install -f""".format(output=tar)
     return command_str.split('\n')
 
 def _impl(ctx):
-    if not ctx.attr.packages and not ctx.attr.tar:
-      fail("Cannot install packages. \nEither a list of packages or a tar " +
-           "with debs should be provided")
-    elif ctx.attr.packages and ctx.attr.tar:
-      fail("Cannot specify both list of packages and a tar with debs")
     shell_file_contents = []
     # Shell file commands
     shell_file_contents.append('#!/bin/bash')
     shell_file_contents.append('set -ex')
 
-    download_commands = _generate_download_commands(ctx) if ctx.attr.packages else []
-    tar_name = ("{0}.tar".format(ctx.attr.name) if ctx.attr.packages
-                else ctx.file.tar.path)
-    install_commands = _generate_install_commands(ctx, tar_name)
+    download_commands = _generate_download_commands(ctx)
+    tar_name = "{0}.tar".format(ctx.attr.name)
 
-    apt_get = package_manager_provider(
-        download_commands = download_commands,
-        install_commands = install_commands,
-    )
+    install_commands = _generate_install_commands(ctx, tar_name)
 
     shell_file_contents.append('\n'.join(download_commands))
     shell_file_contents.append('\n'.join(install_commands))
@@ -84,27 +70,14 @@ def _impl(ctx):
         content = '\n'.join(shell_file_contents),
     )
 
-    runfiles = ctx.runfiles(files=[])
-    if ctx.attr.tar:
-      runfiles = ctx.runfiles(files=ctx.attr.tar.files.to_list())
-
     return struct(
         files = depset([ctx.outputs.executable]),
-        runfiles = runfiles,
-        providers = [apt_get],
     )
 
 generate_apt_get = rule(
     attrs = {
         "packages": attr.string_list(
             doc = "list of packages to download",
-            mandatory = False,
-        ),
-        "tar": attr.label(
-            doc = "tar with package debs to install",
-            mandatory = False,
-            allow_files = tar_filetype,
-            single_file = True,
         ),
     },
     executable = True,
@@ -113,9 +86,8 @@ generate_apt_get = rule(
 
 """Fetches and Installs packages via apt-get or bundled debs.
 
-This rule fetches and installs packages via apt-get or tar with debs.
+This rule fetches and installs packages via apt-get.
 
 Args:
   packages: List of packages to fetch and install.
-  tar: Tar with package deb bundled.
 """
