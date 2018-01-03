@@ -62,9 +62,6 @@ def _impl(ctx):
     elif ctx.attr.packages and ctx.attr.tar:
       fail("Cannot specify both list of packages and a tar with debs")
     shell_file_contents = []
-    # Shell file commands
-    shell_file_contents.append('#!/bin/bash')
-    shell_file_contents.append('set -ex')
 
     download_commands = _generate_download_commands(ctx) if ctx.attr.packages else []
     tar_name = ("{0}.tar".format(ctx.attr.name) if ctx.attr.packages
@@ -76,6 +73,8 @@ def _impl(ctx):
         install_commands = install_commands,
     )
 
+    shell_file_contents.append('#!/bin/bash')
+    shell_file_contents.append('set -ex')
     shell_file_contents.append('\n'.join(download_commands))
     shell_file_contents.append('\n'.join(install_commands))
 
