@@ -22,7 +22,7 @@ bazel build //...
 
 This can be slow the first time, but future builds are incremental and very fast.
 
-Tests are implemented using the [structure_test](https://www.github.com/GoogleCloudPlatform/runtimes-common/structure_test) library.
+Tests are implemented using the [structure_test](https://www.github.com/GoogleCloudPlatform/container-structure-test) library.
 The tests are defined as YAML files in the `tests` directory.
 
 To run tests, use:
@@ -37,6 +37,8 @@ To run these, use:
 ```shell
 make test
 ```
+
+Note: running either set of tests requires installing [container_diff](https://github.com/GoogleCloudPlatform/container-diff) and having it on your PATH.
 
 # How to become a contributor and submit your own code
 
