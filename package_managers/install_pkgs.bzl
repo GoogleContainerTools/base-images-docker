@@ -98,7 +98,7 @@ install_pkgs = rule(
         "installables_tar": attr.label(
             allow_files = True,
             single_file = True,
-            mandatory = True
+            mandatory = True,
         ),
         "output_image_name": attr.string(
             mandatory = True,

@@ -17,7 +17,6 @@
 load("//package_managers/apt_get:repos.bzl", "generate_additional_repos")
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 
-
 def _generate_download_commands(ctx):
     return """#!/bin/bash
 set -ex
