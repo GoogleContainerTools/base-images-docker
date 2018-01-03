@@ -18,10 +18,10 @@ load("//package_managers:package_manager_provider.bzl", "package_manager_provide
 
 def _generate_install_commands(tar):
   return """
-tar -xvf {}
+tar -xvf {tar}
 dpkg -i --force-depends ./*.deb
 dpkg --configure -a
-apt-get install -f""".format(tar)
+apt-get install -f""".format(tar=tar)
 
 def _impl(ctx):
   installables_tar = ctx.file.installables_tar.path

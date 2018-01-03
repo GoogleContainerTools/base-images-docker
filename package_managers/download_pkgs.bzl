@@ -23,14 +23,12 @@ set -ex
 # Fetch Index
 apt-get update -y
 # Make partial dir
-mkdir -p {cache}/{archive}/partial
+mkdir -p /tmp/install/./partial
 # Install command
-apt-get install --no-install-recommends -y -q -o Dir::Cache="{cache}" -o Dir::Cache::archives="{archive}" {packages} --download-only
+apt-get install --no-install-recommends -y -q -o Dir::Cache="/tmp/install" -o Dir::Cache::archives="." {packages} --download-only
 # Tar command to only include all the *.deb files and ignore other directories placed in the cache dir.
-tar -cpf {output}.tar --directory {cache}/{archive} `cd {cache}/{archive} && ls *.deb`""".format(
+tar -cpf {output}.tar --directory /tmp/install/. `cd /tmp/install/. && ls *.deb`""".format(
     output=ctx.attr.name,
-    cache='/tmp/install',
-    archive='.',
     packages=' '.join(ctx.attr.packages))
 
 def _run_download_script(ctx, output, build_contents):
