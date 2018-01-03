@@ -11,7 +11,7 @@ load("//package_managers/apt_get:apt_get.bzl", "generate_apt_get")
 download_pkgs(
     name = "test_download_pkgs",
     image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
-    package_manager_generator = "//package_managers/apt_get:default_docker_packages",
+    packages = ["curl", "netbase"],
 )
 
 rule_test(

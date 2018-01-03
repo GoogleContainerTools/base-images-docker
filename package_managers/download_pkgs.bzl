@@ -16,7 +16,6 @@
 
 load("//package_managers/apt_get:apt_get.bzl", "generate_apt_get")
 load("//package_managers/apt_get:repos.bzl", "generate_additional_repos")
-load("//package_managers:package_manager_provider.bzl", "package_manager_provider")
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 
 def _run_download_script(ctx, output, build_contents):
@@ -79,13 +78,8 @@ _download_pkgs = rule(
             allow_files = True,
             single_file = True,
         ),
-        "package_manager_generator": attr.label(
-            default = Label("//package_managers/apt_get:default_docker_packages"),
-            executable = True,
-            cfg = "target",
-            allow_files = True,
-            single_file = True,
-            providers = [package_manager_provider],
+        "packages": attr.string_list(
+            mandatory = True,
         ),
     },
     executable = True,
@@ -109,7 +103,7 @@ Args:
   additional_repos: list of additional debian package repos to use, in sources.list format
 """
 
-def download_pkgs(name, image_tar, package_manager_generator, additional_repos=[]):
+def download_pkgs(name, image_tar, packages, additional_repos=[]):
   """Downloads packages within a container
   This rule creates a script to download packages within a container.
   The script bunldes all the packages in a tarball.
@@ -139,6 +133,6 @@ def download_pkgs(name, image_tar, package_manager_generator, additional_repos=[
   )
   _download_pkgs(
        name = "{0}".format(name),
-       package_manager_generator = package_manager_generator,
        image_tar = ":{0}.tar".format(img_target_name),
+       packages = packages,
   )

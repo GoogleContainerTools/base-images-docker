@@ -24,7 +24,9 @@ load(
 )
 
 def _generate_download_commands(ctx):
-    command_str = """# Fetch Index
+    return """#!/bin/bash
+set -ex
+# Fetch Index
 apt-get update -y
 # Make partial dir
 mkdir -p {cache}/{archive}/partial
@@ -36,38 +38,13 @@ tar -cpf {output}.tar --directory {cache}/{archive} `cd {cache}/{archive} && ls 
     cache=CACHE_DIR,
     archive=ARCHIVE_DIR,
     packages=' '.join(ctx.attr.packages))
-    commands = []
-    # filter all comments from command_str
-    for cmd in command_str.split('\n'):
-      if cmd and not cmd.startswith('#'):
-        commands.append(cmd)
-    return commands
-
-def _generate_install_commands(ctx, tar):
-    command_str = """
-tar -xvf {output}
-dpkg -i  --force-depends ./*.deb
-dpkg --configure -a
-apt-get install -f""".format(output=tar)
-    return command_str.split('\n')
 
 def _impl(ctx):
-    shell_file_contents = []
-    # Shell file commands
-    shell_file_contents.append('#!/bin/bash')
-    shell_file_contents.append('set -ex')
-
     download_commands = _generate_download_commands(ctx)
-    tar_name = "{0}.tar".format(ctx.attr.name)
-
-    install_commands = _generate_install_commands(ctx, tar_name)
-
-    shell_file_contents.append('\n'.join(download_commands))
-    shell_file_contents.append('\n'.join(install_commands))
 
     ctx.actions.write(
         output = ctx.outputs.executable,
-        content = '\n'.join(shell_file_contents),
+        content = download_commands,
     )
 
     return struct(
