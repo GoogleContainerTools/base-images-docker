@@ -29,7 +29,7 @@ set -ex
 # Execute the loader script.
 {0}
 # Run the builder image.
-cid=$(docker run -d --privileged {1} {2} {3})
+cid=$(docker run -d --add-host snapshot.debian.org:193.62.202.30 --privileged {1} {2} {3})
 docker attach $cid
 # Copy out the rootfs.
 docker cp $cid:/workspace/rootfs.tar.gz {4}
