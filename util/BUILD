@@ -8,4 +8,5 @@ py_binary(
 exports_files([
     "commit.sh.tpl",
     "extract.sh.tpl",
+    "image_util.sh",
 ])

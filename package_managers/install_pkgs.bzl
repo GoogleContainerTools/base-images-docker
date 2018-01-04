@@ -44,21 +44,19 @@ def _impl(ctx):
   build_contents = """\
 #!/bin/bash
 set -ex
-docker load --input {base_image_tar}
+# Load utils
+source {util_script}
 
-old_cmd=$(docker inspect -f "{{{{.Config.Cmd}}}}" {base_image_name})
-# If CMD wasn't set, set it to a sane default.
-if [ "$old_cmd" = "[]" ];
-then
-  old_cmd=["/bin/sh"]
-fi
+docker load --input {base_image_tar}
 
 cid=$(docker run -d -v $(pwd)/{installables_tar}:/tmp/{installables_tar} -v $(pwd)/{installer_script}:/tmp/installer.sh --privileged {base_image_name} /tmp/installer.sh)
 
-docker attach $cid
-docker commit -c "CMD $old_cmd" $cid {output_image_name}
+docker attach $cid || true
+
+reset_cmd {base_image_name} $cid {output_image_name}
 docker save {output_image_name} > {output_file_name}
-""".format(base_image_tar=ctx.file.image_tar.path,
+""".format(util_script=ctx.file._image_utils.short_path,
+           base_image_tar=ctx.file.image_tar.path,
            base_image_name=builder_image_name,
            installables_tar=installables_tar,
            installer_script=install_script.path,
@@ -73,7 +71,7 @@ docker save {output_image_name} > {output_file_name}
   )
   ctx.actions.run(
     outputs=[unstripped_tar],
-    inputs=[ctx.file.image_tar, install_script, ctx.file.installables_tar],
+    inputs=[ctx.file.image_tar, install_script, ctx.file.installables_tar, ctx.file._image_utils],
     executable=script,
   )
 
@@ -112,6 +110,11 @@ install_pkgs = rule(
             default = "//util:config_stripper",
             executable = True,
             cfg = "host",
+        ),
+        "_image_utils": attr.label(
+            default = "//util:image_util.sh",
+            allow_files = True,
+            single_file = True,
         ),
     },
     outputs = {
