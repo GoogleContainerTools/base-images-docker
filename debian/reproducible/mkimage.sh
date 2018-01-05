@@ -47,7 +47,7 @@ deb http://snapshot.debian.org/archive/debian/$SNAPSHOT $DIST-updates main
 deb http://snapshot.debian.org/archive/debian-security/$SNAPSHOT $DIST/updates main
 EOF
 rootfs_chroot apt-get -o Acquire::Check-Valid-Until=false update
-rootfs_chroot apt-get -y -q upgrade
+rootfs_chroot apt-get -y -q --force-yes upgrade
 
 # Clean some apt artifacts
 rootfs_chroot apt-get clean
