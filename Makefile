@@ -7,9 +7,3 @@ test:
 	buildifier -mode=check $(shell find . -name BUILD -type f)
 	buildifier -mode=check $(shell find . -name WORKSPACE -type f)
 	buildifier -mode=check $(shell find . -name '*.bzl' -type f)
-
-buildifier:
-	buildifier -mode=check $(shell find . -name BUILD -type f)
-	buildifier -mode=check $(shell find . -name WORKSPACE -type f)
-	buildifier -mode=check $(shell find . -name '*.bzl' -type f)
-
