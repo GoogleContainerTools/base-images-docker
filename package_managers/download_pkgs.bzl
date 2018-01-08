@@ -60,7 +60,7 @@ def _impl(ctx):
 set -ex
 docker load --input {image_tar}
 # Run the builder image.
-cid=$(docker run -d --privileged {image_name} sh -c $'{download_commands}')
+cid=$(docker run -d --privileged {image_name} sh -c '{download_commands}')
 docker attach $cid
 docker cp $cid:{installables}.tar {output}
 # Cleanup
