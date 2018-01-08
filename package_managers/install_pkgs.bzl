@@ -55,7 +55,7 @@ docker attach $cid || true
 
 reset_cmd {base_image_name} $cid {output_image_name}
 docker save {output_image_name} > {output_file_name}
-""".format(util_script=ctx.file._image_utils.short_path,
+""".format(util_script=ctx.file._image_utils.path,
            base_image_tar=ctx.file.image_tar.path,
            base_image_name=builder_image_name,
            installables_tar=installables_tar,
