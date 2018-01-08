@@ -66,6 +66,7 @@ def _commit_impl(ctx):
         template=ctx.file._run_tpl,
         output=script,
         substitutions={
+          "%{util_script}": ctx.file._image_utils.path,
           "%{output_image}": 'bazel/%s:%s' % (ctx.label.package or 'default',
                                               ctx.attr.name),
           "%{load_statement}": load_statement,
@@ -76,7 +77,7 @@ def _commit_impl(ctx):
         is_executable=True,
     )
 
-    runfiles = [ctx.file.image_tar] + \
+    runfiles = [ctx.file.image_tar, ctx.file._image_utils] + \
                 ctx.attr.image_tar.files.to_list() + \
                 ctx.attr.image_tar.data_runfiles.files.to_list()
 
@@ -107,6 +108,11 @@ _run_and_commit = rule(
         ),
         "_run_tpl": attr.label(
             default = Label("//util:commit.sh.tpl"),
+            allow_files = True,
+            single_file = True,
+        ),
+        "_image_utils": attr.label(
+            default = "//util:image_util.sh",
             allow_files = True,
             single_file = True,
         ),

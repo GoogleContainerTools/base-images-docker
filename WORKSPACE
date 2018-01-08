@@ -23,7 +23,7 @@ workspace(name = "debian_docker")
 # Docker rules.
 git_repository(
     name = "io_bazel_rules_docker",
-    commit = "8bbe2a8abd382641e65ff7127a3700a8530f02ce",
+    commit = "8aeab63328a82fdb8e8eb12f677a4e5ce6b183b1",
     remote = "https://github.com/bazelbuild/rules_docker.git",
 )
 

@@ -28,6 +28,8 @@ load(
     "rule_test",
     "file_test",
 )
+load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
+load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
 
 container_run_and_extract(
     name = "test_container_extract",
@@ -65,4 +67,15 @@ rule_test(
         "test_container_commit_commit.tar",
     ],
     rule = "test_container_commit",
+)
+
+docker_build(
+    name = "test_container_commit_image",
+    base = ":test_container_commit",
+)
+
+container_test(
+    name = "test_container_commit_metadata",
+    configs = [":container_commit.yaml"],
+    image = ":test_container_commit_image",
 )
