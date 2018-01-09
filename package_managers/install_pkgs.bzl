@@ -14,8 +14,6 @@
 
 """Rule for installing apt packages from a tar file into a docker image."""
 
-load("//package_managers:package_manager_provider.bzl", "package_manager_provider")
-
 def _generate_install_commands(tar):
   return """
 tar -xvf {tar}
