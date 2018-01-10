@@ -8,14 +8,18 @@ UBUNTU_VERSIONS = [
     "16_0_4",
 ]
 
+# 'ubuntu_%s' is a ubuntu_%s rootfs w/ ca-certificates, curl, and netbase
+# This image is used for node images. Look node/reproducible/BUILD#L31
 [dockerfile_build(
-    name = "ubuntu_%s_dockerbuild" % version,
+    name = "ubuntu_%s" % version,
     base = ":ubuntu_%s_vanilla" % version,
     dockerfile = ":Dockerfile.ubuntu",
 ) for version in UBUNTU_VERSIONS]
 
+# 'ubuntu_%s_build' is the 'ubuntu_%s' image w/ build-essential and python2.7
+#  This image is used for node images. Look node/reproducible/BUILD#L41
 [dockerfile_build(
-    name = "ubuntu_%s_build_dockerbuild" % version,
+    name = "ubuntu_%s_build" % version,
     base = ":ubuntu_%s" % version,
     dockerfile = ":Dockerfile.ubuntu_build",
 ) for version in UBUNTU_VERSIONS]
@@ -37,21 +41,4 @@ pkg_tar(
     name = "ubuntu_%s_vanilla" % version,
     env = UBUNTU_ENV,
     tars = ["@ubuntu_%s_tar_download//file" % version],
-) for version in UBUNTU_VERSIONS]
-
-# 'ubuntu_%s' is a ubuntu_%s rootfs w/ ca-certificates, curl, and netbase
-# This image is used for node images. Look node/reproducible/BUILD#L31
-[docker_build(
-    name = "ubuntu_%s" % version,
-    base = "//ubuntu:ubuntu_%s_dockerbuild.tar" % version,
-    tars = [
-        ":overlay.tar",
-    ],
-) for version in UBUNTU_VERSIONS]
-
-# 'ubuntu_%s_build' is the 'ubuntu_%s' image w/ build-essential and python2.7
-#  This image is used for node images. Look node/reproducible/BUILD#L41
-[docker_build(
-    name = "ubuntu_%s_build" % version,
-    base = "//ubuntu:ubuntu_%s_build_dockerbuild.tar" % version,
 ) for version in UBUNTU_VERSIONS]

@@ -30,7 +30,7 @@ sh_binary(
 # on top of a vanilla ubuntu_%s release
 [[docker_build(
     name = "node_%s_ubuntu_%s" % (node_version, ubuntu_version),
-    base = "//ubuntu:ubuntu_%s_dockerbuild" % ubuntu_version,
+    base = "//ubuntu:ubuntu_%s" % ubuntu_version,
     env = NODEJS_ENV,
     ports = ["8080"],
     tars = [
