@@ -14,6 +14,8 @@
 
 """Rule for building debootstrap rootfs tarballs."""
 
+load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
+
 def _impl(ctx):
     dockerfile_path = ctx.file.dockerfile.path
 
@@ -99,7 +101,7 @@ docker save {tag} > {output}
 
     return struct()
 
-dockerfile_build = rule(
+_dockerfile_build = rule(
     attrs = {
         "base": attr.label(
             allow_files = True,
@@ -133,3 +135,15 @@ dockerfile_build = rule(
     },
     implementation = _impl,
 )
+
+def dockerfile_build(name, *args, **kwargs):
+    intermediate_name = "%s-intermediate" % name
+    _dockerfile_build(
+        name=intermediate_name,
+        *args,
+        **kwargs
+    )
+    docker_build(
+        name=name,
+        base=intermediate_name + ".tar"
+    )
