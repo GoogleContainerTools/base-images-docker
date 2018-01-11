@@ -94,12 +94,6 @@ dpkg_list(
 )
 
 git_repository(
-    name = "runtimes_common",
-    commit = "f0e627c4fae70c4220636eac0d2cedb83391e930",
-    remote = "https://github.com/GoogleCloudPlatform/runtimes-common.git",
-)
-
-git_repository(
     name = "io_bazel_rules_go",
     remote = "https://github.com/bazelbuild/rules_go.git",
     tag = "0.5.5",
