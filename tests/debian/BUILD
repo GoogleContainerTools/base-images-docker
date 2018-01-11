@@ -1,6 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@runtimes_common//structure_tests:tests.bzl", "structure_test")
+load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
 
 exports_files(glob(["*.yaml"]))
 
@@ -9,14 +9,14 @@ DEBIAN_MAP = {
     9: "stretch",
 }
 
-[structure_test(
+[container_test(
     name = "debian%s_test" % num,
-    config = ":debian_test.yaml",
+    configs = [":debian_test.yaml"],
     image = "//debian/reproducible:debian%s" % num,
 ) for num, distro in DEBIAN_MAP.items()]
 
-[structure_test(
+[container_test(
     name = "debian%s_version_test" % num,
-    config = ":debian_%s_test.yaml" % num,
+    configs = [":debian_%s_test.yaml" % num],
     image = "//debian/reproducible:debian%s" % num,
 ) for num, distro in DEBIAN_MAP.items()]

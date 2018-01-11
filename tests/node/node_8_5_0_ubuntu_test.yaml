@@ -11,3 +11,4 @@ metadataTest:
     - key: NODE_ENV
       value: production
   exposedPorts: ["8080"]
+  command: ["/bin/bash"]
