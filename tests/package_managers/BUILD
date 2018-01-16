@@ -7,6 +7,8 @@ load(
 )
 load("//package_managers:download_pkgs.bzl", "download_pkgs")
 load("//package_managers:install_pkgs.bzl", "install_pkgs")
+load("//package_managers:apt_key.bzl", "add_apt_key")
+load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
 
 download_pkgs(
     name = "test_download_pkgs",
@@ -56,4 +58,16 @@ rule_test(
         "test_install_pkgs.tar",
     ],
     rule = "test_install_pkgs",
+)
+
+add_apt_key(
+    name = "bazel_gpg",
+    image = "//package_managers:apt_key_image",
+    key = "@bazel_gpg//file",
+)
+
+container_test(
+    name = "gpg_test",
+    configs = [":gpg_test.yaml"],
+    image = ":bazel_gpg",
 )

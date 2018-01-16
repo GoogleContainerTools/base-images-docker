@@ -118,3 +118,9 @@ UBUNTU_MAP = {
     sha256 = map["sha256"],
     url = map["url"],
 ) for version, map in UBUNTU_MAP.items()]
+
+http_file(
+    name = "bazel_gpg",
+    sha256 = "e0e806160454a3e5e308188439525896bf9881f1f2f0b887192428f517da4131",
+    url = "https://bazel.build/bazel-release.pub.gpg",
+)
