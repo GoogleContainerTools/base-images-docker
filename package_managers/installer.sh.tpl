@@ -8,4 +8,4 @@ pushd /tmp
 popd
 umount -l /tmp/installer.sh
 umount -l /tmp/%{installables_tar}
-rm -rf /tmp
+rm -rf /tmp/*
