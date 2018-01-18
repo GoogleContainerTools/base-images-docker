@@ -15,19 +15,3 @@
 package(default_visibility = ["//visibility:public"])
 
 exports_files(["installer.sh.tpl"])
-
-load("//package_managers:download_pkgs.bzl", "download_pkgs")
-load("//package_managers:install_pkgs.bzl", "install_pkgs")
-
-download_pkgs(
-    name = "apt_key_pkgs",
-    image_tar = "//debian/reproducible:debian9.tar",
-    packages = ["gnupg"],
-)
-
-install_pkgs(
-    name = "apt_key_image",
-    image_tar = "//debian/reproducible:debian9.tar",
-    installables_tar = "//package_managers:apt_key_pkgs.tar",
-    output_image_name = "gcr.io/gcp-runtimes/apt_key:latest",
-)

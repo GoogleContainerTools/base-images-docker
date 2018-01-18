@@ -62,7 +62,7 @@ rule_test(
 
 add_apt_key(
     name = "bazel_gpg",
-    image = "//package_managers:apt_key_image",
+    image = "//debian/reproducible:debian9",
     key = "@bazel_gpg//file",
 )
 
