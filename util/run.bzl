@@ -230,7 +230,7 @@ def container_run_and_extract(name, image, commands, extract_file):
         image_tar = image_tar + ".tar",
         commands = commands,
         extract_file = extract_file,
-        output_file = extract_file.lstrip("/"),
+        output_file = name + extract_file,
     )
 
 def _process_commands(command_list):
