@@ -44,14 +44,14 @@ container_run_and_extract(
 rule_test(
     name = "test_container_extract_rule",
     generates = [
-        "foo.txt",
+        "test_container_extract/foo.txt",
     ],
     rule = "test_container_extract",
 )
 
 file_test(
     name = "test_extracted_file",
-    file = ":foo.txt",
+    file = "test_container_extract/foo.txt",
     regexp = "test",
 )
 
