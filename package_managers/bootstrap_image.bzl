@@ -28,7 +28,7 @@ load("//store/git:git.bzl",
 
 def _impl(ctx):
     store_key = "{0}/{1}".format(ctx.attr.date, PACKAGES_FILE_NAME)
- 
+
     get_status = git_store_get(
         ctx = ctx,
         store_location = ctx.attr.store_location,
@@ -65,7 +65,7 @@ fi
         content = build_contents,
         is_executable = True,
     )
-    
+
     ctx.actions.run(
         outputs = [ctx.outputs.packages_tar],
         inputs = ctx.attr.download_pkgs.default_runfiles.files.to_list() +
@@ -75,7 +75,7 @@ fi
         mnemonic = "RunFetchOrDownload",
         use_default_shell_env = True,
     )
-    # this is not executed when you call the install_pkgs rule. 
+    # This is not executed when you call the install_pkgs rule.
     # Only gets executed when you run _fetch target
     put_status = git_store_put(
         ctx = ctx,
@@ -87,8 +87,7 @@ fi
     return struct(
         files = depset([ctx.outputs.packages_tar,]),
         runfiles = ctx.runfiles(files = ctx.attr.download_pkgs.default_runfiles.files.to_list() +
-                                        [put_status, 
-                                         ctx.file.image_tar])
+                                        [put_status, ctx.file.image_tar])
     )
 
 fetch_or_download_pkgs = rule(

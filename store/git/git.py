@@ -90,7 +90,7 @@ class LocalGitStore(object):
       ['mkdir', '-p', os.path.dirname(file_location)],
       ['cp', src, file_location]
     ])
-     
+ 
 
 def main(unused_argv):
   if FLAGS.method == "get" and not FLAGS.dest:
