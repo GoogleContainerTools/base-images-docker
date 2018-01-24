@@ -11,3 +11,4 @@ test:
 
 complex-test:
 	tests/package_managers/test_complex_packages.sh
+	tests/package_managers/test_bootstrap_image_macro.sh
