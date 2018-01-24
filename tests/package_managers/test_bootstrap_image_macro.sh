@@ -7,7 +7,7 @@ trap __cleanup EXIT
 #Clean up functions
 __cleanup ()
 {
-  [[ -d "$TEST_STORE" ]] && rm -rf "$TEST_STORE"
+  [[ -d "$TEST_GIT_REPO" ]] && rm -rf "$TEST_GIT_REPO"
 }
 
 PWD=$(pwd)
@@ -18,8 +18,9 @@ if [ "$PWD" != "$GIT_ROOT" ]; then
   exit 1
 fi
 
-TEST_STORE="tests/package_managers/tmp_git/ubuntu/builds"
-TEST_SCRIPT_CMD="./bootstrap_image.sh -t tests/package_managers:bootstrap_ubuntu"
+TEST_GIT_REPO="tests/package_managers/tmp_git"
+TEST_STORE="$TEST_GIT_REPO/ubuntu/builds"
+TEST_SCRIPT_CMD="./bootstrap_image.sh -t tests/package_managers:bootstrap_ubuntu -g $PWD/$TEST_GIT_REPO"
 DATE="2017/12/15"
 
 # Create a Temporary store in this directory
