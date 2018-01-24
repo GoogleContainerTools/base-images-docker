@@ -3,7 +3,7 @@ set -e
 
 # This script kicks of the bootstrap image macro with the right flags.
 
-while getopts t:g:d:v option
+while getopts t:g:d option
 do
  case "${option}"
  in
@@ -15,7 +15,7 @@ done
 
 # Error out if -t does not exists
 if [ -z "${TARGET}" ];  then
-  USAGE="""
+  echo """
 $(basename "$0") <Mandatory_args> <Optional_args>
 Mandatory Args
  -t <bootstrap_image_macro>
@@ -32,11 +32,11 @@ fi
 
 echo "Running bazel build ${TARGET}"
 bazel build "${TARGET}" \
-  --action_env=GIT_ROOT=${GIT_ROOT} \
-  --sandbox_writable_path=${GIT_ROOT} \
-  ${DEBUG}
+    --action_env=GIT_ROOT=${GIT_ROOT} \
+    --sandbox_writable_path=${GIT_ROOT} \
+    ${DEBUG}
 
-# get rid of running this once we figure out how to make put_status output mandatory in bootstrap_image. 
+# get rid of running this once we figure out how to make put_status output mandatory in bootstrap_image.
 echo "Running bazel build ${TARGET}_fetch to make we store the downloaded packages in the store back"
 bazel build "${TARGET}_fetch" \
   --action_env=GIT_ROOT=${GIT_ROOT} \

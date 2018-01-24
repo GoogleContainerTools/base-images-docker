@@ -4,6 +4,6 @@ py_test(
     name = "git_test",
     srcs = ["git_test.py"],
     deps = [
-        "//store/git:git",
+        "//store/git",
     ],
 )

@@ -30,7 +30,6 @@ def git_store_get(ctx, store_location, key, artifact, suppress_error="True"):
       mnemonic = "GetArtifact")
   return status
 
-
 def git_store_put(ctx, store_location, artifact, key):
   """Create an action to put artifact in fs store."""
   status = ctx.actions.declare_file("{0}_put.status".format(ctx.label.name))
@@ -51,8 +50,9 @@ def git_store_put(ctx, store_location, artifact, key):
 
 tools = {
     "git_store": attr.label(
-        default=Label("//store/git:git"),
-        cfg="host",
-        executable=True,
-        allow_files=True)
+        default = Label("//store/git:git"),
+        cfg = "host",
+        executable = True,
+        allow_files = True,
+    ),
 }

@@ -64,6 +64,7 @@ class LocalGitStore(object):
   def _execute(self, commands):
     try:
      for command in commands:
+       print(command)
        self.status_code = subprocess.check_call(command)
     except subprocess.CalledProcessError as e:
        self.status_code = e.returncode
