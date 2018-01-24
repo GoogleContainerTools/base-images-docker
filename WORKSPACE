@@ -124,3 +124,9 @@ http_file(
     sha256 = "e0e806160454a3e5e308188439525896bf9881f1f2f0b887192428f517da4131",
     url = "https://bazel.build/bazel-release.pub.gpg",
 )
+
+http_file(
+    name = "launchpad_openjdk_gpg",
+    sha256 = "54b6274820df34a936ccc6f5cb725a9b7bb46075db7faf0ef7e2d86452fa09fd",
+    url = "http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0xEB9B1D8886F44E2A",
+)
