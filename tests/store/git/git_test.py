@@ -45,9 +45,9 @@ class GitStoreTest(unittest.TestCase):
        git_root = self.git_root,
        store_location = self.store_location,
        key = GitStoreTest.TEST_KEY,
-       suppress_error = suppress_error,\s
+       suppress_error = suppress_error,
        status_file = self.status_file) as git_store:
-       yield git_store\s
+       yield git_store
 
   def _create_store(self, with_key=False):
     self.abs_store = os.path.join(self.git_root, self.store_location)
@@ -96,7 +96,7 @@ class GitStoreTest(unittest.TestCase):
 
   def _create_src(self):
     (src_fp, src) = tempfile.mkstemp(dir=self.tmp_root)
-    return src\s
+    return src
 
   def testPutIfKeyNotExists(self):
     self._create_store()

@@ -2,8 +2,16 @@
 
 set -ex
 
-PWD=`pwd`
-GIT_ROOT=`git rev-parse --show-toplevel`
+trap __cleanup EXIT
+
+#Clean up functions
+__cleanup ()
+{
+  [[ -d "$TEST_STORE" ]] && rm -rf "$TEST_STORE"
+}
+
+PWD=$(pwd)
+GIT_ROOT=$(git rev-parse --show-toplevel)
 
 if [ "$PWD" != "$GIT_ROOT" ]; then
   echo "Please run this script from bazel root workspace"
@@ -19,36 +27,33 @@ mkdir -p "$TEST_STORE"
 
 # Run Bazel build target for first time
 bazel clean
-OUTPUT=source $TEST_SCRIPT_CMD
-EXPTECTED_OUTPUT="Running download_pkgs script"
+OUTPUT=$($TEST_SCRIPT_CMD)
+
 # Check if download_pkgs output was ran
+EXPECTED_OUTPUT="*Running download_pkgs script*"
 if [ "${OUTPUT/$EXPECTED_OUTPUT}" = "$OUTPUT" ] ; then
-    echo "Expected download_pkgs script ran!!"
+  echo "Expected download_pkgs script to run. However it did not"
+  exit 1
 else
-    echo "Expected download_pkgs script to run. However it did not"
-    exit 1
+  echo "download_pkgs script ran as expected"
 fi
 
 # Test if downloaded pakcages.tar is copied to the store
+PUT_FILE="$GIT_ROOT/$TEST_STORE/$DATE/packages.tar"
+if [ ! -f "$PUT_FILE" ]; then
+   echo "Expected file $PUT_FILE to be present. However its not."
+   exit 1
+fi
 
 # Run Bazel build target once again and this time download_pkgs script should
 # not run
 bazel clean
-OUTPUT=source $TEST_SCRIPT_CMD
-EXPTECTED_OUTPUT="Running download_pkgs script"
+OUTPUT=$($TEST_SCRIPT_CMD)
 # Check if download_pkgs output was ran
-if [ "${OUTPUT/$EXPECTED_OUTPUT}" = "$OUTPUT" ] ; then
-  echo "download_pkgs script ran but should not have"
-  exit 1
+if [ "${OUTPUT/$EXPECTED_OUTPUT}" = "$OUTPUT_2" ] ; then
+  echo "download_pkgs script did not run as expected"
 else
-  echo "Expected download_pkgs script not to run."
+  echo "download_pkgs script ran. However it should not have!"
+  exit 1
 fi
-
-trap __cleanup EXIT
-
-#Clean up functions
-__cleanup ()
-{
-    [[ -d "$TEST_STORE" ]] && rm -rf "$TEST_STORE"
-}
 

@@ -49,7 +49,7 @@ class LocalGitStore(object):
       self.status_file = status_file
       self.suppress_error = suppress_error
     except KeyError:
-      raise LocalGitStore.LocalGitStoreError("Git root not found. Either use --git_rot or  bazel command line flag --action_env=GIT_ROOT=`pwd`")
+      raise LocalGitStore.LocalGitStoreError("Git root not found. Either use --git_root or  bazel command line flag --action_env=GIT_ROOT=`pwd`")
 
   def __enter__(self):
     self.status_code = 0

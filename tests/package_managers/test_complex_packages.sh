@@ -1,8 +1,19 @@
 #!/bin/bash
 
 set -ex
+
+#Clean up functions
+cleanup()
+{
+    [[ -f "$TEST_BUILD_FILE"  ]] && rm  "$TEST_BUILD_FILE"
+      [[ -f "$TEST_DOCKER_FILE"  ]] && rm  "$TEST_DOCKER_FILE"
+}
+
+trap cleanup EXIT
+
+TEST_BUILD_FILE="tests/package_managers/BUILD.bazel"
 # Build new BUILD file with download_pkgs target
-cat > tests/package_managers/BUILD.bazel <<- EOM
+cat > "$TEST_BUILD_FILE" <<- EOM
 load("//package_managers:download_pkgs.bzl", "download_pkgs")
 
 download_pkgs(
@@ -22,7 +33,7 @@ bazel run //tests/package_managers:test_complex_download_pkgs
 cp  bazel-bin/tests/package_managers/test_complex_download_pkgs.runfiles/debian_docker/tests/package_managers/test_complex_download_pkgs.tar tests/package_managers
 
 # Add install_pkgs target to generated BUILD file
-cat >> tests/package_managers/BUILD.bazel <<- EOM
+cat >> "$TEST_BUILD_FILE" <<- EOM
 load("//package_managers:install_pkgs.bzl", "install_pkgs")
 
 install_pkgs(
@@ -40,17 +51,17 @@ cp bazel-bin/tests/package_managers/test_complex_install_pkgs.tar tests/package_
 
 # Generate a Dockerfile with the same apt packages and build the docker image
 bazel build //ubuntu:ubuntu_16_0_4_vanilla
-cat > tests/package_managers/Dockerfile.test <<- EOM
+TEST_DOCKER_FILE="tests/package_managers/Dockerfile.test"
+cat > "$TEST_DOCKER_FILE" <<- EOM
 FROM bazel/ubuntu:ubuntu_16_0_4_vanilla
 
 RUN apt-get update && \
   apt-get install --no-install-recommends -y curl netbase ca-certificates
 EOM
 
-cid=$(docker build -q - < tests/package_managers/Dockerfile.test)
+cid=$(docker build -q - < $TEST_DOCKER_FILE)
 
 # Compare it with the tar file built with install_pkgs using container diff
 # TODO(selgamal): actually parse out container-diff output once it's fixed
 container-diff diff tests/package_managers/test_complex_install_pkgs.tar daemon://"$cid" -j
 
-rm tests/package_managers/BUILD.bazel
