@@ -61,13 +61,16 @@ rule_test(
 )
 
 add_apt_key(
-    name = "bazel_gpg",
+    name = "gpg_image",
     image = "//debian/reproducible:debian9",
-    key = "@bazel_gpg//file",
+    keys = [
+        "@bazel_gpg//file",
+        "@launchpad_openjdk_gpg//file",
+    ],
 )
 
 container_test(
     name = "gpg_test",
     configs = [":gpg_test.yaml"],
-    image = ":bazel_gpg",
+    image = ":gpg_image",
 )

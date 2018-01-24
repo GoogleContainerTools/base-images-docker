@@ -17,7 +17,7 @@
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 load("//util:run.bzl", "container_run_and_extract")
 
-def add_apt_key(name, key, image, gpg_image=None):
+def add_apt_key(name, keys, image, gpg_image=None):
     # First build an image capable of adding an apt-key.
     # This requires the keyfile and the "gnupg package."
 
@@ -32,7 +32,7 @@ def add_apt_key(name, key, image, gpg_image=None):
         name=key_image,
         base=gpg_image,
         directory="/gpg",
-        files=[key],
+        files=keys,
     )
 
     commands = [
@@ -40,7 +40,7 @@ def add_apt_key(name, key, image, gpg_image=None):
         "apt-get install -y -q gnupg",
         # In a macro we don't get to see exactly what the key file will be named,
         # so we put it in a special directory and use glob.
-        "apt-key add /gpg/*"
+        "for file in /gpg/*; do apt-key add \$file; done"
     ]
 
     gpg_name="%s_gpg" % name
