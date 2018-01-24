@@ -9,6 +9,7 @@ load("//package_managers:download_pkgs.bzl", "download_pkgs")
 load("//package_managers:install_pkgs.bzl", "install_pkgs")
 load("//package_managers:apt_key.bzl", "add_apt_key")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
+load("//package_managers:bootstrap_image.bzl", "bootstrap_image_macro",)
 
 download_pkgs(
     name = "test_download_pkgs",
@@ -70,4 +71,24 @@ container_test(
     name = "gpg_test",
     configs = [":gpg_test.yaml"],
     image = ":bazel_gpg",
+)
+
+bootstrap_image_macro(
+    name = "bootstrap_ubuntu",
+    store_location = "ubuntu/builds",
+    date = "2017/12/15",
+    image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
+    output_image_name = "ubuntu",
+    packages = [
+        "curl",
+        "netbase",
+    ],
+)
+
+rule_test(
+   name = "test_bootstrap_ubuntu",
+   generates = [
+       "bootstrap_ubuntu.tar",
+   ],
+   rule = "bootstrap_ubuntu",
 )
