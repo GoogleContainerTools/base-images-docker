@@ -19,6 +19,7 @@ load("//package_managers:download_pkgs.bzl", "download_pkgs")
 load("//package_managers:install_pkgs.bzl", "install_pkgs")
 
 PACKAGES_FILE_NAME = "packages.tar"
+
 GET_OUTPUT_DIR = "/tmp"
 
 # Load all the stores get and put.
