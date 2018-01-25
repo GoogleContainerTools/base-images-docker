@@ -44,6 +44,7 @@ def generate_additional_repos(name, repos):
         srcs=all_repo_files,
         package_dir="/etc/apt/sources.list.d/"
     )
+
 """Generates /etc/apt/sources.list.d/ files with the specified repos.
 
 Args:
