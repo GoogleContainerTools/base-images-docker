@@ -16,6 +16,7 @@
 from contextlib import contextmanager
 from datetime import datetime
 import os
+import shutil
 import subprocess
 import sys
 from third_party.py import gflags
@@ -64,10 +65,10 @@ class LocalGitStore(object):
   def _execute(self, commands):
     try:
      for command in commands:
-       print(command)
-       self.status_code = subprocess.check_call(command)
+       self.status_code = subprocess.check_call(command, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
        self.status_code = e.returncode
+       print(e)
        if self.suppress_error:
           return
        raise LocalGitStore.LocalGitStoreError(e)
@@ -75,8 +76,10 @@ class LocalGitStore(object):
   def get(self, get):
     """Get file and copy it to bazel workspace"""
     file_location = os.path.join(self.store_location, self.key)
+    if os.path.exists(get) and self.suppress_error:
+       os.remove(get)
     self._execute(commands = [
-       ['cp', file_location, os.path.join(self.git_root, get)]
+       ['cp', file_location, get]
     ])
 
   def put_if_not_exists(self, src):

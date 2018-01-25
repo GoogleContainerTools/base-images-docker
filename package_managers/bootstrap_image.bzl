@@ -19,6 +19,7 @@ load("//package_managers:download_pkgs.bzl", "download_pkgs")
 load("//package_managers:install_pkgs.bzl", "install_pkgs")
 
 PACKAGES_FILE_NAME = "packages.tar"
+GET_OUTPUT_DIR = "/tmp"
 
 # Load all the stores get and put.
 load(
@@ -30,12 +31,12 @@ load(
 
 def _impl(ctx):
     store_key = "{0}/{1}".format(ctx.attr.date, PACKAGES_FILE_NAME)
-
+    get_file = "{0}/{1}".format(GET_OUTPUT_DIR, PACKAGES_FILE_NAME)
     get_status = git_store_get(
         ctx = ctx,
         store_location = ctx.attr.store_location,
         key = store_key,
-        artifact = "{0}/{1}".format(ctx.bin_dir.path, PACKAGES_FILE_NAME),
+        artifact = get_file,
     )
     download_pkgs_file_prefix = ctx.executable.download_pkgs.path
     build_contents = """
@@ -47,18 +48,18 @@ if [ $EXIT_CODE != 0 ]; then
   {download_pkgs_script}
   cp {download_pkgs_tar} {output}
 else
-  GIT_ROOT=`printenv GIT_ROOT`
-  cp $GIT_ROOT/{output_dir}/{packages} {output}
+  cp {get_file} {output}
+  rm {get_file}
 fi
+
 """.format(
        output = ctx.outputs.packages_tar.path,
        download_pkgs_script = "{0}.sh".format(download_pkgs_file_prefix),
        download_pkgs_tar = "{0}.tar".format(download_pkgs_file_prefix),
        key = store_key,
        store_location = ctx.attr.store_location,
-       output_dir = ctx.bin_dir.path,
        get_status = get_status.path,
-       packages = PACKAGES_FILE_NAME,
+       get_file = get_file,
     )
 
     fetch_or_download = ctx.actions.declare_file("fetch_or_download")
