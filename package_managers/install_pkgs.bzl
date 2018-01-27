@@ -19,7 +19,12 @@ def _generate_install_commands(tar):
 tar -xvf {tar}
 dpkg -i --force-depends ./*.deb
 dpkg --configure -a
-apt-get install -f""".format(tar=tar)
+apt-get install -f
+rm /var/log/dpkg.log
+rm /var/cache/ldconfig/aux-cache
+rm /var/log/alternatives.log
+rm /var/cache/apt/pkgcache.bin
+rm /var/cache/apt/srcpkgcache.bin""".format(tar=tar)
 
 def _impl(ctx):
   installables_tar = ctx.file.installables_tar.path

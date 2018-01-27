@@ -15,10 +15,12 @@
 # limitations under the License.
 
 import argparse
+import cStringIO
 import hashlib
 import json
 import os
 import shutil
+import subprocess
 import sys
 import tarfile
 import tempfile
@@ -51,9 +53,22 @@ def strip_tar(input, output):
     with open(mf_path, 'r') as mf:
         manifest = json.load(mf)
     for image in manifest:
+        # Scrape each layer for any timestamps
+        new_layers = []
+        new_diff_ids = []
+        for layer in image['Layers']:
+          (new_layer_name, new_diff_id) = strip_layer(os.path.join(tempdir, layer))
+
+          new_layers.append(new_layer_name)
+          new_diff_ids.append(new_diff_id)
+
+        # Change the manifest to reflect the new layer nameis
+        image['Layers'] = new_layers
+
         config = image['Config']
         cfg_path = os.path.join(tempdir, config)
-        new_cfg_path = strip_config(cfg_path)
+        new_cfg_path = strip_config(cfg_path, new_diff_ids)
+
         # Update the name of the config in the metadata object
         # to match it's new digest.
         image['Config'] = new_cfg_path
@@ -66,8 +81,10 @@ def strip_tar(input, output):
     files_to_add = []
     for root, _, files in os.walk(tempdir):
         for f in files:
-            name = os.path.join(root, f)
-            files_to_add.append(name)
+            if os.path.basename(f) != 'repositories':
+                name = os.path.join(root, f)
+                os.utime(name, (0,0))
+                files_to_add.append(name)
 
     with tarfile.open(name=output, mode='w') as ot:
         for f in sorted(files_to_add):
@@ -78,11 +95,61 @@ def strip_tar(input, output):
     shutil.rmtree(tempdir)
     return 0
 
+def strip_layer(path):
+    # The original layer tar is of the form <random string>/layer.tar, the
+    # working directory is one level up from where layer.tar is.
+    original_dir = os.path.normpath(os.path.join(os.path.dirname(path), '..'))
 
-def strip_config(path):
+    buf = cStringIO.StringIO()
+
+    # Go through each file/dir in the layer
+    # Set its mtime to 0
+    # If it's a file, add its content to the running buffer
+    # Add it to the new gzip'd tar.
+    with tarfile.open(name=path, mode='r') as it:
+      with tarfile.open(fileobj=buf, mode='w') as ot:
+        ti = it.next()
+        while ti is not None:
+          ti.mtime = 0
+          if ti.isfile():
+            f = it.extractfile(ti)
+            ot.addfile(ti, f)
+          else:
+            ot.addfile(ti)
+          ti = it.next()
+
+    # Create the new diff_id for the config
+    tar = buf.getvalue()
+    diffid = hashlib.sha256(tar).hexdigest()
+    diffid = 'sha256:%s' % diffid
+
+    # Compress buf to gz
+    gzip_process = subprocess.Popen(
+        ['gzip', '-nf'],
+        stdout=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    gz = gzip_process.communicate(input=tar)[0]
+
+    # Calculate sha of layer
+    sha = hashlib.sha256(gz).hexdigest()
+    new_name = 'sha256:%s' % sha
+    with open(os.path.join(original_dir, new_name), 'w') as out:
+      out.write(gz)
+
+    shutil.rmtree(os.path.dirname(path))
+    return (new_name, diffid)
+
+
+def strip_config(path, new_diff_ids):
     with open(path, 'r') as f:
         config = json.load(f)
     config['created'] = _TIMESTAMP
+    config['rootfs']['diff_ids'] = new_diff_ids
+
+    # Hardcode the base container name so configs will come out identical
+    config['container'] = '17aba11f7f94e6826c3144158537f0b82f8726e16dec815dc8e485f2ef1791eb'
+    config['container_config']['Hostname'] = '17aba11f7f94'
     for entry in config['history']:
         entry['created'] = _TIMESTAMP
 
@@ -92,7 +159,7 @@ def strip_config(path):
 
     # Calculate the new file path
     sha = hashlib.sha256(config_str).hexdigest()
-    new_path = '%s.json' % sha
+    new_path = 'sha256:%s' % sha
     os.rename(path, os.path.join(os.path.dirname(path), new_path))
     return new_path
 
