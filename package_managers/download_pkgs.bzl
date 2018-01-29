@@ -32,19 +32,18 @@ tar -cpf {output}.tar --directory /tmp/install/. `cd /tmp/install/. && ls *.deb`
     packages=' '.join(ctx.attr.packages))
 
 def _run_download_script(ctx, output, build_contents):
-    download_script = ctx.actions.declare_file("{0}_download".format(ctx.attr.name))
     contents = build_contents.replace(ctx.file.image_tar.short_path, ctx.file.image_tar.path)
     contents = contents.replace(ctx.outputs.pkg_tar.short_path, ctx.outputs.pkg_tar.path)
     # The paths for running within bazel build are different and hence replace short_path
     # by full path
     ctx.actions.write(
-        output = download_script,
+        output = ctx.outputs.build_script,
         content = contents,
     )
 
     ctx.actions.run(
         outputs = [ctx.outputs.pkg_tar],
-        executable = download_script,
+        executable = ctx.outputs.build_script,
         inputs = [ctx.file.image_tar],
     )
 
@@ -76,9 +75,8 @@ docker rm $cid
         output = ctx.outputs.executable,
         content = build_contents,
     )
-
     return struct(
-        runfiles = ctx.runfiles(files = [ctx.file.image_tar,]),
+        runfiles = ctx.runfiles(files = [ctx.file.image_tar, ctx.outputs.build_script]),
         files = depset([ctx.outputs.executable])
     )
 
@@ -96,6 +94,7 @@ _download_pkgs = rule(
     executable = True,
     outputs = {
         "pkg_tar": "%{name}.tar",
+        "build_script": "%{name}.sh",
     },
     implementation = _impl,
 )
@@ -109,9 +108,7 @@ The script bunldes all the packages in a tarball.
 Args:
   name: A unique name for this rule.
   image_tar: The image tar for the container used to download packages.
-  package_manager_genrator: A target which generates a script using
-       package management tool e.g apt-get, dpkg to downloads packages.
-  additional_repos: list of additional debian package repos to use, in sources.list format
+  packages: list of packages to download. e.g. ['curl', 'netbase']
 """
 
 def download_pkgs(name, image_tar, packages, additional_repos=[]):
@@ -121,8 +118,6 @@ def download_pkgs(name, image_tar, packages, additional_repos=[]):
   Args:
     name: A unique name for this rule.
     image_tar: The image tar for the container used to download packages.
-    package_manager_genrator: A target which generates a script using
-      package management tool e.g apt-get, dpkg to downloads packages.
     packages: list of packages to download. e.g. ['curl', 'netbase']
     additional_repos: list of additional debian package repos to use, in sources.list format
   """
