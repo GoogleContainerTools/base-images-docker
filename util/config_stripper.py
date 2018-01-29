@@ -27,6 +27,7 @@ import tempfile
 
 _TIMESTAMP = '1970-01-01T00:00:00Z'
 
+WHITELISTED_PREFIXES = ['sha256:', 'manifest']
 
 def main():
     parser = argparse.ArgumentParser()
@@ -62,7 +63,7 @@ def strip_tar(input, output):
           new_layers.append(new_layer_name)
           new_diff_ids.append(new_diff_id)
 
-        # Change the manifest to reflect the new layer nameis
+        # Change the manifest to reflect the new layer name
         image['Layers'] = new_layers
 
         config = image['Config']
@@ -81,7 +82,7 @@ def strip_tar(input, output):
     files_to_add = []
     for root, _, files in os.walk(tempdir):
         for f in files:
-            if os.path.basename(f) != 'repositories':
+            if os.path.basename(f).startswith(tuple(WHITELISTED_PREFIXES)):
                 name = os.path.join(root, f)
                 os.utime(name, (0,0))
                 files_to_add.append(name)
@@ -108,15 +109,13 @@ def strip_layer(path):
     # Add it to the new gzip'd tar.
     with tarfile.open(name=path, mode='r') as it:
       with tarfile.open(fileobj=buf, mode='w') as ot:
-        ti = it.next()
-        while ti is not None:
-          ti.mtime = 0
-          if ti.isfile():
-            f = it.extractfile(ti)
-            ot.addfile(ti, f)
+        for tarinfo in it:
+          tarinfo.mtime = 0
+          if tarinfo.isfile():
+            f = it.extractfile(tarinfo)
+            ot.addfile(tarinfo, f)
           else:
-            ot.addfile(ti)
-          ti = it.next()
+            ot.addfile(tarinfo)
 
     # Create the new diff_id for the config
     tar = buf.getvalue()
@@ -124,6 +123,7 @@ def strip_layer(path):
     diffid = 'sha256:%s' % diffid
 
     # Compress buf to gz
+    # Shelling out to bash gzip is noticeably faster than using python's gzip
     gzip_process = subprocess.Popen(
         ['gzip', '-nf'],
         stdout=subprocess.PIPE,
