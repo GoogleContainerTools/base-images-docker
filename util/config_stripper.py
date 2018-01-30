@@ -147,9 +147,9 @@ def strip_config(path, new_diff_ids):
     config['created'] = _TIMESTAMP
     config['rootfs']['diff_ids'] = new_diff_ids
 
-    # Hardcode the base container name so configs will come out identical
-    config['container'] = '17aba11f7f94e6826c3144158537f0b82f8726e16dec815dc8e485f2ef1791eb'
-    config['container_config']['Hostname'] = '17aba11f7f94'
+    # Base container info is not required and changes every build, so delete it.
+    del config['container']
+    del config['container_config']['Hostname']
     for entry in config['history']:
         entry['created'] = _TIMESTAMP
 
