@@ -24,7 +24,13 @@ rm /var/log/dpkg.log
 rm /var/cache/ldconfig/aux-cache
 rm /var/log/alternatives.log
 rm /var/cache/apt/pkgcache.bin
-rm /var/cache/apt/srcpkgcache.bin""".format(tar=tar)
+rm /var/cache/apt/srcpkgcache.bin
+rm /var/logtotal/.wh.dpkg.log
+rm /var/logtotal/.wh.alternatives.log
+rm /var/cache/ldconfigtotal/.wh.aux-cache
+rm /var/cache/apttotal/.wh.srcpkgcache.bin
+rm /var/cache/apttotal/.wh.pkgcache.bin
+touch /run/mount/utab""".format(tar=tar)
 
 def _impl(ctx):
   installables_tar = ctx.file.installables_tar.path

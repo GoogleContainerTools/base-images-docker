@@ -150,6 +150,7 @@ def strip_config(path, new_diff_ids):
     # Base container info is not required and changes every build, so delete it.
     del config['container']
     del config['container_config']['Hostname']
+    del config['docker_version']
     for entry in config['history']:
         entry['created'] = _TIMESTAMP
 
