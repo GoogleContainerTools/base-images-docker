@@ -22,8 +22,6 @@ dpkg --configure -a
 apt-get install -f
 rm -rf /var/log
 rm -rf /var/cache
-find /usr/share/doc -depth -type f ! -name copyright|xargs rm || true
-find /usr/share/doc -empty|xargs rmdir || true
 touch /run/mount/utab""".format(tar=tar)
 
 def _impl(ctx):
