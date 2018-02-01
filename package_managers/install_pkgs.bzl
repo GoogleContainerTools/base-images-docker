@@ -21,15 +21,10 @@ dpkg -i --force-depends ./*.deb
 dpkg --configure -a
 apt-get install -f
 rm /var/log/dpkg.log
-rm /var/cache/ldconfig/aux-cache
 rm /var/log/alternatives.log
-rm /var/cache/apt/pkgcache.bin
-rm /var/cache/apt/srcpkgcache.bin
 rm /var/logtotal/.wh.dpkg.log
 rm /var/logtotal/.wh.alternatives.log
-rm /var/cache/ldconfigtotal/.wh.aux-cache
-rm /var/cache/apttotal/.wh.srcpkgcache.bin
-rm /var/cache/apttotal/.wh.pkgcache.bin
+rm -rf /var/cache
 touch /run/mount/utab""".format(tar=tar)
 
 def _impl(ctx):
