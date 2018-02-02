@@ -148,9 +148,13 @@ def strip_config(path, new_diff_ids):
     config['rootfs']['diff_ids'] = new_diff_ids
 
     # Base container info is not required and changes every build, so delete it.
-    del config['container']
-    del config['container_config']['Hostname']
-    del config['docker_version']
+    if 'container' in config:
+      del config['container']
+    if ('container_config' in config and
+        'Hostname' in config['container_config']):
+      del config['container_config']['Hostname']
+    if 'docker_version' in config:
+      del config['docker_version']
     for entry in config['history']:
         entry['created'] = _TIMESTAMP
 
