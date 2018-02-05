@@ -21,6 +21,8 @@ def _generate_download_commands(ctx):
     return """#!/bin/bash
 set -ex
 # Fetch Index
+# Remove /var/lib/apt/lists/* in the base image. apt-get update -y command will create them.
+rm -rf /var/lib/apt/lists/*
 apt-get update -y
 # Make partial dir
 mkdir -p /tmp/install/./partial
