@@ -32,14 +32,16 @@ if [ -z "${GIT_ROOT}" ]; then
 fi
 
 echo "Running bazel build ${TARGET}"
+# shellcheck disable=SC2086
 bazel build "${TARGET}" \
-    --action_env=GIT_ROOT="${GIT_ROOT}" \
-    --sandbox_writable_path="${GIT_ROOT} ${DEBUG}"
+  --action_env=GIT_ROOT="${GIT_ROOT}" \
+  --sandbox_writable_path="${GIT_ROOT}" ${DEBUG}
 
 # get rid of running this once we figure out how to make put_status output mandatory in bootstrap_image.
 echo "Running bazel build ${TARGET}_fetch to make we store the downloaded packages in the store back"
+# shellcheck disable=SC2086
 bazel build "${TARGET}_fetch" \
   --action_env=GIT_ROOT="${GIT_ROOT}" \
-  --sandbox_writable_path="${GIT_ROOT} ${DEBUG}"
+  --sandbox_writable_path="${GIT_ROOT}" ${DEBUG}
 
 echo "Please run 'git status' and 'git commit' commands to commit  the downloaded packages to the git repository"
