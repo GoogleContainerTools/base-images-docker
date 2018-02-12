@@ -27,6 +27,12 @@ git_repository(
     remote = "https://github.com/bazelbuild/rules_docker.git",
 )
 
+git_repository(
+    name = "containerregistry",
+    commit = "d7b9bf582f672507252ebfd3cf30c3d41abf93be",
+    remote = "https://github.com/google/containerregistry.git",
+)
+
 load(
     "@io_bazel_rules_docker//docker:docker.bzl",
     "docker_repositories",
