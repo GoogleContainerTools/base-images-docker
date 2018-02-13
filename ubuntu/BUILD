@@ -36,6 +36,9 @@ pkg_tar(
     strip_prefix = "overlay/",
 )
 
+# A handful of files need to be deleted from the base ubuntu image so that when our
+# config stripper deletes those files from our reproducible images there won't be
+# whiteout files.
 [genrule(
     name = "ubuntu_%s_vanilla_reproducible" % version,
     srcs = ["@ubuntu_%s_tar_download//file" % version],

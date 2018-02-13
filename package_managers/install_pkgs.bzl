@@ -20,6 +20,7 @@ tar -xvf {tar}
 dpkg -i --force-depends ./*.deb
 dpkg --configure -a
 apt-get install -f
+# delete the files that vary build to build
 rm -f /var/log/dpkg.log
 rm -f /var/cache/ldconfig/aux-cache
 rm -f /var/cache/apt/pkgcache.bin
