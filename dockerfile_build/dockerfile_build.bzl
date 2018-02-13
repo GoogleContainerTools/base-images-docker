@@ -35,14 +35,13 @@ def _impl(ctx):
     else:
         loader = "docker load -i %s" % ctx.file.base_tar.path
         attr = ctx.attr.base_tar
-    
+
     # Strip off the '.tar'
     base_image = attr.label.name.split('.', 1)[0]
     # docker_build rules always generate an image named 'bazel/$package:$name'.
     base_image_name = "bazel/%s:%s" % (attr.label.package,
                                        base_image)
 
-    
     # Generate a shell script to run the build.
     build_contents = """\
 #!/bin/bash

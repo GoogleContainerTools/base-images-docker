@@ -36,9 +36,21 @@ pkg_tar(
     strip_prefix = "overlay/",
 )
 
+# A handful of files need to be deleted from the base ubuntu image so that when our
+# config stripper deletes those files from our reproducible images there won't be
+# whiteout files.
+# tar --delete deletes files in place so we need to uncompress to a temp tar
+# then delete then output.
+[genrule(
+    name = "ubuntu_%s_vanilla_reproducible" % version,
+    srcs = ["@ubuntu_%s_tar_download//file" % version],
+    outs = ["ubuntu_%s_vanilla_reproducible.tar" % version],
+    cmd = "cp $< temp.tar.gz && gunzip temp.tar.gz && tar --delete var/log/dpkg.log var/cache/apt/pkgcache.bin var/cache/ldconfig/aux-cache -f temp.tar && mv temp.tar $@",
+) for version in UBUNTU_VERSIONS]
+
 # 'ubuntu_%s_vanilla' is docker image derived from a snapshot ubuntu_%s rootfs
 [docker_build(
     name = "ubuntu_%s_vanilla" % version,
     env = UBUNTU_ENV,
-    tars = ["@ubuntu_%s_tar_download//file" % version],
+    tars = [":ubuntu_%s_vanilla_reproducible" % version],
 ) for version in UBUNTU_VERSIONS]
