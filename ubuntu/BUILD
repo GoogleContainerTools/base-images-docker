@@ -39,6 +39,8 @@ pkg_tar(
 # A handful of files need to be deleted from the base ubuntu image so that when our
 # config stripper deletes those files from our reproducible images there won't be
 # whiteout files.
+# tar --delete deletes files in place so we need to uncompress to a temp tar
+# then delete then output.
 [genrule(
     name = "ubuntu_%s_vanilla_reproducible" % version,
     srcs = ["@ubuntu_%s_tar_download//file" % version],
