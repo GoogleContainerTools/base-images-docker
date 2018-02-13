@@ -20,8 +20,9 @@ tar -xvf {tar}
 dpkg -i --force-depends ./*.deb
 dpkg --configure -a
 apt-get install -f
-rm -rf /var/log/*
-rm -rf /var/cache/*
+rm -f /var/log/dpkg.log
+rm -f /var/cache/ldconfig/aux_cache
+rm -f /var/cache/apt/pkgcache.bin
 touch /run/mount/utab""".format(tar=tar)
 
 def _impl(ctx):

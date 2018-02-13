@@ -36,9 +36,16 @@ pkg_tar(
     strip_prefix = "overlay/",
 )
 
+[genrule(
+    name = "ubuntu_%s_vanilla_reproducible" % version,
+    srcs = ["@ubuntu_%s_tar_download//file" % version],
+    outs = ["ubuntu_%s_vanilla_reproducible.tar" % version],
+    cmd = "cp $< temp.tar.gz && gunzip temp.tar.gz && tar --delete var/log/dpkg.log var/cache/apt/pkgcache.bin var/cache/ldconfig/aux-cache -f temp.tar && mv temp.tar $@",
+) for version in UBUNTU_VERSIONS]
+
 # 'ubuntu_%s_vanilla' is docker image derived from a snapshot ubuntu_%s rootfs
 [docker_build(
     name = "ubuntu_%s_vanilla" % version,
     env = UBUNTU_ENV,
-    tars = ["@ubuntu_%s_tar_download//file" % version],
+    tars = [":ubuntu_%s_vanilla_reproducible" % version],
 ) for version in UBUNTU_VERSIONS]
