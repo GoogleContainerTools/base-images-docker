@@ -3,6 +3,8 @@ package(default_visibility = ["//visibility:public"])
 load("//dockerfile_build:dockerfile_build.bzl", "dockerfile_build")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
+load("//package_managers:download_pkgs.bzl", "download_pkgs")
+load("//package_managers:install_pkgs.bzl", "install_pkgs")
 
 UBUNTU_VERSIONS = [
     "16_0_4",
@@ -53,4 +55,21 @@ pkg_tar(
     name = "ubuntu_%s_vanilla" % version,
     env = UBUNTU_ENV,
     tars = [":ubuntu_%s_vanilla_reproducible" % version],
+) for version in UBUNTU_VERSIONS]
+
+[download_pkgs(
+    name = "download_ubuntu_%s_pkgs" % version,
+    image_tar = ":ubuntu_%s_vanilla.tar" % version,
+    packages = [
+        "curl",
+        "netbase",
+        "ca-certificates",
+    ],
+) for version in UBUNTU_VERSIONS]
+
+[install_pkgs(
+    name = "install_ubuntu_%s_pkgs" % version,
+    image_tar = ":ubuntu_%s_vanilla.tar" % version,
+    installables_tar = ":download_ubuntu_%s_pkgs.tar" % version,
+    output_image_name = "ubuntu_%s" % version,
 ) for version in UBUNTU_VERSIONS]
