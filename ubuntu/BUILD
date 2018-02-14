@@ -58,13 +58,13 @@ pkg_tar(
 
 bootstrap_image_macro(
     name = "bootstrap_ubuntu",
+    date = "20180214",
     image_tar = ":ubuntu_16_0_4_vanilla.tar",
+    output_image_name = "ubuntu_16_0_4",
     packages = [
+        "ca-certificates",
         "curl",
         "netbase",
-        "ca-certificates",
     ],
     store_location = "ubuntu/builds",
-    date = "20180214",
-    output_image_name = "ubuntu_16_0_4",
 )
