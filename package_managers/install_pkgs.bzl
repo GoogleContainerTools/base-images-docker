@@ -58,12 +58,6 @@ cid=$(docker run -d -v $(pwd)/{installables_tar}:/tmp/{installables_tar} -v $(pw
 
 docker attach $cid || true
 
-ecode=$(docker inspect -f '{{(index .State.ExitCode) 0}}' $cid)
-
-if [ $ecode != 0 ]; then
-  exit $ecode
-fi
-
 reset_cmd {base_image_name} $cid {output_image_name}
 docker save {output_image_name} > {output_file_name}
 """.format(util_script=ctx.file._image_utils.path,
