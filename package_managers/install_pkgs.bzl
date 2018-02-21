@@ -58,7 +58,7 @@ cid=$(docker run -d -v $(pwd)/{installables_tar}:/tmp/{installables_tar} -v $(pw
 
 docker attach $cid || true
 
-ecode=$(docker inspect -f '{{(index .State.ExitCode) 0}}')
+ecode=$(docker inspect -f '{{(index .State.ExitCode) 0}}' $cid)
 
 if [ $ecode != 0 ]; then
   exit $ecode
