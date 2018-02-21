@@ -127,10 +127,11 @@ Args:
   package_manager_genrator: A target which generates a script using
        package management tool e.g apt-get, dpkg to downloads packages.
   store: A target to store the downloaded packages or retrieve previously downloaded packages.
-  additional_repos: list of additional debian package repos to use, in sources.list format
+  additional_repos: list of additional debian package repos to use, in sources.list format.
+  installation_cleanup_commands: cleanup commands to run after package installation.
 """
 
-def bootstrap_image_macro(name, image_tar, packages, store_location, date, output_image_name, additional_repos=[]):
+def bootstrap_image_macro(name, image_tar, packages, store_location, date, output_image_name, additional_repos=[], installation_cleanup_commands=""):
   """Downloads packages within a container
   This rule creates a script to download packages within a container.
   The script bundles all the packages in a tarball.
@@ -139,6 +140,7 @@ def bootstrap_image_macro(name, image_tar, packages, store_location, date, outpu
     image_tar: The image tar for the container used to download packages.
     packages: list of packages to download. e.g. ['curl', 'netbase']
     additional_repos: list of additional debian package repos to use, in sources.list format
+    installation_cleanup_commands: cleanup commands to run after package installation.
   """
   download_target = "{0}_download".format(name)
   download_pkgs(
@@ -163,6 +165,7 @@ def bootstrap_image_macro(name, image_tar, packages, store_location, date, outpu
       image_tar = image_tar,
       installables_tar = ":{0}.tar".format(fetch_target),
       output_image_name = output_image_name,
+      installation_cleanup_commands = installation_cleanup_commands,
   )
 
   docker_build(

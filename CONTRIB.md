@@ -9,6 +9,16 @@ cd .git/hooks/
 ln -s ../../hacks/hooks/* .
 ```
 
+Some of these images also rely on features only in a modern version of the `tar` command.
+Notably, OSX defaults to an older version of these coreutils.
+
+To install the newer versions on OSX, follow these steps:
+
+```shell
+brew install coreutils
+brew install gnu-tar --with-default-names
+```
+
 # How to build these base images
 
 We use `bazel` to build most of the images in this repository, so that we can build them reproducibly.

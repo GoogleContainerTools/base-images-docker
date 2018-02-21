@@ -14,17 +14,19 @@
 
 """Rule for installing apt packages from a tar file into a docker image."""
 
-def _generate_install_commands(tar):
+def _generate_install_commands(tar, installation_cleanup_commands):
   return """
 tar -xvf {tar}
 dpkg -i --force-depends ./*.deb
 dpkg --configure -a
 apt-get install -f
+{installation_cleanup_commands}
 # delete the files that vary build to build
 rm -f /var/log/dpkg.log
+rm -f /var/log/alternatives.log
 rm -f /var/cache/ldconfig/aux-cache
 rm -f /var/cache/apt/pkgcache.bin
-touch /run/mount/utab""".format(tar=tar)
+touch /run/mount/utab""".format(tar=tar, installation_cleanup_commands=installation_cleanup_commands)
 
 def _impl(ctx):
   installables_tar = ctx.file.installables_tar.path
@@ -33,7 +35,7 @@ def _impl(ctx):
   ctx.template_action(
       template=ctx.file._installer_tpl,
       substitutions= {
-          "%{install_commands}": _generate_install_commands(installables_tar),
+          "%{install_commands}": _generate_install_commands(installables_tar, ctx.attr.installation_cleanup_commands),
           "%{installables_tar}": installables_tar,
       },
       output = install_script,
@@ -100,6 +102,9 @@ install_pkgs = rule(
             allow_files = True,
             single_file = True,
             mandatory = True,
+        ),
+        "installation_cleanup_commands": attr.string(
+            default = "",
         ),
         "output_image_name": attr.string(
             mandatory = True,
