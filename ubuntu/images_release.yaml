@@ -1,8 +1,9 @@
 steps:
   - name: 'ubuntu'
     args: ['chmod', 'a+rx', '-R', '/workspace']
-  - name: 'gcr.io/cloud-builders/bazel'
-    args: ['run', '//ubuntu:bootstrap_${_IMAGE}', '--action_env=GIT_ROOT=/workspace', '--sandbox_writable_path=/workspace']
+    # Run the bazel image with docker run to ensure workspace gets mounted in correctly.
+  - name: 'gcr.io/cloud-builders/docker:latest'
+    args: ['run', '-v', '/workspace:/workspace', '-w', '/workspace', '-v', '/var/run:/var/run', 'gcr.io/cloud-builders/bazel:latest', 'run', '//ubuntu:bootstrap_${_IMAGE}', '--action_env=GIT_ROOT=/workspace', '--sandbox_writable_path=/workspace']
   - name: gcr.io/cloud-builders/docker:latest
     args: ['tag', 'bazel/ubuntu:bootstrap_${_IMAGE}', 'gcr.io/gcp-runtimes/${_IMAGE}:${COMMIT_SHA}']
 images: ['gcr.io/gcp-runtimes/${_IMAGE}']
