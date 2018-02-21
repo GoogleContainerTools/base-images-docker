@@ -91,7 +91,7 @@ bootstrap_image_macro(
 rule_test(
     name = "test_bootstrap_ubuntu",
     generates = [
-        "bootstrap_ubuntu.tar",
+        "bootstrap_ubuntu-layer.tar",
     ],
     rule = "bootstrap_ubuntu",
 )
