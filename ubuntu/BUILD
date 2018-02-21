@@ -56,15 +56,15 @@ pkg_tar(
     tars = [":ubuntu_%s_vanilla_reproducible" % version],
 ) for version in UBUNTU_VERSIONS]
 
-bootstrap_image_macro(
-    name = "bootstrap_ubuntu",
-    date = "20180214",
-    image_tar = ":ubuntu_16_0_4_vanilla.tar",
-    output_image_name = "ubuntu_16_0_4",
+[bootstrap_image_macro(
+    name = "bootstrap_ubuntu_%s" % version,
+    date = "20180220",
+    image_tar = ":ubuntu_%s_vanilla.tar" % version,
+    output_image_name = "ubuntu_%s" % version,
     packages = [
         "ca-certificates",
         "curl",
         "netbase",
     ],
     store_location = "ubuntu/builds",
-)
+) for version in UBUNTU_VERSIONS]
