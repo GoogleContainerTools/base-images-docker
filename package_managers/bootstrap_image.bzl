@@ -159,10 +159,16 @@ def bootstrap_image_macro(name, image_tar, packages, store_location, date, outpu
       date = date,
   )
 
+  install_target = "{0}_install".format(name)
   install_pkgs(
-      name = name,
+      name = install_target,
       image_tar = image_tar,
       installables_tar = ":{0}.tar".format(fetch_target),
       output_image_name = output_image_name,
       installation_cleanup_commands = installation_cleanup_commands,
- )
+  )
+
+  docker_build(
+      name = name,
+      base = ":{0}.tar".format(install_target),
+  )

@@ -3,6 +3,7 @@ package(default_visibility = ["//visibility:public"])
 load("//dockerfile_build:dockerfile_build.bzl", "dockerfile_build")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
+load("//package_managers:bootstrap_image.bzl", "bootstrap_image_macro")
 
 UBUNTU_VERSIONS = [
     "16_0_4",
@@ -53,4 +54,17 @@ pkg_tar(
     name = "ubuntu_%s_vanilla" % version,
     env = UBUNTU_ENV,
     tars = [":ubuntu_%s_vanilla_reproducible" % version],
+) for version in UBUNTU_VERSIONS]
+
+[bootstrap_image_macro(
+    name = "bootstrap_ubuntu_%s" % version,
+    date = "20180214",
+    image_tar = ":ubuntu_%s_vanilla.tar" % version,
+    output_image_name = "ubuntu_%s" % version,
+    packages = [
+        "ca-certificates",
+        "curl",
+        "netbase",
+    ],
+    store_location = "ubuntu/builds",
 ) for version in UBUNTU_VERSIONS]
