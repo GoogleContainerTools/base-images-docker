@@ -20,6 +20,8 @@ the host machine.
 
 workspace(name = "debian_docker")
 
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
 # Docker rules.
 git_repository(
     name = "io_bazel_rules_docker",
@@ -38,7 +40,30 @@ load(
     "docker_repositories",
     "docker_pull",
 )
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+git_repository(
+    name = "containerregistry",
+    remote = "https://github.com/google/containerregistry.git",
+    tag = "v0.0.26",
+)
+
+git_repository(
+    name = "bazel_skylib",
+    remote = "https://github.com/bazelbuild/bazel-skylib.git",
+    tag = "0.2.0",
+)
+
+git_repository(
+    name = "structure_test",
+    commit = "b97925142b1a09309537e648ade11b4af47ff7ad",
+    remote = "https://github.com/GoogleCloudPlatform/container-structure-test.git",
+)
+
+git_repository(
+    name = "subpar",
+    commit = "7e12cc130eb8f09c8cb02c3585a91a4043753c56",
+    remote = "https://github.com/google/subpar",
+)
 
 docker_repositories()
 
@@ -115,6 +140,10 @@ UBUNTU_MAP = {
     "16_0_4": {
         "sha256": "51a8c466269bdebf232cac689aafad8feacd64804b13318c01096097a186d051",
         "url": "https://storage.googleapis.com/ubuntu_tar/20171028/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
+    },
+    "18_0_4": {
+        "sha256": "738fe0796db351e400ff6c12bbb4c3b6b24d70ad69ca33f92a44ec4c8e1dc267",
+        "url": "https://storage.googleapis.com/ubuntu_tar/20171028/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
     },
 }
 
