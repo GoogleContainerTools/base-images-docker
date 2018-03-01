@@ -12,7 +12,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Rule for installing apt packages from a tar file into a docker image."""
+"""Rule for installing apt packages from a tar file into a docker image.
+
+In addition to the base install_pkgs rule, we expose its constituents
+(attr, outputs, implementation) directly so that others can use them
+in their rules' implementation. The expectation in such cases is that
+users will write something like:
+
+  load(
+    "@debian_docker//package_managers:install_pkgs.bzl",
+    _install = "install",
+  )
+
+  def _impl(ctx):
+    ...
+    return _install.implementation(ctx, ... kwarg overrides ...)
+
+  _my_rule = rule(
+      attrs = _install.attrs + {
+         # My attributes, or overrides of _install.attrs defaults.
+         ...
+      },
+      outputs = _install.outputs,
+      implementation = _impl,
+  )
+
+"""
 
 def _generate_install_commands(tar, installation_cleanup_commands):
   return """
