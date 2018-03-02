@@ -14,15 +14,18 @@
 
 """Rule for downloading apt packages and tar them in a .tar file."""
 
-load("//package_managers/apt_get:repos.bzl", "generate_additional_repos")
-load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
+def _generate_add_additional_repo_commands(ctx, additional_repos):
+    return """printf "{repos}" >> /etc/apt/sources.list.d/{name}_repos.list""".format(
+    name=ctx.attr.name,
+    repos='\n'.join(additional_repos))
 
-def _generate_download_commands(ctx):
+def _generate_download_commands(ctx, packages, additional_repos):
     return """#!/bin/bash
 set -ex
-# Fetch Index
+{add_additional_repo_commands}
 # Remove /var/lib/apt/lists/* in the base image. apt-get update -y command will create them.
 rm -rf /var/lib/apt/lists/*
+# Fetch Index
 apt-get update -y
 # Make partial dir
 mkdir -p /tmp/install/./partial
@@ -31,28 +34,47 @@ apt-get install --no-install-recommends -y -q -o Dir::Cache="/tmp/install" -o Di
 # Tar command to only include all the *.deb files and ignore other directories placed in the cache dir.
 tar -cpf {output}.tar --directory /tmp/install/. `cd /tmp/install/. && ls *.deb`""".format(
     output=ctx.attr.name,
-    packages=' '.join(ctx.attr.packages))
+    packages=' '.join(packages),
+    add_additional_repo_commands=_generate_add_additional_repo_commands(ctx, additional_repos))
 
-def _run_download_script(ctx, output, build_contents):
-    contents = build_contents.replace(ctx.file.image_tar.short_path, ctx.file.image_tar.path)
-    contents = contents.replace(ctx.outputs.pkg_tar.short_path, ctx.outputs.pkg_tar.path)
+def _run_download_script(ctx, build_contents, image_tar, output_tar, output_script):
+    contents = build_contents.replace(image_tar.short_path, image_tar.path)
+    contents = contents.replace(output_tar.short_path, output_tar.path)
     # The paths for running within bazel build are different and hence replace short_path
     # by full path
     ctx.actions.write(
-        output = ctx.outputs.build_script,
+        output = output_script,
         content = contents,
     )
 
     ctx.actions.run(
-        outputs = [ctx.outputs.pkg_tar],
-        executable = ctx.outputs.build_script,
-        inputs = [ctx.file.image_tar],
+        outputs = [output_tar],
+        executable = output_script,
+        inputs = [image_tar],
     )
 
-def _impl(ctx):
+def _impl(ctx, image_tar=None, packages=None, additional_repos=None, output_executable=None, output_tar=None, output_script=None):
+    """Implementation for the download_pkgs rule.
+
+    Args:
+        ctx: The bazel rule context
+        image_tar: File, overrides ctx.file.image_tar
+        packages: str List, overrides ctx.attr.packages
+        additional_repos: str List, overrides ctx.attr.additional_repos
+        output_executable: File, overrides ctx.outputs.executable
+        output_tar: File, overrides ctx.outputs.pkg_tar
+        output_script: File, overrides ctx.outputs.build_script
+    """
+    image_tar = image_tar or ctx.file.image_tar
+    packages = packages or ctx.attr.packages
+    additional_repos = additional_repos or ctx.attr.additional_repos
+    output_executable = output_executable or ctx.outputs.executable
+    output_tar = output_tar or ctx.outputs.pkg_tar
+    output_script = output_script or ctx.outputs.build_script
+
     # docker_build rules always generate an image named 'bazel/$package:$name'.
-    builder_image_name = "bazel/%s:%s" % (ctx.attr.image_tar.label.package,
-                                          ctx.attr.image_tar.label.name.split(".tar")[0])
+    builder_image_name = "bazel/%s:%s" % (image_tar.owner.package,
+                                          image_tar.owner.name.split(".tar")[0])
 
     # Generate a shell script to run apt_get inside this docker image.
     # TODO(tejaldesai): Replace this by docker_run rule
@@ -66,81 +88,59 @@ docker attach $cid
 docker cp $cid:{installables}.tar {output}
 # Cleanup
 docker rm $cid
- """.format(image_tar=ctx.file.image_tar.short_path,
+ """.format(image_tar=image_tar.short_path,
             image_name=builder_image_name,
             installables=ctx.attr.name,
-            download_commands=_generate_download_commands(ctx),
-            output=ctx.outputs.pkg_tar.short_path,
+            download_commands=_generate_download_commands(ctx, packages, additional_repos),
+            output=output_tar.short_path,
             )
-    _run_download_script(ctx, ctx.outputs.pkg_tar, build_contents)
+    _run_download_script(ctx, build_contents, image_tar, output_tar, output_script)
     ctx.actions.write(
-        output = ctx.outputs.executable,
+        output = output_executable,
         content = build_contents,
     )
     return struct(
-        runfiles = ctx.runfiles(files = [ctx.file.image_tar, ctx.outputs.build_script]),
-        files = depset([ctx.outputs.executable])
+        runfiles = ctx.runfiles(files = [image_tar, output_script]),
+        files = depset([output_executable])
     )
 
-_download_pkgs = rule(
-    attrs = {
-        "image_tar": attr.label(
-            default = Label("//ubuntu:ubuntu_16_0_4_vanilla.tar"),
-            allow_files = True,
-            single_file = True,
-        ),
-        "packages": attr.string_list(
-            mandatory = True,
-        ),
-    },
-    executable = True,
-    outputs = {
-        "pkg_tar": "%{name}.tar",
-        "build_script": "%{name}.sh",
-    },
+_attrs = {
+    "image_tar": attr.label(
+        default = Label("//ubuntu:ubuntu_16_0_4_vanilla.tar"),
+        allow_files = True,
+        single_file = True,
+    ),
+    "packages": attr.string_list(
+        mandatory = True,
+    ),
+    "additional_repos": attr.string_list(),
+}
+
+_outputs = {
+    "pkg_tar": "%{name}.tar",
+    "build_script": "%{name}.sh",
+}
+
+download = struct(
+    attrs = _attrs,
+    outputs = _outputs,
     implementation = _impl,
 )
 
-"""Downloads packages within a container
+"""Downloads packages within a container.
 
 This rule creates a script to download packages within a container.
-It also run the script and produces the tarball if requested.
 The script bunldes all the packages in a tarball.
 
 Args:
   name: A unique name for this rule.
   image_tar: The image tar for the container used to download packages.
   packages: list of packages to download. e.g. ['curl', 'netbase']
+  additional_repos: list of additional debian package repos to use, in sources.list format
 """
-
-def download_pkgs(name, image_tar, packages, additional_repos=[]):
-  """Downloads packages within a container
-  This rule creates a script to download packages within a container.
-  The script bunldes all the packages in a tarball.
-  Args:
-    name: A unique name for this rule.
-    image_tar: The image tar for the container used to download packages.
-    packages: list of packages to download. e.g. ['curl', 'netbase']
-    additional_repos: list of additional debian package repos to use, in sources.list format
-  """
-  tars = []
-  if additional_repos:
-    repo_name="{0}_repos".format(name)
-    generate_additional_repos(
-        name = repo_name,
-        repos = additional_repos
-    )
-    tars.append("%s.tar" % repo_name)
-
-
-  img_target_name = "{0}_build".format(name)
-  docker_build(
-        name = img_target_name,
-        base = image_tar,
-        tars = tars,
-  )
-  _download_pkgs(
-       name = "{0}".format(name),
-       image_tar = ":{0}.tar".format(img_target_name),
-       packages = packages,
-  )
+download_pkgs = rule(
+    attrs = _attrs,
+    outputs = _outputs,
+    implementation = _impl,
+    executable = True,
+)

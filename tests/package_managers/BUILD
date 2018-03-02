@@ -46,6 +46,31 @@ sh_test(
     data = [":test_download_pkgs.tar"],
 )
 
+add_apt_key(
+    name = "ubuntu_gpg_image",
+    image = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
+    keys = [
+        "@bazel_gpg//file",
+    ],
+)
+
+download_pkgs(
+    name = "test_download_pkgs_with_additional_repos",
+    image_tar = ":ubuntu_gpg_image.tar",
+    packages = [
+        "bazel",
+    ],
+    additional_repos = [
+        "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8",
+    ],
+)
+
+sh_test(
+    name = "download_pkgs_with_additional_repos_run_test",
+    srcs = ["download_pkgs_with_additional_repos_run_test.sh"],
+    data = [":test_download_pkgs_with_additional_repos.tar"],
+)
+
 install_pkgs(
     name = "test_install_pkgs",
     image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
