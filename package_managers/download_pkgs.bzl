@@ -138,9 +138,10 @@ Args:
   packages: list of packages to download. e.g. ['curl', 'netbase']
   additional_repos: list of additional debian package repos to use, in sources.list format
 """
+
 download_pkgs = rule(
     attrs = _attrs,
+    executable = True,
     outputs = _outputs,
     implementation = _impl,
-    executable = True,
 )

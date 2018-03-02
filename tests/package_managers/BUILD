@@ -56,12 +56,12 @@ add_apt_key(
 
 download_pkgs(
     name = "test_download_pkgs_with_additional_repos",
+    additional_repos = [
+        "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8",
+    ],
     image_tar = ":ubuntu_gpg_image.tar",
     packages = [
         "bazel",
-    ],
-    additional_repos = [
-        "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8",
     ],
 )
 
