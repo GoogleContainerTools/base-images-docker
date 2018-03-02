@@ -53,7 +53,7 @@ rm -f /var/cache/ldconfig/aux-cache
 rm -f /var/cache/apt/pkgcache.bin
 touch /run/mount/utab""".format(tar=tar, installation_cleanup_commands=installation_cleanup_commands)
 
-def _impl(ctx, image_tar=None, installables_tar=None, installation_cleanup_commands="", output_tar=None):
+def _impl(ctx, image_tar=None, installables_tar=None, installation_cleanup_commands="", output_image_name="", output_tar=None):
   """Implementation for the install_pkgs rule.
 
   Args:
@@ -61,11 +61,13 @@ def _impl(ctx, image_tar=None, installables_tar=None, installation_cleanup_comma
     image_tar: File, overrides ctx.file.image_tar
     installables_tar: File, overrides ctx.file.installables_tar
     installation_cleanup_commands: str, overrides ctx.attr.installation_cleanup_commands
+    output_image_name: str, overrides ctx.attr.output_image_name
     output_tar: File, overrides ctx.outputs.out
   """
   image_tar = image_tar or ctx.file.image_tar
   installables_tar = installables_tar or ctx.file.installables_tar
   installation_cleanup_commands = installation_cleanup_commands or ctx.attr.installation_cleanup_commands
+  output_image_name = output_image_name or ctx.attr.output_image_name
   output_tar = output_tar or ctx.outputs.out
 
   installables_tar_path = installables_tar.path
@@ -105,7 +107,7 @@ docker save {output_image_name} > {output_file_name}
            installables_tar=installables_tar_path,
            installer_script=install_script.path,
            output_file_name=unstripped_tar.path,
-           output_image_name=ctx.attr.output_image_name
+           output_image_name=output_image_name
   )
 
   script=ctx.actions.declare_file(ctx.label.name + ".build")
