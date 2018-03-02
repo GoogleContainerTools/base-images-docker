@@ -53,7 +53,7 @@ rm -f /var/cache/ldconfig/aux-cache
 rm -f /var/cache/apt/pkgcache.bin
 touch /run/mount/utab""".format(tar=tar, installation_cleanup_commands=installation_cleanup_commands)
 
-def _impl(ctx, image_tar=None, installables_tar=None, installation_cleanup_commands=""):
+def _impl(ctx, image_tar=None, installables_tar=None, installation_cleanup_commands="", output_tar=None):
   """Implementation for the container_image rule.
 
   Args:
@@ -61,10 +61,12 @@ def _impl(ctx, image_tar=None, installables_tar=None, installation_cleanup_comma
     image_tar: File, overrides ctx.file.image_tar
     installables_tar: File, overrides ctx.file.installables_tar
     installation_cleanup_commands: str, overrides ctx.attr.installation_cleanup_commands
+    output_tar: File, overrides ctx.outputs.out
   """
   image_tar = image_tar or ctx.file.image_tar
   installables_tar = installables_tar or ctx.file.installables_tar
   installation_cleanup_commands = installation_cleanup_commands or ctx.attr.installation_cleanup_commands
+  output_tar = output_tar or ctx.outputs.out
 
   installables_tar_path = installables_tar.path
   # Generate the installer.sh script
@@ -81,7 +83,7 @@ def _impl(ctx, image_tar=None, installables_tar=None, installation_cleanup_comma
 
   builder_image_name = "bazel/%s:%s" % (image_tar.owner.package,
                                         image_tar.owner.name.split(".tar")[0])
-  unstripped_tar = ctx.actions.declare_file(ctx.outputs.install_pkgs_out.basename + ".unstripped")
+  unstripped_tar = ctx.actions.declare_file(output_tar.basename + ".unstripped")
 
   build_contents = """\
 #!/bin/bash
@@ -118,10 +120,10 @@ docker save {output_image_name} > {output_file_name}
   )
 
   ctx.actions.run(
-    outputs=[ctx.outputs.install_pkgs_out],
+    outputs=[output_tar],
     inputs=[unstripped_tar],
     executable=ctx.executable._config_stripper,
-    arguments=['--in_tar_path=%s' % unstripped_tar.path, '--out_tar_path=%s' % ctx.outputs.install_pkgs_out.path],
+    arguments=['--in_tar_path=%s' % unstripped_tar.path, '--out_tar_path=%s' % output_tar.path],
   )
 
   return struct ()
@@ -162,7 +164,7 @@ _attrs = {
 }
 
 _outputs = {
-    "install_pkgs_out": "%{output_image_name}.tar",
+    "out": "%{name}.tar",
 }
 
 install = struct(

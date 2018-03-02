@@ -60,7 +60,7 @@ pkg_tar(
     name = "bootstrap_ubuntu_%s" % version,
     date = "20180214",
     image_tar = ":ubuntu_%s_vanilla.tar" % version,
-    output_image_name = "bootstrap_ubuntu_%s" % version,
+    output_image_name = "ubuntu_%s" % version,
     packages = [
         "ca-certificates",
         "curl",

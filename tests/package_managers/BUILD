@@ -80,7 +80,7 @@ bootstrap_image_macro(
     name = "bootstrap_ubuntu",
     date = "2017/12/15",
     image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
-    output_image_name = "bootstrap_ubuntu",
+    output_image_name = "ubuntu",
     packages = [
         "curl",
         "netbase",
