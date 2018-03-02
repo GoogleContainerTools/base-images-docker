@@ -54,7 +54,7 @@ rm -f /var/cache/apt/pkgcache.bin
 touch /run/mount/utab""".format(tar=tar, installation_cleanup_commands=installation_cleanup_commands)
 
 def _impl(ctx, image_tar=None, installables_tar=None, installation_cleanup_commands="", output_tar=None):
-  """Implementation for the container_image rule.
+  """Implementation for the install_pkgs rule.
 
   Args:
     ctx: The bazel rule context
