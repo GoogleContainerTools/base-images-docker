@@ -7,27 +7,19 @@ load("//package_managers:bootstrap_image.bzl", "bootstrap_image_macro")
 
 UBUNTU_VERSIONS = [
     "16_0_4",
+    "18_0_4",
 ]
-
-# 'ubuntu_%s' is a ubuntu_%s rootfs w/ ca-certificates, curl, and netbase
-# This image is used for node images. Look node/reproducible/BUILD#L31
-[dockerfile_build(
-    name = "ubuntu_%s" % version,
-    base = ":ubuntu_%s_vanilla" % version,
-    dockerfile = ":Dockerfile.ubuntu",
-) for version in UBUNTU_VERSIONS]
-
-# 'ubuntu_%s_build' is the 'ubuntu_%s' image w/ build-essential and python2.7
-#  This image is used for node images. Look node/reproducible/BUILD#L41
-[dockerfile_build(
-    name = "ubuntu_%s_build" % version,
-    base = ":ubuntu_%s" % version,
-    dockerfile = ":Dockerfile.ubuntu_build",
-) for version in UBUNTU_VERSIONS]
 
 UBUNTU_ENV = {
     "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
 }
+
+# 'ubuntu_16_0_4' is a ubuntu_%s rootfs w/ ca-certificates, curl, and netbase
+dockerfile_build(
+    name = "ubuntu_16_0_4",
+    base = ":ubuntu_16_0_4_vanilla",
+    dockerfile = ":Dockerfile.ubuntu",
+)
 
 # The overlay directory contains files that should be overlaid into the rootfs at /.
 pkg_tar(
@@ -42,12 +34,20 @@ pkg_tar(
 # whiteout files.
 # tar --delete deletes files in place so we need to uncompress to a temp tar
 # then delete then output.
-[genrule(
-    name = "ubuntu_%s_vanilla_reproducible" % version,
-    srcs = ["@ubuntu_%s_tar_download//file" % version],
-    outs = ["ubuntu_%s_vanilla_reproducible.tar" % version],
+genrule(
+    name = "ubuntu_16_0_4_vanilla_reproducible",
+    srcs = ["@ubuntu_16_0_4_tar_download//file"],
+    outs = ["ubuntu_16_0_4_vanilla_reproducible.tar"],
     cmd = "cp $< temp.tar.gz && gunzip temp.tar.gz && tar --delete var/log/dpkg.log var/cache/apt/pkgcache.bin var/cache/ldconfig/aux-cache -f temp.tar && mv temp.tar $@",
-) for version in UBUNTU_VERSIONS]
+)
+
+# There's a slightly different list of files to clean in 18_0_4.
+genrule(
+    name = "ubuntu_18_0_4_vanilla_reproducible",
+    srcs = ["@ubuntu_18_0_4_tar_download//file"],
+    outs = ["ubuntu_18_0_4_vanilla_reproducible.tar"],
+    cmd = "cp $< temp.tar.gz && gunzip temp.tar.gz && tar --delete var/log/dpkg.log var/cache/ldconfig/aux-cache -f temp.tar && mv temp.tar $@",
+)
 
 # 'ubuntu_%s_vanilla' is docker image derived from a snapshot ubuntu_%s rootfs
 [docker_build(
@@ -58,7 +58,7 @@ pkg_tar(
 
 [bootstrap_image_macro(
     name = "bootstrap_ubuntu_%s" % version,
-    date = "20180222",
+    date = "20180306",
     image_tar = ":ubuntu_%s_vanilla.tar" % version,
     output_image_name = "ubuntu_%s" % version,
     packages = [
@@ -66,5 +66,5 @@ pkg_tar(
         "curl",
         "netbase",
     ],
-    store_location = "ubuntu/builds",
+    store_location = "ubuntu/%s/builds" % version,
 ) for version in UBUNTU_VERSIONS]
