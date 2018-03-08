@@ -143,7 +143,7 @@ UBUNTU_MAP = {
     },
     "18_0_4": {
         "sha256": "738fe0796db351e400ff6c12bbb4c3b6b24d70ad69ca33f92a44ec4c8e1dc267",
-        "url": "https://storage.googleapis.com/ubuntu_tar/20171028/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
+        "url": "https://storage.googleapis.com/ubuntu_tar/20180224/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
     },
 }
 

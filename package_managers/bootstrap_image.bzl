@@ -32,7 +32,7 @@ load(
 
 def _impl(ctx):
     store_key = "{0}/{1}".format(ctx.attr.date, PACKAGES_FILE_NAME)
-    get_file = "{0}/{1}".format(GET_OUTPUT_DIR, PACKAGES_FILE_NAME)
+    get_file = "{0}/{1}/{2}".format(GET_OUTPUT_DIR, ctx.attr.name, PACKAGES_FILE_NAME)
     get_status = git_store_get(
         ctx = ctx,
         store_location = ctx.attr.store_location,
@@ -63,7 +63,7 @@ fi
        get_file = get_file,
     )
 
-    fetch_or_download = ctx.actions.declare_file("fetch_or_download")
+    fetch_or_download = ctx.actions.declare_file("{0}_fetch_or_download".format(ctx.attr.name))
     ctx.actions.write(
         output = fetch_or_download,
         content = build_contents,
