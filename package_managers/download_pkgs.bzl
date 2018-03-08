@@ -121,6 +121,7 @@ _outputs = {
     "build_script": "%{name}.sh",
 }
 
+# Export download_pkgs rule for other bazel rules to depend on.
 download = struct(
     attrs = _attrs,
     outputs = _outputs,

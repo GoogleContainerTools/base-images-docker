@@ -169,6 +169,7 @@ _outputs = {
     "out": "%{name}.tar",
 }
 
+# Export install_pkgs rule for other bazel rules to depend on.
 install = struct(
     attrs = _attrs,
     outputs = _outputs,
