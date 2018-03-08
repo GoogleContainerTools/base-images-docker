@@ -31,7 +31,7 @@ rule_test(
 file_test(
     name = "test_download_pkgs_docker_run",
     file = ":test_download_pkgs",
-    regexp = ".*docker run -w=\"/\" -d --privileged bazel/tests/package_managers:test_download_pkgs_build sh -c $'.*",
+    regexp = ".*docker run -w=\"/\" -d --privileged bazel/ubuntu:ubuntu_16_0_4_vanilla sh -c $'.*",
 )
 
 file_test(
@@ -44,6 +44,31 @@ sh_test(
     name = "download_pkgs_run_test",
     srcs = ["download_pkgs_run_test.sh"],
     data = [":test_download_pkgs.tar"],
+)
+
+add_apt_key(
+    name = "ubuntu_gpg_image",
+    image = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
+    keys = [
+        "@bazel_gpg//file",
+    ],
+)
+
+download_pkgs(
+    name = "test_download_pkgs_with_additional_repos",
+    additional_repos = [
+        "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8",
+    ],
+    image_tar = ":ubuntu_gpg_image.tar",
+    packages = [
+        "bazel",
+    ],
+)
+
+sh_test(
+    name = "download_pkgs_with_additional_repos_run_test",
+    srcs = ["download_pkgs_with_additional_repos_run_test.sh"],
+    data = [":test_download_pkgs_with_additional_repos.tar"],
 )
 
 install_pkgs(
