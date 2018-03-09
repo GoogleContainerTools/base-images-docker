@@ -51,7 +51,7 @@ rm -f /var/log/dpkg.log
 rm -f /var/log/alternatives.log
 rm -f /var/cache/ldconfig/aux-cache
 rm -f /var/cache/apt/pkgcache.bin
-touch /run/mount/utab""".format(tar=tar, installation_cleanup_commands=installation_cleanup_commands)
+mkdir -p /run/mount/ && touch /run/mount/utab""".format(tar=tar, installation_cleanup_commands=installation_cleanup_commands)
 
 def _impl(ctx, image_tar=None, installables_tar=None, installation_cleanup_commands="", output_image_name="", output_tar=None):
   """Implementation for the install_pkgs rule.
