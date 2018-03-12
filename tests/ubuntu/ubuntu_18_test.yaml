@@ -1,0 +1,31 @@
+schemaVersion: '2.0.0'
+commandTests:
+- name: 'path'
+  command: 'sh'
+  args: ['-c', 'echo $PATH']
+  expectedOutput: ['/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin']
+commandTests:
+- name: 'curl installed'
+  command: 'dpkg'
+  args: ['-l', 'curl']
+  excludedOutput: ['.*no packages found matching.*']
+commandTests:
+- name: 'ca-certificates installed'
+  command: 'dpkg'
+  args: ['-l', 'ca-certificates']
+  excludedOutput: ['.*no packages found matching.*']
+- name: 'netbase installed'
+  command: 'dpkg'
+  args: ['-l', 'netbase']
+  excludedOutput: ['.*no packages found matching.*']
+fileContentTests:
+- name: 'Ubuntu Distro Check'
+  expectedContents: ['.*NAME="Ubuntu".*', '.*VERSION="18.04 LTS \(Bionic Beaver\)".*']
+  path: '/etc/os-release'
+fileExistenceTests:
+- name: 'Root'
+  path: '/'
+  shouldExist: true
+  permissions: 'drwxr-xr-x'
+metadataTest:
+  command: ["/bin/bash"]
