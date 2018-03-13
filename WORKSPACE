@@ -55,7 +55,7 @@ git_repository(
 
 git_repository(
     name = "structure_test",
-    commit = "b97925142b1a09309537e648ade11b4af47ff7ad",
+    commit = "fa9226712ab31e808b240a616056e2abc2fdf40a",
     remote = "https://github.com/GoogleCloudPlatform/container-structure-test.git",
 )
 
@@ -142,8 +142,8 @@ UBUNTU_MAP = {
         "url": "https://storage.googleapis.com/ubuntu_tar/20171028/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
     },
     "18_0_4": {
-        "sha256": "738fe0796db351e400ff6c12bbb4c3b6b24d70ad69ca33f92a44ec4c8e1dc267",
-        "url": "https://storage.googleapis.com/ubuntu_tar/20180224/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
+        "sha256": "a1ae25b466d253ce35960dabade10bd945967739ea90ca277ea47b89bd76ef59",
+        "url": "https://storage.googleapis.com/ubuntu_tar/20180309/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
     },
 }
 
