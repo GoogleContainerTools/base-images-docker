@@ -97,7 +97,7 @@ docker load --input {base_image_tar}
 
 cid=$(docker run -d -v $(pwd)/{installables_tar}:/tmp/{installables_tar} -v $(pwd)/{installer_script}:/tmp/installer.sh --privileged {base_image_name} /tmp/installer.sh)
 
-docker attach $cid || true
+docker attach $cid
 
 reset_cmd {base_image_name} $cid {output_image_name}
 docker save {output_image_name} > {output_file_name}
