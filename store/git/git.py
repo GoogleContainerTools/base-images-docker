@@ -78,6 +78,10 @@ class LocalGitStore(object):
     file_location = os.path.join(self.store_location, self.key)
     if os.path.exists(get) and self.suppress_error:
        os.remove(get)
+    # Make sure the directory exists.
+    dirname = os.path.dirname(get)
+    if not os.path.exists(dirname):
+      os.makedirs(dirname)
     self._execute(commands = [
        ['cp', file_location, get]
     ])
