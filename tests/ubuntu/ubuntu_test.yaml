@@ -19,6 +19,11 @@ commandTests:
   command: 'dpkg'
   args: ['-l', 'netbase']
   excludedOutput: ['.*no packages found matching.*']
+commandTests:
+- name: 'DEBIAN_FRONTEND'
+  command: 'sh'
+  args: ['-c', 'echo $DEBIAN_FRONTEND']
+  expectedOutput: ['noninteractive']
 fileContentTests:
 - name: 'Ubuntu Distro Check'
   expectedContents: ['.*ubuntu.*']

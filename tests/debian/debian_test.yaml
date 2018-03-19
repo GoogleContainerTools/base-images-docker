@@ -18,6 +18,10 @@ commandTests:
   command: 'sh'
   args: ['-c', 'echo $PORT']
   expectedOutput: ['8080']
+- name: 'DEBIAN_FRONTEND'
+  command: 'sh'
+  args: ['-c', 'echo $DEBIAN_FRONTEND']
+  expectedOutput: ['noninteractive']
 fileContentTests:
 - name: 'Debian Sources'
   excludedContents: ['.*gce_debian_mirror.*']
