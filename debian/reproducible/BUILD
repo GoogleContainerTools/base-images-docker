@@ -35,6 +35,7 @@ load("//debian/reproducible:debootstrap.bzl", "debootstrap_image")
 DEBIAN_ENV = {
     "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
     "PORT": "8080",
+    "DEBIAN_FRONTEND": "noninteractive",
 }
 
 DEBIAN_MAP = {
