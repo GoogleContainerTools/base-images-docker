@@ -10,14 +10,14 @@ commandTests:
   args: ['dump']
   expectedOutput: ['Acquire::Retries "3"']
   name: 'apt-config'
-- name: 'path'
-  command: 'sh'
-  args: ['-c', 'echo $PATH']
-  expectedOutput: ['/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin']
-- name: 'PORT'
-  command: 'sh'
-  args: ['-c', 'echo $PORT']
-  expectedOutput: ['8080']
+metadataTest:
+  env:
+        - key: PORT
+          value: 8080
+        - key: DEBIAN_FRONTEND
+          value: noninteractive
+        - key: PATH
+          value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 fileContentTests:
 - name: 'Debian Sources'
   excludedContents: ['.*gce_debian_mirror.*']

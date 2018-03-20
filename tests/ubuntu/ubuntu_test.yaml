@@ -1,10 +1,5 @@
 schemaVersion: '2.0.0'
 commandTests:
-- name: 'path'
-  command: 'sh'
-  args: ['-c', 'echo $PATH']
-  expectedOutput: ['/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin']
-commandTests:
 - name: 'curl installed'
   command: 'dpkg'
   args: ['-l', 'curl']
@@ -30,3 +25,8 @@ fileExistenceTests:
   permissions: 'drwxr-xr-x'
 metadataTest:
   command: ["/bin/bash"]
+  env:
+        - key: PATH
+          value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        - key: DEBIAN_FRONTEND
+          value: noninteractive

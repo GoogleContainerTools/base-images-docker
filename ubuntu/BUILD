@@ -12,6 +12,7 @@ UBUNTU_VERSIONS = [
 
 UBUNTU_ENV = {
     "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    "DEBIAN_FRONTEND": "noninteractive",
 }
 
 # 'ubuntu_16_0_4' is a ubuntu_%s rootfs w/ ca-certificates, curl, and netbase
