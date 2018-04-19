@@ -18,5 +18,5 @@ if [[ $files ]]; then
 fi
 
 
-echo "Checking shellcheck..."
-find . -name "*.sh" | grep -v "third_party/" | xargs shellcheck
+#echo "Checking shellcheck..."
+#find . -name "*.sh" | grep -v "third_party/" | xargs shellcheck

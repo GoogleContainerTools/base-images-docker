@@ -9,7 +9,7 @@ jdk:
   - oraclejdk8
 
 language: go
-go: 1.7.1
+go: 1.10.x
 install: true
 
 addons:
@@ -19,7 +19,6 @@ addons:
     - sourceline: 'deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8'
       key_url: 'https://storage.googleapis.com/bazel-apt/doc/apt-key.pub.gpg'
     packages:
-    - shellcheck
     - bazel
 
 install:
