@@ -18,33 +18,19 @@ to new container image, or extract specified targets to a directory on
 the host machine.
 """
 
-workspace(name = "debian_docker")
-
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+workspace(name = "base_images_docker")
 
 # Docker rules.
 git_repository(
     name = "io_bazel_rules_docker",
-    commit = "f4e43196c5cef146b0a8efc46269a8beb59504bd",
+    commit = "452878d665648ada0aaf816931611fdd9c683a97",
     remote = "https://github.com/bazelbuild/rules_docker.git",
-)
-
-git_repository(
-    name = "containerregistry",
-    commit = "d7b9bf582f672507252ebfd3cf30c3d41abf93be",
-    remote = "https://github.com/google/containerregistry.git",
 )
 
 load(
     "@io_bazel_rules_docker//docker:docker.bzl",
     "docker_repositories",
     "docker_pull",
-)
-
-git_repository(
-    name = "containerregistry",
-    remote = "https://github.com/google/containerregistry.git",
-    tag = "v0.0.26",
 )
 
 git_repository(
@@ -76,8 +62,8 @@ docker_pull(
 
 git_repository(
     name = "distroless",
-    commit = "bd16e2028cc0dd6acba3de58448c94b3d2ead21a",
-    remote = "https://github.com/GoogleCloudPlatform/distroless.git",
+    commit = "813d1ddef217f3871e4cb0a73da100aeddc638ee",
+    remote = "https://github.com/GoogleContainerTools/distroless.git",
 )
 
 load(
@@ -126,8 +112,8 @@ dpkg_list(
 
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "4d8d6244320dd751590f9100cf39fd7a4b75cd901e1f3ffdfd6f048328883695",
-    url = "https://github.com/bazelbuild/rules_go/releases/download/0.9.0/rules_go-0.9.0.tar.gz",
+    sha256 = "f70c35a8c779bb92f7521ecb5a1c6604e9c3edd431e50b6376d7497abc8ad3c1",
+    url = "https://github.com/bazelbuild/rules_go/releases/download/0.11.0/rules_go-0.11.0.tar.gz",
 )
 
 load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains")
@@ -142,8 +128,8 @@ UBUNTU_MAP = {
         "url": "https://storage.googleapis.com/ubuntu_tar/20171028/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
     },
     "18_0_4": {
-        "sha256": "79a8d94521c680b13f27c8d01953afd43433d6c9fb3b42adb602817e53b186e3",
-        "url": "https://storage.googleapis.com/ubuntu_tar/20180417/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
+        "sha256": "976134ce226c39610c3296a089a9e735160a2b472a67a31125a8f97f0dfbe118",
+        "url": "https://storage.googleapis.com/ubuntu_tar/20180417/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
     },
 }
 

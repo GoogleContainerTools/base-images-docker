@@ -20,7 +20,7 @@ in their rules' implementation. The expectation in such cases is that
 users will write something like:
 
   load(
-    "@debian_docker//package_managers:install_pkgs.bzl",
+    "@base_images_docker//package_managers:install_pkgs.bzl",
     _install = "install",
   )
 
