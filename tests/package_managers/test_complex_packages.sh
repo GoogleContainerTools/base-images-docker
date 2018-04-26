@@ -30,7 +30,7 @@ EOM
 # Run download_pkgs and grab the resulting installables tar file
 rm -f test_download_complex_pkgs.tar
 bazel run //tests/package_managers:test_complex_download_pkgs
-cp  bazel-bin/tests/package_managers/test_complex_download_pkgs.runfiles/debian_docker/tests/package_managers/test_complex_download_pkgs.tar tests/package_managers
+cp  bazel-bin/tests/package_managers/test_complex_download_pkgs.runfiles/base_images_docker/tests/package_managers/test_complex_download_pkgs.tar tests/package_managers
 
 # Add install_pkgs target to generated BUILD file
 cat >> "$TEST_BUILD_FILE" <<- EOM

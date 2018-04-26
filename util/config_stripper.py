@@ -27,7 +27,7 @@ import tempfile
 
 _TIMESTAMP = '1970-01-01T00:00:00Z'
 
-WHITELISTED_PREFIXES = ['sha256:', 'manifest']
+WHITELISTED_PREFIXES = ['sha256:', 'manifest', 'repositories']
 
 def main():
     parser = argparse.ArgumentParser()

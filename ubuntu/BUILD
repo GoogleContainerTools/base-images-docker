@@ -59,7 +59,7 @@ genrule(
 
 [bootstrap_image_macro(
     name = "bootstrap_ubuntu_%s" % version,
-    date = "20180418",
+    date = "20180426",
     image_tar = ":ubuntu_%s_vanilla.tar" % version,
     output_image_name = "ubuntu_%s" % version,
     packages = [
