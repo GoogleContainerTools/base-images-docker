@@ -84,7 +84,7 @@ def _impl(ctx, image_tar=None, installables_tar=None, installation_cleanup_comma
   )
 
   builder_image_name = "bazel/%s:%s" % (image_tar.owner.package,
-                                        image_tar.owner.name.split(".tar")[0])
+                                        image_tar.basename.split(".tar")[0])
   unstripped_tar = ctx.actions.declare_file(output_tar.basename + ".unstripped")
 
   build_contents = """\
