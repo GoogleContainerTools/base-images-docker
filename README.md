@@ -5,7 +5,7 @@ Source for the Google-maintained base docker images. These images can be used as
 Images currently supported:
 * Debian 8 (Jessie) `launcher.gcr.io/google/debian8` and `gcr.io/google-appengine/debian8`
 * Debian 9 (Stretch) `launcher.gcr.io/google/debian9` and `gcr.io/google-appengine/debian9`
-* Ubuntu `gcr.io/gcp-runtimes/ubuntu_16_0_4:latest`
+* Ubuntu `launcher.gcr.io/google/ubuntu16_04` and `gcr.io/gcp-runtimes/ubuntu_16_0_4`
 
 Usage
 =======
