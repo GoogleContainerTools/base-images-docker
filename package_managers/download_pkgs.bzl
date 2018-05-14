@@ -74,7 +74,7 @@ def _impl(ctx, image_tar=None, packages=None, additional_repos=None, output_exec
 
     # docker_build rules always generate an image named 'bazel/$package:$name'.
     builder_image_name = "bazel/%s:%s" % (image_tar.owner.package,
-                                          image_tar.owner.name.split(".tar")[0])
+                                          image_tar.basename.split(".tar")[0])
 
     # Generate a shell script to run apt_get inside this docker image.
     # TODO(tejaldesai): Replace this by docker_run rule

@@ -23,11 +23,29 @@ load(
     "container_bundle",
 )
 
-def _extract_impl(ctx):
-    # Since we're always bundling/renaming the image in the macro, this is valid.
-    load_statement = 'docker load -i %s' % ctx.file.image_tar.path
+def _extract_impl(ctx, name="", image_tar=None, image_name="", commands=None, extract_file="", output_file=None):
+    """Implementation for the _run_and_extract rule.
 
-    script = ctx.new_file(ctx.label.name + ".build")
+    Args:
+        ctx: The bazel rule context
+        name: String, overrides ctx.label.name
+        image_tar: File, overrides ctx.file.image_tar
+        image_name: String, overrides ctx.attr.image_name
+        commands: String list, overrides ctx.attr.commands
+        extract_file: String, overrides ctx.attr.extract_file
+        output_file: File, overrides ctx.outputs.out
+    """
+    name = name or ctx.label.name
+    image_tar = image_tar or ctx.file.image_tar
+    image_name = image_name or ctx.attr.image_name
+    commands = commands or ctx.attr.commands
+    extract_file = extract_file or ctx.attr.extract_file
+    output_file = output_file or ctx.outputs.out
+
+    # Since we're always bundling/renaming the image in the macro, this is valid.
+    load_statement = 'docker load -i %s' % image_tar.path
+
+    script = ctx.new_file(name + ".build")
 
     # Generate a shell script to execute the run statement
     ctx.actions.expand_template(
@@ -35,25 +53,107 @@ def _extract_impl(ctx):
         output=script,
         substitutions={
           "%{load_statement}": load_statement,
-          "%{image}": ctx.attr.image_name,
-          "%{commands}": _process_commands(ctx.attr.commands),
-          "%{extract_file}": ctx.attr.extract_file,
-          "%{output}": ctx.outputs.out.path,
+          "%{image}": image_name,
+          "%{commands}": _process_commands(commands),
+          "%{extract_file}": extract_file,
+          "%{output}": output_file.path,
         },
         is_executable=True,
     )
 
-    runfiles = [ctx.file.image_tar] + \
-                ctx.attr.image_tar.files.to_list() + \
-                ctx.attr.image_tar.data_runfiles.files.to_list()
-
     ctx.actions.run(
-        outputs=[ctx.outputs.out],
-        inputs=runfiles,
+        outputs=[output_file],
+        inputs=[image_tar],
         executable=script,
     )
 
     return struct()
+
+_extract_attrs = {
+    "image_tar": attr.label(
+        executable = True,
+        allow_files = True,
+        mandatory = True,
+        single_file = True,
+        cfg = "target",
+    ),
+    "image_name": attr.string(
+        doc = "name of image to run commands on",
+        mandatory = True,
+    ),
+    "commands": attr.string_list(
+        doc = "commands to run",
+        mandatory = True,
+        non_empty = True,
+    ),
+    "extract_file": attr.string(
+        doc = "path to file to extract from container",
+        mandatory = True,
+    ),
+    "_extract_tpl": attr.label(
+        default = Label("//util:extract.sh.tpl"),
+        allow_files = True,
+        single_file = True,
+    ),
+    "output_file": attr.string(
+        mandatory = True,
+    ),
+}
+
+_extract_outputs = {
+    "out": "%{output_file}",
+}
+
+# Export _run_and_extract rule for other bazel rules to depend on.
+extract = struct(
+    attrs = _extract_attrs,
+    outputs = _extract_outputs,
+    implementation = _extract_impl,
+)
+
+_run_and_extract = rule(
+    attrs = _extract_attrs,
+    outputs = _extract_outputs,
+    implementation = _extract_impl,
+)
+
+def container_run_and_extract(name, image, commands, extract_file):
+    """Macro to wrap the run_and_extract implementation.
+
+    This rule runs a set of commands in a given image, waits for the commands
+    to finish, and then extracts a given file from the container to the
+    bazel-out directory.
+
+    Args:
+        name: A unique name for this rule.
+        image: The image to run the commands in.
+        commands: A list of commands to run (sequentially) in the container.
+        extract_file: The file to extract from the container.
+    """
+    image_tar, intermediate_image = _rename_image(image, name)
+
+    _run_and_extract(
+        name = name,
+        image_name = intermediate_image,
+        image_tar = image_tar + ".tar",
+        commands = commands,
+        extract_file = extract_file,
+        output_file = name + extract_file,
+    )
+
+"""Runs commands in a container and extracts a target file from the container.
+
+This rule runs a set of commands in a given image, waits for the commands
+to finish, and then extracts a given file from the container.
+
+Args:
+    image_name: Name of the image to run commands on
+    image_tar: Tarball of image to run commands on
+    commands: A list of commands to run (sequentially) in the container.
+    extract_file: The file to extract from the container.
+    output_file: Path to output file extracted from container.
+    _extract_tpl: Template for generated script to run docker commands.
+"""
 
 def _commit_impl(ctx):
     # Since we're always bundling/renaming the image in the macro, this is valid.
@@ -137,58 +237,6 @@ Args:
     _run_tpl: Template for generated script to run docker commands.
 """
 
-_run_and_extract = rule(
-    attrs = {
-        "image_tar": attr.label(
-            executable = True,
-            allow_files = True,
-            mandatory = True,
-            single_file = True,
-            cfg = "target",
-        ),
-        "image_name": attr.string(
-            doc = "name of image to run commands on",
-            mandatory = True,
-        ),
-        "commands": attr.string_list(
-            doc = "commands to run",
-            mandatory = True,
-            non_empty = True,
-        ),
-        "extract_file": attr.string(
-            doc = "path to file to extract from container",
-            mandatory = True,
-        ),
-        "_extract_tpl": attr.label(
-            default = Label("//util:extract.sh.tpl"),
-            allow_files = True,
-            single_file = True,
-        ),
-        "output_file": attr.string(
-            mandatory = True,
-        ),
-    },
-    executable = False,
-    outputs = {
-        "out": "%{output_file}",
-    },
-    implementation = _extract_impl,
-)
-
-"""Runs commands in a container and extracts a target file from the container.
-
-This rule runs a set of commands in a given image, waits for the commands
-to finish, and then extracts a given file from the container.
-
-Args:
-    image_name: Name of the image to run commands on
-    image_tar: Tarball of image to run commands on
-    commands: A list of commands to run (sequentially) in the container.
-    extract_file: The file to extract from the container.
-    output_file: Path to output file extracted from container.
-    _extract_tpl: Template for generated script to run docker commands.
-"""
-
 def container_run_and_commit(name, image, commands):
     """Macro to wrap the run_and_commit implementation.
 
@@ -207,30 +255,6 @@ def container_run_and_commit(name, image, commands):
         image_name = intermediate_image,
         image_tar = image_tar + ".tar",
         commands = commands,
-    )
-
-def container_run_and_extract(name, image, commands, extract_file):
-    """Macro to wrap the run_and_extract implementation.
-
-    This rule runs a set of commands in a given image, waits for the commands
-    to finish, and then extracts a given file from the container to the
-    bazel-out directory.
-
-    Args:
-        name: A unique name for this rule.
-        image: The image to run the commands in.
-        commands: A list of commands to run (sequentially) in the container.
-        extract_file: The file to extract from the container.
-    """
-    image_tar, intermediate_image = _rename_image(image, name)
-
-    _run_and_extract(
-        name = name,
-        image_name = intermediate_image,
-        image_tar = image_tar + ".tar",
-        commands = commands,
-        extract_file = extract_file,
-        output_file = name + extract_file,
     )
 
 def _process_commands(command_list):

@@ -48,7 +48,7 @@ sh_test(
 
 add_apt_key(
     name = "ubuntu_gpg_image",
-    image = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
+    image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
     keys = [
         "@bazel_gpg//file",
     ],
@@ -88,7 +88,7 @@ rule_test(
 
 add_apt_key(
     name = "gpg_image",
-    image = "//debian/reproducible:debian9",
+    image_tar = "//debian/reproducible:debian9.tar",
     keys = [
         "@bazel_gpg//file",
         "@launchpad_openjdk_gpg//file",
