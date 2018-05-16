@@ -39,7 +39,7 @@ genrule(
     name = "ubuntu_16_0_4_vanilla_reproducible",
     srcs = ["@ubuntu_16_0_4_tar_download//file"],
     outs = ["ubuntu_16_0_4_vanilla_reproducible.tar"],
-    cmd = "cp $< temp.tar.gz && gunzip temp.tar.gz && tar --delete var/log/dpkg.log var/cache/apt/pkgcache.bin var/cache/ldconfig/aux-cache -f temp.tar && mv temp.tar $@",
+    cmd = "cp $< temp.tar.gz && gunzip temp.tar.gz && tar --delete var/log/dpkg.log var/cache/ldconfig/aux-cache -f temp.tar && mv temp.tar $@",
 )
 
 # There's a slightly different list of files to clean in 18_0_4.
@@ -59,12 +59,13 @@ genrule(
 
 [bootstrap_image_macro(
     name = "bootstrap_ubuntu_%s" % version,
-    date = "20180515",
+    date = "20180516",
     image_tar = ":ubuntu_%s_vanilla.tar" % version,
     output_image_name = "ubuntu_%s" % version,
     packages = [
         "ca-certificates",
         "curl",
+        "libc-bin",
         "netbase",
     ],
     store_location = "ubuntu/%s/builds" % version,

@@ -29,8 +29,8 @@ git_repository(
 
 load(
     "@io_bazel_rules_docker//docker:docker.bzl",
-    "docker_repositories",
     "docker_pull",
+    "docker_repositories",
 )
 
 git_repository(
@@ -68,9 +68,9 @@ git_repository(
 
 load(
     "@distroless//package_manager:package_manager.bzl",
-    "package_manager_repositories",
-    "dpkg_src",
     "dpkg_list",
+    "dpkg_src",
+    "package_manager_repositories",
 )
 
 package_manager_repositories()
@@ -116,7 +116,7 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_go/releases/download/0.11.0/rules_go-0.11.0.tar.gz",
 )
 
-load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains")
+load("@io_bazel_rules_go//go:def.bzl", "go_register_toolchains", "go_rules_dependencies")
 
 go_rules_dependencies()
 
@@ -124,12 +124,12 @@ go_register_toolchains()
 
 UBUNTU_MAP = {
     "16_0_4": {
-        "sha256": "51a8c466269bdebf232cac689aafad8feacd64804b13318c01096097a186d051",
-        "url": "https://storage.googleapis.com/ubuntu_tar/20171028/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
+        "sha256": "af1117726fe4c17692bf9c60dc4ff7cadfe8545affb91e71f1ce90a3143f0b03",
+        "url": "https://storage.googleapis.com/ubuntu_tar/20180516/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
     },
     "18_0_4": {
-        "sha256": "976134ce226c39610c3296a089a9e735160a2b472a67a31125a8f97f0dfbe118",
-        "url": "https://storage.googleapis.com/ubuntu_tar/20180417/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
+        "sha256": "9256337473faab9bc070609c2b7bd977735aa7cad117feb93f545346846c4cb9",
+        "url": "https://storage.googleapis.com/ubuntu_tar/20180516/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
     },
 }
 
