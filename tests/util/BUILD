@@ -25,8 +25,8 @@ load(
 )
 load(
     "@bazel_tools//tools/build_rules:test_rules.bzl",
-    "rule_test",
     "file_test",
+    "rule_test",
 )
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")

@@ -2,8 +2,8 @@ package(default_visibility = ["//visibility:public"])
 
 load(
     "@bazel_tools//tools/build_rules:test_rules.bzl",
-    "rule_test",
     "file_test",
+    "rule_test",
 )
 load("//package_managers:download_pkgs.bzl", "download_pkgs")
 load("//package_managers:install_pkgs.bzl", "install_pkgs")
