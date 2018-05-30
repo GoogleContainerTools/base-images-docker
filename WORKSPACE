@@ -141,7 +141,7 @@ UBUNTU_MAP = {
 
 http_file(
     name = "bazel_gpg",
-    sha256 = "e0e806160454a3e5e308188439525896bf9881f1f2f0b887192428f517da4131",
+    sha256 = "30af2ca7abfb65987cd61802ca6e352aadc6129dfb5bfc9c81f16617bc3a4416",
     url = "https://bazel.build/bazel-release.pub.gpg",
 )
 
