@@ -150,6 +150,9 @@ def strip_config(path, new_diff_ids):
     # Base container info is not required and changes every build, so delete it.
     if 'container' in config:
       del config['container']
+    if ('config' in config and
+        'Hostname' in config['config']):
+      del config['config']['Hostname']
     if ('container_config' in config and
         'Hostname' in config['container_config']):
       del config['container_config']['Hostname']
