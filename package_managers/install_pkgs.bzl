@@ -82,9 +82,6 @@ def _impl(ctx, image_tar=None, installables_tar=None, installation_cleanup_comma
       output = install_script,
       executable = True,
   )
-
-  builder_image_name = "bazel/%s:%s" % (image_tar.owner.package,
-                                        image_tar.basename.split(".tar")[0])
   unstripped_tar = ctx.actions.declare_file(output_tar.basename + ".unstripped")
 
   build_contents = """\
@@ -93,19 +90,21 @@ set -ex
 # Load utils
 source {util_script}
 
-docker load --input {base_image_tar}
+# Load the image and remember its name
+image_name=$(sh {image_loader_path} {base_image_tar})
 
-cid=$(docker run -d -v $(pwd)/{installables_tar}:/tmp/{installables_tar} -v $(pwd)/{installer_script}:/tmp/installer.sh --privileged {base_image_name} /tmp/installer.sh)
+
+cid=$(docker run -d -v $(pwd)/{installables_tar}:/tmp/{installables_tar} -v $(pwd)/{installer_script}:/tmp/installer.sh --privileged $image_name /tmp/installer.sh)
 
 docker attach $cid || true
 
-reset_cmd {base_image_name} $cid {output_image_name}
+reset_cmd $image_name $cid {output_image_name}
 docker save {output_image_name} > {output_file_name}
 docker rm $cid""".format(util_script=ctx.file._image_utils.path,
            base_image_tar=image_tar.path,
-           base_image_name=builder_image_name,
            installables_tar=installables_tar_path,
            installer_script=install_script.path,
+           image_loader_path = ctx.file._image_loader.path,
            output_file_name=unstripped_tar.path,
            output_image_name=output_image_name
   )
@@ -117,7 +116,7 @@ docker rm $cid""".format(util_script=ctx.file._image_utils.path,
   )
   ctx.actions.run(
     outputs=[unstripped_tar],
-    inputs=[image_tar, install_script, installables_tar, ctx.file._image_utils],
+    inputs=[image_tar, install_script, installables_tar, ctx.file._image_utils, ctx.file._image_loader],
     executable=script,
   )
 
@@ -162,6 +161,11 @@ _attrs = {
         default = "//util:image_util.sh",
         allow_files = True,
         single_file = True,
+    ),
+    "_image_loader": attr.label(
+      default = "//util:image_loader.sh",
+      allow_files = True,
+      single_file = True,
     ),
 }
 
