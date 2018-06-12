@@ -83,6 +83,6 @@ container_test(
 sh_test(
     name = "image_loader_test",
     srcs = ["image_loader_test.sh"],
+    args = ["$(location //util:image_loader.sh)"],
     data = ["//util:image_loader.sh"],
-    args = ["$(location //util:image_loader.sh)"]
 )
