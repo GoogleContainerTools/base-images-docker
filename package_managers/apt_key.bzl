@@ -104,7 +104,9 @@ def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None, output_exec
                   container_parts = result.container_parts)
 
 
-_attrs = _container.image.attrs + _extract.attrs + {
+_attrs = dict(_container.image.attrs)
+_attrs.update(_extract.attrs)
+_attrs.update({
     "keys": attr.label_list(
         allow_files = True,
         mandatory = True,
@@ -118,7 +120,7 @@ _attrs = _container.image.attrs + _extract.attrs + {
     "commands": attr.string_list(doc = "commands to run"),
     "extract_file": attr.string(doc = "path to file to extract from container"),
     "output_file": attr.string()
-}
+})
 
 _outputs = _container.image.outputs
 
