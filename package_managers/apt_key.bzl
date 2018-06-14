@@ -33,7 +33,7 @@ def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None, output_exec
     """
     name = name or ctx.label.name
     keys = keys or ctx.files.keys
-    image_tar = image_tar or ctx.file.image_tar
+    image_tar = image_tar or ctx.file.image
     gpg_image = gpg_image or ctx.file.gpg_image
     output_executable = output_executable or ctx.outputs.executable
     output_tarball = output_tarball or ctx.outputs.out
@@ -72,15 +72,10 @@ def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None, output_exec
     extract_file_name = "/etc/apt/trusted.gpg"
     extract_file_out = ctx.actions.declare_file(name + "-trusted.gpg")
 
-    # container_image rules always generate an image named 'bazel/$package:$name'.
-    image_name = "bazel/%s:%s" % (key_image_output_tarball.owner.package,
-                                  key_image_output_tarball.basename.split(".tar")[0])
-
     _extract.implementation(
         ctx,
         name = name,
-        image_tar = key_image_output_tarball,
-        image_name = image_name,
+        image = key_image_output_tarball,
         commands = commands,
         extract_file = extract_file_name,
         output_file = extract_file_out,
@@ -116,7 +111,6 @@ _attrs.update({
         single_file = True,
     ),
     # Redeclare following attributes of _extract to be non-mandatory.
-    "image_name": attr.string(doc = "name of image to run commands on"),
     "commands": attr.string_list(doc = "commands to run"),
     "extract_file": attr.string(doc = "path to file to extract from container"),
     "output_file": attr.string()

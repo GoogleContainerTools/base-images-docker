@@ -9,4 +9,5 @@ exports_files([
     "commit.sh.tpl",
     "extract.sh.tpl",
     "image_util.sh",
+    "image_loader.sh",
 ])

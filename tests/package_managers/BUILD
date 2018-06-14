@@ -31,7 +31,7 @@ rule_test(
 file_test(
     name = "test_download_pkgs_docker_run",
     file = ":test_download_pkgs",
-    regexp = ".*docker run -w=\"/\" -d --privileged bazel/ubuntu:ubuntu_16_0_4_vanilla sh -c $'.*",
+    regexp = "image_name=.* ubuntu/ubuntu_16_0_4_vanilla.tar)$",
 )
 
 file_test(
@@ -48,7 +48,7 @@ sh_test(
 
 add_apt_key(
     name = "ubuntu_gpg_image",
-    image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
+    image = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
     keys = [
         "@bazel_gpg//file",
     ],
@@ -88,7 +88,7 @@ rule_test(
 
 add_apt_key(
     name = "gpg_image",
-    image_tar = "//debian/reproducible:debian9.tar",
+    image = "//debian/reproducible:debian9.tar",
     keys = [
         "@bazel_gpg//file",
         "@launchpad_openjdk_gpg//file",

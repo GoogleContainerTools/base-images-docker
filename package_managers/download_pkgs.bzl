@@ -37,7 +37,7 @@ tar -cpf {output}.tar --directory /tmp/install/. `cd /tmp/install/. && ls *.deb`
     packages=' '.join(packages),
     add_additional_repo_commands=_generate_add_additional_repo_commands(ctx, additional_repos))
 
-def _run_download_script(ctx, build_contents, image_tar, output_tar, output_script):
+def _run_download_script(ctx, build_contents, image_tar, output_tar, output_script, image_loader):
     contents = build_contents.replace(image_tar.short_path, image_tar.path)
     contents = contents.replace(output_tar.short_path, output_tar.path)
     # The paths for running within bazel build are different and hence replace short_path
@@ -50,7 +50,7 @@ def _run_download_script(ctx, build_contents, image_tar, output_tar, output_scri
     ctx.actions.run(
         outputs = [output_tar],
         executable = output_script,
-        inputs = [image_tar],
+        inputs = [image_tar, image_loader],
     )
 
 def _impl(ctx, image_tar=None, packages=None, additional_repos=None, output_executable=None, output_tar=None, output_script=None):
@@ -72,35 +72,34 @@ def _impl(ctx, image_tar=None, packages=None, additional_repos=None, output_exec
     output_tar = output_tar or ctx.outputs.pkg_tar
     output_script = output_script or ctx.outputs.build_script
 
-    # docker_build rules always generate an image named 'bazel/$package:$name'.
-    builder_image_name = "bazel/%s:%s" % (image_tar.owner.package,
-                                          image_tar.basename.split(".tar")[0])
-
     # Generate a shell script to run apt_get inside this docker image.
     # TODO(tejaldesai): Replace this by docker_run rule
     build_contents = """\
 #!/bin/bash
 set -ex
-docker load --input {image_tar}
+
+# Load the image and remember its name
+image_name=$(sh {image_loader_path} {image_tar})
+
 # Run the builder image.
-cid=$(docker run -w="/" -d --privileged {image_name} sh -c $'{download_commands}')
+cid=$(docker run -w="/" -d --privileged $image_name sh -c $'{download_commands}')
 docker attach $cid
 docker cp $cid:{installables}.tar {output}
 # Cleanup
 docker rm $cid
  """.format(image_tar=image_tar.short_path,
-            image_name=builder_image_name,
             installables=ctx.attr.name,
             download_commands=_generate_download_commands(ctx, packages, additional_repos),
             output=output_tar.short_path,
+            image_loader_path = ctx.file._image_loader.path,
             )
-    _run_download_script(ctx, build_contents, image_tar, output_tar, output_script)
+    _run_download_script(ctx, build_contents, image_tar, output_tar, output_script, ctx.file._image_loader)
     ctx.actions.write(
         output = output_executable,
         content = build_contents,
     )
     return struct(
-        runfiles = ctx.runfiles(files = [image_tar, output_script]),
+        runfiles = ctx.runfiles(files = [image_tar, output_script, ctx.file._image_loader]),
         files = depset([output_executable])
     )
 
@@ -114,6 +113,11 @@ _attrs = {
         mandatory = True,
     ),
     "additional_repos": attr.string_list(),
+    "_image_loader": attr.label(
+      default = "//util:image_loader.sh",
+      allow_files = True,
+      single_file = True,
+    ),
 }
 
 _outputs = {
