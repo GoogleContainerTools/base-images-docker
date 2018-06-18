@@ -133,14 +133,14 @@ download_pkgs(
 )
 
 install_pkgs(
-    name = "install_git_for_reproducibility1",
+    name = "install_git_for_reproducibility_1",
     image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
     installables_tar = ":download_pkg_git.tar",
     output_image_name = "test_install_pkgs_duplicate",
 )
 
 install_pkgs(
-    name = "install_git_for_reproducibility2",
+    name = "install_git_for_reproducibility_2",
     image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
     installables_tar = ":download_pkg_git.tar",
     output_image_name = "test_install_pkgs_duplicate",
@@ -149,7 +149,7 @@ install_pkgs(
 compare_ids_test(
     name = "install_pkgs_reproducibility_test",
     tars = [
-        ":install_git_for_reproducibility1",
-        ":install_git_for_reproducibility2",
+        ":install_git_for_reproducibility_1",
+        ":install_git_for_reproducibility_2",
     ],
 )
