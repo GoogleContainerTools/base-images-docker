@@ -91,20 +91,21 @@ set -ex
 source {util_script}
 
 # Load the image and remember its name
-image_name=$(sh {image_loader_path} {base_image_tar})
+image_id=$(sh {image_id_extractor_path} {base_image_tar})
+docker load -i {base_image_tar}
 
 
-cid=$(docker run -d -v $(pwd)/{installables_tar}:/tmp/{installables_tar} -v $(pwd)/{installer_script}:/tmp/installer.sh --privileged $image_name /tmp/installer.sh)
+cid=$(docker run -d -v $(pwd)/{installables_tar}:/tmp/{installables_tar} -v $(pwd)/{installer_script}:/tmp/installer.sh --privileged $image_id /tmp/installer.sh)
 
 docker attach $cid || true
 
-reset_cmd $image_name $cid {output_image_name}
+reset_cmd $image_id $cid {output_image_name}
 docker save {output_image_name} > {output_file_name}
 docker rm $cid""".format(util_script=ctx.file._image_utils.path,
            base_image_tar=image_tar.path,
            installables_tar=installables_tar_path,
            installer_script=install_script.path,
-           image_loader_path = ctx.file._image_loader.path,
+           image_id_extractor_path = ctx.file._image_id_extractor.path,
            output_file_name=unstripped_tar.path,
            output_image_name=output_image_name
   )
@@ -116,7 +117,7 @@ docker rm $cid""".format(util_script=ctx.file._image_utils.path,
   )
   ctx.actions.run(
     outputs=[unstripped_tar],
-    inputs=[image_tar, install_script, installables_tar, ctx.file._image_utils, ctx.file._image_loader],
+    inputs=[image_tar, install_script, installables_tar, ctx.file._image_utils, ctx.file._image_id_extractor],
     executable=script,
   )
 
@@ -162,8 +163,8 @@ _attrs = {
         allow_files = True,
         single_file = True,
     ),
-    "_image_loader": attr.label(
-      default = "//util:image_loader.sh",
+    "_image_id_extractor": attr.label(
+      default = "@io_bazel_rules_docker//contrib:extract_image_id.sh",
       allow_files = True,
       single_file = True,
     ),

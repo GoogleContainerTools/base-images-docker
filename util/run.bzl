@@ -54,14 +54,14 @@ def _extract_impl(ctx, name = "", image = None, commands = None, extract_file = 
             "%{commands}": _process_commands(commands),
             "%{extract_file}": extract_file,
             "%{output}": output_file.path,
-            "%{image_loader_path}": ctx.file._image_loader.path,
+            "%{image_id_extractor_path}": ctx.file._image_id_extractor.path,
         },
         is_executable=True,
     )
 
     ctx.actions.run(
         outputs = [output_file],
-        inputs = [image, ctx.file._image_loader],
+        inputs = [image, ctx.file._image_id_extractor],
         executable = script,
     )
 
@@ -89,8 +89,8 @@ _extract_attrs = {
         allow_files = True,
         single_file = True,
     ),
-    "_image_loader": attr.label(
-      default = "//util:image_loader.sh",
+    "_image_id_extractor": attr.label(
+      default = "@io_bazel_rules_docker//contrib:extract_image_id.sh",
       allow_files = True,
       single_file = True,
     ),
@@ -146,12 +146,12 @@ def _commit_impl(ctx):
           "%{image_tar}": ctx.file.image.path,
           "%{commands}": _process_commands(ctx.attr.commands),
           "%{output_tar}": ctx.outputs.out.path,
-          "%{image_loader_path}": ctx.file._image_loader.path,
+          "%{image_id_extractor_path}": ctx.file._image_id_extractor.path,
         },
         is_executable=True,
     )
 
-    runfiles = [ctx.file.image, ctx.file._image_utils, ctx.file._image_loader] + \
+    runfiles = [ctx.file.image, ctx.file._image_utils, ctx.file._image_id_extractor] + \
                 ctx.attr.image.files.to_list() + \
                 ctx.attr.image.data_runfiles.files.to_list()
 
@@ -173,7 +173,7 @@ Args:
     image: Tarball of image to run commands on.
     commands: A list of commands to run (sequentially) in the container.
     _run_tpl: Template for generated script to run docker commands.
-    _image_loader: A script to load a tar ball into docker while also remembering its name/id
+    _image_id_extractor: A script to extract a tarball's image's id
 """
 container_run_and_commit = rule(
     attrs = {
@@ -198,8 +198,8 @@ container_run_and_commit = rule(
             allow_files = True,
             single_file = True,
         ),
-        "_image_loader": attr.label(
-          default = "//util:image_loader.sh",
+        "_image_id_extractor": attr.label(
+          default = "@io_bazel_rules_docker//contrib:extract_image_id.sh",
           allow_files = True,
           single_file = True,
         ),

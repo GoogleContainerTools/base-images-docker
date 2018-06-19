@@ -79,10 +79,3 @@ container_test(
     configs = [":container_commit.yaml"],
     image = ":test_container_commit_image",
 )
-
-sh_test(
-    name = "image_loader_test",
-    srcs = ["image_loader_test.sh"],
-    args = ["$(location //util:image_loader.sh)"],
-    data = ["//util:image_loader.sh"],
-)
