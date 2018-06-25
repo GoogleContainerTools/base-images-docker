@@ -8,10 +8,10 @@ every time.
 
 ### Usage
 
-Use `gcloud container builds submit --config=reproducible/cloudbuild.yaml .`
+Use `gcloud container builds submit --config=debian/reproducible/cloudbuild.yaml .`
 to build the image in the cloud.
-To build locally, use: `bazel build //reproducible:debian8`.
-To run tests locally, use: `bazel test //reproducible:debian8_test`.
+To build locally, use: `bazel build //debian/reproducible:debian8`.
+To run tests locally, use: `bazel test //debian/reproducible:debian8_test`.
 
 
 ### Process
@@ -33,4 +33,6 @@ See the `mkimage.sh` script for this portion of the process.
 #### Updates
 
 To update the debian package versions used in the build,
-modify the `SNAPSHOT` variable in the `BUILD` file in this directory.
+modify the `DEB_SNAPSHOT` variable in the top-level `WORKSPACE` file
+(along with its accompanying SHA256 checksum),
+as well as in the `BUILD` file in this directory.
