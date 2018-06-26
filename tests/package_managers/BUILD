@@ -9,6 +9,7 @@ load("//package_managers:download_pkgs.bzl", "download_pkgs")
 load("//package_managers:install_pkgs.bzl", "install_pkgs")
 load("//package_managers:apt_key.bzl", "add_apt_key")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
+load("@io_bazel_rules_docker//contrib:compare_ids_test.bzl", "compare_ids_test")
 load("//package_managers:bootstrap_image.bzl", "bootstrap_image_macro")
 
 download_pkgs(
@@ -119,4 +120,36 @@ rule_test(
         "bootstrap_ubuntu-layer.tar",
     ],
     rule = "bootstrap_ubuntu",
+)
+
+# Testing reproducibility of install_pkgs
+
+download_pkgs(
+    name = "download_pkg_git",
+    image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
+    packages = [
+        "git",
+    ],
+)
+
+install_pkgs(
+    name = "install_git_for_reproducibility_1",
+    image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
+    installables_tar = ":download_pkg_git.tar",
+    output_image_name = "test_install_pkgs_duplicate",
+)
+
+install_pkgs(
+    name = "install_git_for_reproducibility_2",
+    image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
+    installables_tar = ":download_pkg_git.tar",
+    output_image_name = "test_install_pkgs_duplicate",
+)
+
+compare_ids_test(
+    name = "install_pkgs_reproducibility_test",
+    tars = [
+        ":install_git_for_reproducibility_1",
+        ":install_git_for_reproducibility_2",
+    ],
 )

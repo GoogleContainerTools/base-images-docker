@@ -23,7 +23,7 @@ workspace(name = "base_images_docker")
 # Docker rules.
 git_repository(
     name = "io_bazel_rules_docker",
-    commit = "1144f83122750fe4aca139bd0f205d99c9bd94c1",
+    commit = "666d5cb083f0da1fd3157a990cbcb1de61c0d949",
     remote = "https://github.com/bazelbuild/rules_docker.git",
 )
 
@@ -41,8 +41,23 @@ git_repository(
 
 git_repository(
     name = "structure_test",
-    commit = "fa9226712ab31e808b240a616056e2abc2fdf40a",
+    commit = "61f1d2f394e1fa1cd62f703cd51a8300e225da5a",
     remote = "https://github.com/GoogleCloudPlatform/container-structure-test.git",
+)
+
+git_repository(
+    name = "runtimes_common",
+    commit = "9828ee5659320cebbfd8d34707c36648ca087888",
+    remote = "https://github.com/GoogleCloudPlatform/runtimes-common.git",
+)
+
+new_http_archive(
+    name = "docker_credential_gcr",
+    build_file_content = """package(default_visibility = ["//visibility:public"])
+exports_files(["docker-credential-gcr"])""",
+    sha256 = "3f02de988d69dc9c8d242b02cc10d4beb6bab151e31d63cb6af09dd604f75fce",
+    type = "tar.gz",
+    url = "https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/download/v1.4.3/docker-credential-gcr_linux_amd64-1.4.3.tar.gz",
 )
 
 git_repository(
