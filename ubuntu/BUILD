@@ -15,13 +15,6 @@ UBUNTU_ENV = {
     "DEBIAN_FRONTEND": "noninteractive",
 }
 
-# 'ubuntu_16_0_4' is a ubuntu_%s rootfs w/ ca-certificates, curl, and netbase
-dockerfile_build(
-    name = "ubuntu_16_0_4",
-    base = ":ubuntu_16_0_4_vanilla",
-    dockerfile = ":Dockerfile.ubuntu",
-)
-
 # The overlay directory contains files that should be overlaid into the rootfs at /.
 pkg_tar(
     name = "overlay",
