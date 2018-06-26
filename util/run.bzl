@@ -215,18 +215,3 @@ def _process_commands(command_list):
     # Use the $ to allow escape characters in string
     return 'sh -c $\"{0}\"'.format(" && ".join(command_list))
 
-def _rename_image(image, name):
-    # TODO(nkubala): this should live in rules_docker
-
-    """A macro to predictably rename the image under test."""
-    intermediate_image_name = "%s:intermediate" % image.replace(':', '').replace('@', '').replace('/', '')
-    image_tar_name = "intermediate_bundle_%s" % name
-
-    # Give the image a predictable name when loaded
-    container_bundle(
-        name = image_tar_name,
-        images = {
-            intermediate_image_name: image,
-        }
-    )
-    return image_tar_name, intermediate_image_name
