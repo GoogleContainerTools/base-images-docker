@@ -139,12 +139,12 @@ go_register_toolchains()
 
 UBUNTU_MAP = {
     "16_0_4": {
-        "sha256": "af1117726fe4c17692bf9c60dc4ff7cadfe8545affb91e71f1ce90a3143f0b03",
-        "url": "https://storage.googleapis.com/ubuntu_tar/20180516/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
+        "sha256": "7faa16873c39a5b7485ac1e38dbcdbf1066005b8e975d3abb7a9375e32351aa3",
+        "url": "https://storage.googleapis.com/ubuntu_tar/20180620/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
     },
     "18_0_4": {
-        "sha256": "9256337473faab9bc070609c2b7bd977735aa7cad117feb93f545346846c4cb9",
-        "url": "https://storage.googleapis.com/ubuntu_tar/20180516/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
+        "sha256": "19cb81b929fa41210f4e76f8f27141482518aad65876540aef6d714837248489",
+        "url": "https://storage.googleapis.com/ubuntu_tar/20180625/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
     },
 }
 
