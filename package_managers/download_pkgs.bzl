@@ -37,7 +37,7 @@ tar -cpf {output}.tar --directory /tmp/install/. `cd /tmp/install/. && ls *.deb`
     packages=' '.join(packages),
     add_additional_repo_commands=_generate_add_additional_repo_commands(ctx, additional_repos))
 
-def _run_download_script(ctx, build_contents, image_tar, output_tar, output_script, image_loader):
+def _run_download_script(ctx, build_contents, image_tar, output_tar, output_script, image_id_extractor):
     contents = build_contents.replace(image_tar.short_path, image_tar.path)
     contents = contents.replace(output_tar.short_path, output_tar.path)
     # The paths for running within bazel build are different and hence replace short_path
@@ -50,7 +50,7 @@ def _run_download_script(ctx, build_contents, image_tar, output_tar, output_scri
     ctx.actions.run(
         outputs = [output_tar],
         executable = output_script,
-        inputs = [image_tar, image_loader],
+        inputs = [image_tar, image_id_extractor],
     )
 
 def _impl(ctx, image_tar=None, packages=None, additional_repos=None, output_executable=None, output_tar=None, output_script=None):
@@ -79,10 +79,11 @@ def _impl(ctx, image_tar=None, packages=None, additional_repos=None, output_exec
 set -ex
 
 # Load the image and remember its name
-image_name=$(sh {image_loader_path} {image_tar})
+image_id=$(sh {image_id_extractor_path} {image_tar})
+docker load -i {image_tar}
 
 # Run the builder image.
-cid=$(docker run -w="/" -d --privileged $image_name sh -c $'{download_commands}')
+cid=$(docker run -w="/" -d --privileged $image_id sh -c $'{download_commands}')
 docker attach $cid
 docker cp $cid:{installables}.tar {output}
 # Cleanup
@@ -91,15 +92,15 @@ docker rm $cid
             installables=ctx.attr.name,
             download_commands=_generate_download_commands(ctx, packages, additional_repos),
             output=output_tar.short_path,
-            image_loader_path = ctx.file._image_loader.path,
+            image_id_extractor_path = ctx.file._image_id_extractor.path,
             )
-    _run_download_script(ctx, build_contents, image_tar, output_tar, output_script, ctx.file._image_loader)
+    _run_download_script(ctx, build_contents, image_tar, output_tar, output_script, ctx.file._image_id_extractor)
     ctx.actions.write(
         output = output_executable,
         content = build_contents,
     )
     return struct(
-        runfiles = ctx.runfiles(files = [image_tar, output_script, ctx.file._image_loader]),
+        runfiles = ctx.runfiles(files = [image_tar, output_script, ctx.file._image_id_extractor]),
         files = depset([output_executable])
     )
 
@@ -113,8 +114,8 @@ _attrs = {
         mandatory = True,
     ),
     "additional_repos": attr.string_list(),
-    "_image_loader": attr.label(
-      default = "//util:image_loader.sh",
+    "_image_id_extractor": attr.label(
+        default = "@io_bazel_rules_docker//contrib:extract_image_id.sh",
       allow_files = True,
       single_file = True,
     ),

@@ -32,7 +32,7 @@ rule_test(
 file_test(
     name = "test_download_pkgs_docker_run",
     file = ":test_download_pkgs",
-    regexp = "image_name=.* ubuntu/ubuntu_16_0_4_vanilla.tar)$",
+    regexp = "image_id.* ubuntu/ubuntu_16_0_4_vanilla.tar)$",
 )
 
 file_test(
