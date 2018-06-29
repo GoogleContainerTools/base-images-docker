@@ -23,7 +23,7 @@ workspace(name = "base_images_docker")
 # Docker rules.
 git_repository(
     name = "io_bazel_rules_docker",
-    commit = "666d5cb083f0da1fd3157a990cbcb1de61c0d949",
+    commit = "7401cb256222615c497c0dee5a4de5724a4f4cc7",
     remote = "https://github.com/bazelbuild/rules_docker.git",
 )
 
