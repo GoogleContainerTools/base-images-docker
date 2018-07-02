@@ -148,7 +148,7 @@ install_pkgs(
 
 compare_ids_test(
     name = "install_pkgs_reproducibility_test",
-    tars = [
+    images = [
         ":install_git_for_reproducibility_1",
         ":install_git_for_reproducibility_2",
     ],
