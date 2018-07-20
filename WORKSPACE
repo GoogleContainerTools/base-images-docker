@@ -20,11 +20,14 @@ the host machine.
 
 workspace(name = "base_images_docker")
 
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
 # Docker rules.
-git_repository(
+http_archive(
     name = "io_bazel_rules_docker",
-    commit = "7401cb256222615c497c0dee5a4de5724a4f4cc7",
-    remote = "https://github.com/bazelbuild/rules_docker.git",
+    sha256 = "b4775b7c4fc76e3113dab643ee35eefbabca0b44908d0d1c85dcf29cab7c0638",
+    strip_prefix = "rules_docker-c7a93454d27e09ef707dfca53887ed0ff4372f04",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/c7a93454d27e09ef707dfca53887ed0ff4372f04.tar.gz"],
 )
 
 load(

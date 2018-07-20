@@ -90,7 +90,7 @@ _extract_attrs = {
         single_file = True,
     ),
     "_image_id_extractor": attr.label(
-      default = "@io_bazel_rules_docker//contrib:extract_image_id.sh",
+      default = "@io_bazel_rules_docker//contrib:extract_image_id.py",
       allow_files = True,
       single_file = True,
     ),
@@ -199,7 +199,7 @@ container_run_and_commit = rule(
             single_file = True,
         ),
         "_image_id_extractor": attr.label(
-          default = "@io_bazel_rules_docker//contrib:extract_image_id.sh",
+          default = "@io_bazel_rules_docker//contrib:extract_image_id.py",
           allow_files = True,
           single_file = True,
         ),
