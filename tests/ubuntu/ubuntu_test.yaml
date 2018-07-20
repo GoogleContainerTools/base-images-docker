@@ -24,7 +24,7 @@ fileExistenceTests:
   shouldExist: true
   permissions: 'drwxr-xr-x'
 metadataTest:
-  command: ["/bin/bash"]
+  cmd: ["/bin/bash"]
   env:
         - key: PATH
           value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin

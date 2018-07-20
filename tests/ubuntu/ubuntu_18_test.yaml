@@ -28,4 +28,4 @@ fileExistenceTests:
   shouldExist: true
   permissions: 'drwxr-xr-x'
 metadataTest:
-  command: ["/bin/bash"]
+  cmd: ["/bin/bash"]
