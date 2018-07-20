@@ -83,7 +83,7 @@ def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None, output_exec
 
     # Build the final image with additional gpg keys in it.
 
-    result = _container.image.implementation(
+    return _container.image.implementation(
         ctx,
         name=name,
         base=image_tar,
@@ -93,11 +93,6 @@ def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None, output_exec
         output_tarball=output_tarball,
         output_layer=output_layer
     )
-
-    return struct(runfiles = result.runfiles,
-                  files = result.files,
-                  container_parts = result.container_parts)
-
 
 _attrs = dict(_container.image.attrs)
 _attrs.update(_extract.attrs)
