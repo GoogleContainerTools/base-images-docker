@@ -11,4 +11,4 @@ commandTests:
 fileContentTests:
 - name: 'Curl'
   path: '/var/lib/dpkg/status'
-  contents: '*curl*'
+  expectedContents: ['.*curl.*']
