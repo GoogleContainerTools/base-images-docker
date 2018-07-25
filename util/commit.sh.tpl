@@ -6,7 +6,7 @@ set -ex
 source %{util_script}
 
 # Load the image and remember its name
-image_id=$(sh %{image_id_extractor_path} %{image_tar})
+image_id=$(python %{image_id_extractor_path} %{image_tar})
 docker load -i %{image_tar}
 
 id=$(docker run -d $image_id %{commands})

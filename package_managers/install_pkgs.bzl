@@ -91,7 +91,7 @@ set -ex
 source {util_script}
 
 # Load the image and remember its name
-image_id=$(sh {image_id_extractor_path} {base_image_tar})
+image_id=$(python {image_id_extractor_path} {base_image_tar})
 docker load -i {base_image_tar}
 
 
@@ -164,7 +164,7 @@ _attrs = {
         single_file = True,
     ),
     "_image_id_extractor": attr.label(
-      default = "@io_bazel_rules_docker//contrib:extract_image_id.sh",
+      default = "@io_bazel_rules_docker//contrib:extract_image_id.py",
       allow_files = True,
       single_file = True,
     ),

@@ -79,7 +79,7 @@ def _impl(ctx, image_tar=None, packages=None, additional_repos=None, output_exec
 set -ex
 
 # Load the image and remember its name
-image_id=$(sh {image_id_extractor_path} {image_tar})
+image_id=$(python {image_id_extractor_path} {image_tar})
 docker load -i {image_tar}
 
 # Run the builder image.
@@ -115,7 +115,7 @@ _attrs = {
     ),
     "additional_repos": attr.string_list(),
     "_image_id_extractor": attr.label(
-        default = "@io_bazel_rules_docker//contrib:extract_image_id.sh",
+        default = "@io_bazel_rules_docker//contrib:extract_image_id.py",
       allow_files = True,
       single_file = True,
     ),
