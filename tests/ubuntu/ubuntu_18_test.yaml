@@ -20,7 +20,7 @@ commandTests:
   excludedOutput: ['.*no packages found matching.*']
 fileContentTests:
 - name: 'Ubuntu Distro Check'
-  expectedContents: ['.*NAME="Ubuntu".*', '.*VERSION="18.04 LTS \(Bionic Beaver\)".*']
+  expectedContents: ['.*NAME="Ubuntu".*', '.*VERSION="18.04.1 LTS \(Bionic Beaver\)".*']
   path: '/etc/os-release'
 fileExistenceTests:
 - name: 'Root'
