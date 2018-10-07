@@ -5,3 +5,4 @@ mkdebootstrap/mkimage/
 mkdebootstrap/Dockerfile
 bazel-*
 rootfs.tar.gz
+centos/layer.tar
