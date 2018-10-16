@@ -17,7 +17,9 @@
 load("@io_bazel_rules_docker//container:container.bzl", _container = "container")
 load("@base_images_docker//util:run.bzl", _extract = "extract")
 
-def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None, output_executable=None, output_tarball=None, output_layer=None):
+def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None,
+    output_executable=None, output_tarball=None, output_layer=None,
+    output_digest=None):
     """Implementation for the add_apt_key rule.
 
     Args:
@@ -30,6 +32,7 @@ def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None, output_exec
             overrides ctx.outputs.executable
         output_tarball: File, overrides ctx.outputs.out
         output_layer: File, overrides ctx.outputs.layer
+        output_digest: File, overrides ctx.outputs.digest
     """
     name = name or ctx.label.name
     keys = keys or ctx.files.keys
@@ -38,6 +41,7 @@ def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None, output_exec
     output_executable = output_executable or ctx.outputs.executable
     output_tarball = output_tarball or ctx.outputs.out
     output_layer = output_layer or ctx.outputs.layer
+    output_digest = output_digest or ctx.outputs.digest
 
     # First build an image capable of adding an apt-key.
     # This requires the keyfile and the "gnupg package."
@@ -51,6 +55,7 @@ def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None, output_exec
     key_image_output_executable = ctx.actions.declare_file("%s" % key_image)
     key_image_output_tarball = ctx.actions.declare_file("%s.tar" % key_image)
     key_image_output_layer = ctx.actions.declare_file("%s-layer.tar" % key_image)
+    key_image_output_digest = ctx.actions.declare_file("%s.digest" % key_image)
 
     key_image_result = _container.image.implementation(
         ctx,
@@ -60,7 +65,8 @@ def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None, output_exec
         files=keys,
         output_executable=key_image_output_executable,
         output_tarball=key_image_output_tarball,
-        output_layer=key_image_output_layer
+        output_layer=key_image_output_layer,
+        output_digest=key_image_output_digest,
     )
 
     commands = [
@@ -91,7 +97,8 @@ def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None, output_exec
         files=[extract_file_out],
         output_executable=output_executable,
         output_tarball=output_tarball,
-        output_layer=output_layer
+        output_layer=output_layer,
+        output_digest=output_digest,
     )
 
 _attrs = dict(_container.image.attrs)
