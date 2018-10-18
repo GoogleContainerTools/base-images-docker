@@ -163,6 +163,39 @@ def _commit_impl(ctx):
 
     return struct()
 
+
+_commit_attrs = {
+    "image": attr.label(
+        allow_files = True,
+        mandatory = True,
+        single_file = True,
+        cfg = "target",
+    ),
+    "commands": attr.string_list(
+        doc = "commands to run",
+        mandatory = True,
+        non_empty = True,
+    ),
+    "_run_tpl": attr.label(
+        default = Label("//util:commit.sh.tpl"),
+        allow_files = True,
+        single_file = True,
+    ),
+    "_image_utils": attr.label(
+        default = "//util:image_util.sh",
+        allow_files = True,
+        single_file = True,
+    ),
+    "_image_id_extractor": attr.label(
+        default = "@io_bazel_rules_docker//contrib:extract_image_id.py",
+        allow_files = True,
+        single_file = True,
+    ),
+}
+_commit_outputs = {
+    "out": "%{name}_commit.tar",
+}
+
 """Runs commands in a container and commits the container to a new image.
 
 This rule runs a set of commands in a given image, waits for the commands
@@ -176,40 +209,19 @@ Args:
     _image_id_extractor: A script to extract a tarball's image's id
 """
 container_run_and_commit = rule(
-    attrs = {
-        "image": attr.label(
-            allow_files = True,
-            mandatory = True,
-            single_file = True,
-            cfg = "target",
-        ),
-        "commands": attr.string_list(
-            doc = "commands to run",
-            mandatory = True,
-            non_empty = True,
-        ),
-        "_run_tpl": attr.label(
-            default = Label("//util:commit.sh.tpl"),
-            allow_files = True,
-            single_file = True,
-        ),
-        "_image_utils": attr.label(
-            default = "//util:image_util.sh",
-            allow_files = True,
-            single_file = True,
-        ),
-        "_image_id_extractor": attr.label(
-          default = "@io_bazel_rules_docker//contrib:extract_image_id.py",
-          allow_files = True,
-          single_file = True,
-        ),
-    },
+    attrs = _commit_attrs,
     executable = False,
-    outputs = {
-        "out": "%{name}_commit.tar",
-    },
+    outputs = _commit_outputs,
     implementation = _commit_impl,
 )
+
+# Export container_run_and_commit rule for other bazel rules to depend on.
+commit = struct(
+    attrs = _commit_attrs,
+    outputs = _commit_outputs,
+    implementation = _commit_impl,
+)
+
 
 def _process_commands(command_list):
     # Use the $ to allow escape characters in string
