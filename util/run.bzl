@@ -144,8 +144,9 @@ def _commit_impl(ctx,
         output_image_tar: The output image obtained as a result of running
                           the commands on the input image
     """
+
     name = name or ctx.attr.name
-    image = image or ctx.attr.image
+    image = image or ctx.file.image
     commands = commands or ctx.attr.commands
     script = ctx.new_file(name + ".build")
     output_image_tar = output_image_tar or ctx.outputs.out
