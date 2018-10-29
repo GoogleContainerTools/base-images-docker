@@ -124,7 +124,12 @@ container_run_and_extract = rule(
     implementation = _extract_impl,
 )
 
-def _commit_impl(ctx):
+def _commit_impl(ctx,
+    name=None,
+    image=None,
+    commands=None,
+    output_image_tar=None,
+):
     """Implementation for the container_run_and_commit rule.
 
     This rule runs a set of commands in a given image, waits for the commands
@@ -132,8 +137,19 @@ def _commit_impl(ctx):
 
     Args:
         ctx: The bazel rule context
+        image: The input image tarball
+        image_runfiles: Any runfiles that were generated along with the input
+                        image
+        commands: The commands to run in the input imnage container
+        output_image_tar: The output image obtained as a result of running
+                          the commands on the input image
     """
-    script = ctx.new_file(ctx.label.name + ".build")
+
+    name = name or ctx.attr.name
+    image = image or ctx.file.image
+    commands = commands or ctx.attr.commands
+    script = ctx.new_file(name + ".build")
+    output_image_tar = output_image_tar or ctx.outputs.out
 
     # Generate a shell script to execute the run statement
     ctx.actions.expand_template(
@@ -142,21 +158,19 @@ def _commit_impl(ctx):
         substitutions={
           "%{util_script}": ctx.file._image_utils.path,
           "%{output_image}": 'bazel/%s:%s' % (ctx.label.package or 'default',
-                                              ctx.attr.name),
-          "%{image_tar}": ctx.file.image.path,
-          "%{commands}": _process_commands(ctx.attr.commands),
-          "%{output_tar}": ctx.outputs.out.path,
+                                              name),
+          "%{image_tar}": image.path,
+          "%{commands}": _process_commands(commands),
+          "%{output_tar}": output_image_tar.path,
           "%{image_id_extractor_path}": ctx.file._image_id_extractor.path,
         },
         is_executable=True,
     )
 
-    runfiles = [ctx.file.image, ctx.file._image_utils, ctx.file._image_id_extractor] + \
-                ctx.attr.image.files.to_list() + \
-                ctx.attr.image.data_runfiles.files.to_list()
+    runfiles = [image, ctx.file._image_utils, ctx.file._image_id_extractor]
 
     ctx.actions.run(
-        outputs=[ctx.outputs.out],
+        outputs=[output_image_tar],
         inputs=runfiles,
         executable=script,
     )
