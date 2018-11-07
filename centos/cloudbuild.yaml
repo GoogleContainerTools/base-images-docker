@@ -1,6 +1,6 @@
 steps:
 - name: 'docker'
-  args: ['build', '.', '-f', 'Dockerfile.build', '-t', 'builder']
+  args: ['build', '.', '-f', 'centos/Dockerfile.build', '-t', 'builder']
 - name: 'builder'
   args: ['/build.sh']
 - name: 'docker'
