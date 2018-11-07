@@ -25,18 +25,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # Docker rules.
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "f3e5c0500533d58be079db1a24ac909f2e0cd98c9d760f5e506e4d05b56c42dd",
-    strip_prefix = "rules_docker-a9bb1dab84cdf46e34d1b34b53a17bda129b5eba",
-    urls = ["https://github.com/bazelbuild/rules_docker/archive/a9bb1dab84cdf46e34d1b34b53a17bda129b5eba.tar.gz"],
-)
-
-# Register the docker toolchain type
-register_toolchains(
-    # Register the default docker toolchain that expects the 'docker'
-    # executable to be in the PATH
-    "@io_bazel_rules_docker//toolchains/docker:default_linux_toolchain",
-    "@io_bazel_rules_docker//toolchains/docker:default_windows_toolchain",
-    "@io_bazel_rules_docker//toolchains/docker:default_osx_toolchain",
+    sha256 = "d9ee70d2f763ce197e2691f12d69ee8e32b2245a48d53b4365fa239b66405c0c",
+    strip_prefix = "rules_docker-7391b39ccad788524262e106d54adfdbfc3e44d5",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/7391b39ccad788524262e106d54adfdbfc3e44d5.tar.gz"],
 )
 
 load(
