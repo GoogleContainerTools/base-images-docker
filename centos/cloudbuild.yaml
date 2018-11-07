@@ -1,0 +1,8 @@
+steps:
+- name: 'docker'
+  args: ['build', '.', '-f', 'Dockerfile.build', '-t', 'builder']
+- name: 'builder'
+  args: ['/build.sh']
+- name: 'docker'
+  args: ['build', '.', '-t', 'gcr.io/$PROJECT_ID/centos7:$COMMIT_SHA']
+images: ['gcr.io/$PROJECT_ID/centos7:$COMMIT_SHA']
