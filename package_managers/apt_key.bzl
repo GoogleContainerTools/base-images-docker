@@ -85,6 +85,7 @@ def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None,
         commands = commands,
         extract_file = extract_file_name,
         output_file = extract_file_out,
+        script_file = ctx.new_file(name + ".build")
     )
 
     # Build the final image with additional gpg keys in it.

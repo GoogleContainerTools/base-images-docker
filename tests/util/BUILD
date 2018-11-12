@@ -37,6 +37,7 @@ container_run_and_extract(
         "touch /foo.txt",
         "echo 'test' > /foo.txt",
     ],
+    docker_run_flags = ["-u", "root"],
     extract_file = "/foo.txt",
     image = "@debian_base//image",
 )
@@ -53,6 +54,12 @@ file_test(
     name = "test_extracted_file",
     file = "test_container_extract/foo.txt",
     regexp = "test",
+)
+
+file_test(
+    name = "test_extract_script",
+    file = "test_container_extract.build",
+    regexp = "\-u root",
 )
 
 container_run_and_commit(

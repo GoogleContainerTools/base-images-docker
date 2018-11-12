@@ -23,7 +23,7 @@ load(
     "container_bundle",
 )
 
-def _extract_impl(ctx, name = "", image = None, commands = None, extract_file = "", output_file = ""):
+def _extract_impl(ctx, name = "", image = None, commands = None, docker_run_flags = None, extract_file = "", output_file = "", script_file=""):
     """Implementation for the container_run_and_extract rule.
 
     This rule runs a set of commands in a given image, waits for the commands
@@ -35,15 +35,16 @@ def _extract_impl(ctx, name = "", image = None, commands = None, extract_file = 
         name: String, overrides ctx.label.name
         image: File, overrides ctx.file.image_tar
         commands: String list, overrides ctx.attr.commands
+        docker_run_flags: String list, overrides ctx.attr.docker_run_flags
         extract_file: File, overrides ctx.outputs.out
     """
-
     name = name or ctx.label.name
     image = image or ctx.file.image
     commands = commands or ctx.attr.commands
+    docker_run_flags = docker_run_flags or ctx.attr.docker_run_flags
     extract_file = extract_file or ctx.attr.extract_file
     output_file = output_file or ctx.outputs.out
-    script = ctx.new_file(name + ".build")
+    script = script_file or ctx.outputs.script
 
     # Generate a shell script to execute the run statement
     ctx.actions.expand_template(
@@ -52,6 +53,7 @@ def _extract_impl(ctx, name = "", image = None, commands = None, extract_file = 
         substitutions = {
             "%{image_tar}": image.path,
             "%{commands}": _process_commands(commands),
+            "%{docker_run_flags}": ' '.join(docker_run_flags),
             "%{extract_file}": extract_file,
             "%{output}": output_file.path,
             "%{image_id_extractor_path}": ctx.file._image_id_extractor.path,
@@ -80,6 +82,10 @@ _extract_attrs = {
         mandatory = True,
         non_empty = True,
     ),
+    "docker_run_flags": attr.string_list(
+        doc = "Extra flags to pass to the docker run command",
+        mandatory = False,
+    ),
     "extract_file": attr.string(
         doc = "path to file to extract from container",
         mandatory = True,
@@ -98,6 +104,7 @@ _extract_attrs = {
 
 _extract_outputs = {
     "out": "%{name}%{extract_file}",
+    "script": "%{name}.build",
 }
 
 # Export container_run_and_extract rule for other bazel rules to depend on.
