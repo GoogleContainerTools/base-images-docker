@@ -48,6 +48,7 @@ container_run_and_extract(
 rule_test(
     name = "test_container_extract_rule",
     generates = [
+        "test_container_extract.build",
         "test_container_extract/foo.txt",
     ],
     rule = "test_container_extract",
