@@ -37,7 +37,10 @@ container_run_and_extract(
         "touch /foo.txt",
         "echo 'test' > /foo.txt",
     ],
-    docker_run_flags = ["-u", "root"],
+    docker_run_flags = [
+        "-u",
+        "root",
+    ],
     extract_file = "/foo.txt",
     image = "@debian_base//image",
 )

@@ -17,9 +17,16 @@
 load("@io_bazel_rules_docker//container:container.bzl", _container = "container")
 load("@base_images_docker//util:run.bzl", _extract = "extract")
 
-def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None,
-    output_executable=None, output_tarball=None, output_layer=None,
-    output_digest=None):
+def _impl(
+        ctx,
+        name = None,
+        keys = None,
+        image_tar = None,
+        gpg_image = None,
+        output_executable = None,
+        output_tarball = None,
+        output_layer = None,
+        output_digest = None):
     """Implementation for the add_apt_key rule.
 
     Args:
@@ -59,21 +66,21 @@ def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None,
 
     key_image_result = _container.image.implementation(
         ctx,
-        name=key_image,
-        base=gpg_image,
-        directory="/gpg",
-        files=keys,
-        output_executable=key_image_output_executable,
-        output_tarball=key_image_output_tarball,
-        output_layer=key_image_output_layer,
-        output_digest=key_image_output_digest,
+        name = key_image,
+        base = gpg_image,
+        directory = "/gpg",
+        files = keys,
+        output_executable = key_image_output_executable,
+        output_tarball = key_image_output_tarball,
+        output_layer = key_image_output_layer,
+        output_digest = key_image_output_digest,
     )
 
     commands = [
         "apt-get update",
         "apt-get install -y -q gnupg",
         # Put keys in a special directory and use glob.
-        "for file in /gpg/*; do apt-key add \$file; done"
+        "for file in /gpg/*; do apt-key add \$file; done",
     ]
     extract_file_name = "/etc/apt/trusted.gpg"
     extract_file_out = ctx.actions.declare_file(name + "-trusted.gpg")
@@ -85,21 +92,21 @@ def _impl(ctx, name=None, keys=None, image_tar=None, gpg_image=None,
         commands = commands,
         extract_file = extract_file_name,
         output_file = extract_file_out,
-        script_file = ctx.new_file(name + ".build")
+        script_file = ctx.new_file(name + ".build"),
     )
 
     # Build the final image with additional gpg keys in it.
 
     return _container.image.implementation(
         ctx,
-        name=name,
-        base=image_tar,
-        directory="/etc/apt/trusted.gpg.d/",
-        files=[extract_file_out],
-        output_executable=output_executable,
-        output_tarball=output_tarball,
-        output_layer=output_layer,
-        output_digest=output_digest,
+        name = name,
+        base = image_tar,
+        directory = "/etc/apt/trusted.gpg.d/",
+        files = [extract_file_out],
+        output_executable = output_executable,
+        output_tarball = output_tarball,
+        output_layer = output_layer,
+        output_digest = output_digest,
     )
 
 _attrs = dict(_container.image.attrs)
@@ -116,7 +123,7 @@ _attrs.update({
     # Redeclare following attributes of _extract to be non-mandatory.
     "commands": attr.string_list(doc = "commands to run"),
     "extract_file": attr.string(doc = "path to file to extract from container"),
-    "output_file": attr.string()
+    "output_file": attr.string(),
 })
 
 _outputs = _container.image.outputs
