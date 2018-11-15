@@ -23,7 +23,7 @@ load(
     "container_bundle",
 )
 
-def _extract_impl(ctx, name = "", image = None, commands = None, extract_file = "", output_file = ""):
+def _extract_impl(ctx, name = "", image = None, commands = None, docker_run_flags = None, extract_file = "", output_file = "", script_file = ""):
     """Implementation for the container_run_and_extract rule.
 
     This rule runs a set of commands in a given image, waits for the commands
@@ -35,15 +35,16 @@ def _extract_impl(ctx, name = "", image = None, commands = None, extract_file = 
         name: String, overrides ctx.label.name
         image: File, overrides ctx.file.image_tar
         commands: String list, overrides ctx.attr.commands
+        docker_run_flags: String list, overrides ctx.attr.docker_run_flags
         extract_file: File, overrides ctx.outputs.out
     """
-
     name = name or ctx.label.name
     image = image or ctx.file.image
     commands = commands or ctx.attr.commands
+    docker_run_flags = docker_run_flags or ctx.attr.docker_run_flags
     extract_file = extract_file or ctx.attr.extract_file
     output_file = output_file or ctx.outputs.out
-    script = ctx.new_file(name + ".build")
+    script = script_file or ctx.outputs.script
 
     # Generate a shell script to execute the run statement
     ctx.actions.expand_template(
@@ -52,11 +53,12 @@ def _extract_impl(ctx, name = "", image = None, commands = None, extract_file = 
         substitutions = {
             "%{image_tar}": image.path,
             "%{commands}": _process_commands(commands),
+            "%{docker_run_flags}": " ".join(docker_run_flags),
             "%{extract_file}": extract_file,
             "%{output}": output_file.path,
             "%{image_id_extractor_path}": ctx.file._image_id_extractor.path,
         },
-        is_executable=True,
+        is_executable = True,
     )
 
     ctx.actions.run(
@@ -80,6 +82,10 @@ _extract_attrs = {
         mandatory = True,
         non_empty = True,
     ),
+    "docker_run_flags": attr.string_list(
+        doc = "Extra flags to pass to the docker run command",
+        mandatory = False,
+    ),
     "extract_file": attr.string(
         doc = "path to file to extract from container",
         mandatory = True,
@@ -90,14 +96,15 @@ _extract_attrs = {
         single_file = True,
     ),
     "_image_id_extractor": attr.label(
-      default = "@io_bazel_rules_docker//contrib:extract_image_id.py",
-      allow_files = True,
-      single_file = True,
+        default = "@io_bazel_rules_docker//contrib:extract_image_id.py",
+        allow_files = True,
+        single_file = True,
     ),
 }
 
 _extract_outputs = {
     "out": "%{name}%{extract_file}",
+    "script": "%{name}.build",
 }
 
 # Export container_run_and_extract rule for other bazel rules to depend on.
@@ -107,8 +114,7 @@ extract = struct(
     implementation = _extract_impl,
 )
 
-
-'''
+"""
 This rule runs a set of commands in a given image, waits for the commands
     to finish, and then extracts a given file from the container to the
     bazel-out directory.
@@ -117,19 +123,19 @@ This rule runs a set of commands in a given image, waits for the commands
     image: The image to run the commands in.
     commands: A list of commands to run (sequentially) in the container.
     extract_file: The file to extract from the container.
-'''
+"""
 container_run_and_extract = rule(
     attrs = _extract_attrs,
     outputs = _extract_outputs,
     implementation = _extract_impl,
 )
 
-def _commit_impl(ctx,
-    name=None,
-    image=None,
-    commands=None,
-    output_image_tar=None,
-):
+def _commit_impl(
+        ctx,
+        name = None,
+        image = None,
+        commands = None,
+        output_image_tar = None):
     """Implementation for the container_run_and_commit rule.
 
     This rule runs a set of commands in a given image, waits for the commands
@@ -153,30 +159,31 @@ def _commit_impl(ctx,
 
     # Generate a shell script to execute the run statement
     ctx.actions.expand_template(
-        template=ctx.file._run_tpl,
-        output=script,
-        substitutions={
-          "%{util_script}": ctx.file._image_utils.path,
-          "%{output_image}": 'bazel/%s:%s' % (ctx.label.package or 'default',
-                                              name),
-          "%{image_tar}": image.path,
-          "%{commands}": _process_commands(commands),
-          "%{output_tar}": output_image_tar.path,
-          "%{image_id_extractor_path}": ctx.file._image_id_extractor.path,
+        template = ctx.file._run_tpl,
+        output = script,
+        substitutions = {
+            "%{util_script}": ctx.file._image_utils.path,
+            "%{output_image}": "bazel/%s:%s" % (
+                ctx.label.package or "default",
+                name,
+            ),
+            "%{image_tar}": image.path,
+            "%{commands}": _process_commands(commands),
+            "%{output_tar}": output_image_tar.path,
+            "%{image_id_extractor_path}": ctx.file._image_id_extractor.path,
         },
-        is_executable=True,
+        is_executable = True,
     )
 
     runfiles = [image, ctx.file._image_utils, ctx.file._image_id_extractor]
 
     ctx.actions.run(
-        outputs=[output_image_tar],
-        inputs=runfiles,
-        executable=script,
+        outputs = [output_image_tar],
+        inputs = runfiles,
+        executable = script,
     )
 
     return struct()
-
 
 _commit_attrs = {
     "image": attr.label(
@@ -236,8 +243,6 @@ commit = struct(
     implementation = _commit_impl,
 )
 
-
 def _process_commands(command_list):
     # Use the $ to allow escape characters in string
     return 'sh -c $\"{0}\"'.format(" && ".join(command_list))
-
