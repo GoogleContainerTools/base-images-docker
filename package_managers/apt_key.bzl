@@ -139,5 +139,6 @@ add_apt_key = rule(
     attrs = _attrs,
     outputs = _outputs,
     implementation = _impl,
+    toolchains = ["@io_bazel_rules_docker//toolchains/docker:toolchain_type"],
     executable = True,
 )
