@@ -1,0 +1,1077 @@
+discovery_summary:
+  discovery:
+  - createTime: '2018-11-30T16:57:07.850318Z'
+    discovered:
+      analysisStatus: PENDING
+    kind: DISCOVERY
+    name: projects/gcp-runtimes/occurrences/bfdedf87-1ed7-4a78-a68b-ba3d0ddfaea3
+    noteName: projects/goog-analysis/notes/IMAGE_BASIS
+    resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+    updateTime: '2018-11-30T16:57:07.850318Z'
+  - createTime: '2018-11-30T16:57:35.633770Z'
+    discovered:
+      analysisStatus: FINISHED_SUCCESS
+    kind: DISCOVERY
+    name: projects/gcp-runtimes/occurrences/ca775660-9b1c-40b1-97a0-9bd4350953b2
+    noteName: projects/goog-analysis/notes/PACKAGE_VULNERABILITY
+    resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+    updateTime: '2018-11-30T16:58:23.211954Z'
+image_summary:
+  digest: sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+  fully_qualified_digest: gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+  registry: gcr.io
+  repository: gcp-runtimes/centos7
+package_vulnerability_summary:
+  not_fixed_vulnerability_count: 0
+  total_vulnerability_found: 52
+  vulnerabilities:
+    CRITICAL:
+    - createTime: '2018-11-30T16:58:19.742771Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/9b9a23ea-764e-4177-98cd-e2409e60a332
+      noteName: projects/goog-vulnz/notes/CVE-2017-16997
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:21.060594Z'
+      vulnerabilityDetails:
+        cvssScore: 9.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc-common
+            version:
+              name: '2.17'
+              revision: 222.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc-common
+            version:
+              name: '2.17'
+              revision: 260.el7
+          severityName: MEDIUM
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc
+            version:
+              name: '2.17'
+              revision: 222.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc
+            version:
+              name: '2.17'
+              revision: 260.el7
+          severityName: MEDIUM
+        severity: CRITICAL
+    HIGH:
+    - createTime: '2018-11-30T16:58:20.204970Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/689f4277-d446-49d7-bbc5-9e09d0354b98
+      noteName: projects/goog-vulnz/notes/CVE-2018-6485
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:21.559990Z'
+      vulnerabilityDetails:
+        cvssScore: 7.5
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc-common
+            version:
+              name: '2.17'
+              revision: 222.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc-common
+            version:
+              name: '2.17'
+              revision: 260.el7
+          severityName: MEDIUM
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc
+            version:
+              name: '2.17'
+              revision: 222.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc
+            version:
+              name: '2.17'
+              revision: 260.el7
+          severityName: MEDIUM
+        severity: HIGH
+    - createTime: '2018-11-30T16:58:10.990301Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/765e1c21-df72-4b99-a55c-c7d17fe7c72e
+      noteName: projects/goog-vulnz/notes/CVE-2018-1000120
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:17.144Z'
+      vulnerabilityDetails:
+        cvssScore: 7.5
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: libcurl
+            version:
+              name: 7.29.0
+              revision: 46.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: libcurl
+            version:
+              name: 7.29.0
+              revision: 51.el7
+          severityName: MEDIUM
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: nss-pem
+            version:
+              name: 1.0.3
+              revision: 4.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: nss-pem
+            version:
+              name: 1.0.3
+              revision: 5.el7
+          severityName: MEDIUM
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: curl
+            version:
+              name: 7.29.0
+              revision: 46.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: curl
+            version:
+              name: 7.29.0
+              revision: 51.el7
+          severityName: MEDIUM
+        severity: HIGH
+    - createTime: '2018-11-30T16:58:19.240793Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/c1077ecc-9654-4bd3-b5ce-9ccd522b3fa8
+      noteName: projects/goog-vulnz/notes/CVE-2018-12910
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:19.240793Z'
+      vulnerabilityDetails:
+        cvssScore: 7.5
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glib2
+            version:
+              name: 2.54.2
+              revision: 2.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glib2
+            version:
+              name: 2.56.1
+              revision: 2.el7
+          severityName: MEDIUM
+        severity: HIGH
+    LOW:
+    - createTime: '2018-11-30T16:58:21.931603Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/b27b6b6a-d153-4a04-a80f-4620c8260cf9
+      noteName: projects/goog-vulnz/notes/CVE-2018-0495
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:21.931603Z'
+      vulnerabilityDetails:
+        cvssScore: 1.9
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: openssl-libs
+            version:
+              epoch: 1
+              name: 1.0.2k
+              revision: 12.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: openssl-libs
+            version:
+              epoch: 1
+              name: 1.0.2k
+              revision: 16.el7
+          severityName: MEDIUM
+        severity: LOW
+    MEDIUM:
+    - createTime: '2018-11-30T16:58:14.578784Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/025d90d6-cb51-4602-9f68-1ed7ac613af2
+      noteName: projects/goog-vulnz/notes/CVE-2018-10372
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:14.578784Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 28.base.el7_5.1
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 34.base.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:15.752284Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/0ae48edb-5886-4485-be29-668200bb4407
+      noteName: projects/goog-vulnz/notes/CVE-2018-13033
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:15.752284Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 28.base.el7_5.1
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 34.base.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:16.793914Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/199cbe80-2898-4fcb-b80c-7c7fb8762cf5
+      noteName: projects/goog-vulnz/notes/CVE-2018-8945
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:16.793914Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 28.base.el7_5.1
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 34.base.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:18.314237Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/1c29d05d-a80c-4ce9-9ac5-61b8deed616c
+      noteName: projects/goog-vulnz/notes/CVE-2017-18267
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:18.314237Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glib2
+            version:
+              name: 2.54.2
+              revision: 2.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glib2
+            version:
+              name: 2.56.1
+              revision: 2.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:18.514594Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/1c71e5d7-387c-4772-9558-ce916cf3a096
+      noteName: projects/goog-vulnz/notes/CVE-2018-10733
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:18.514594Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glib2
+            version:
+              name: 2.54.2
+              revision: 2.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glib2
+            version:
+              name: 2.56.1
+              revision: 2.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:22.082186Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/21231b25-1156-498d-b0e4-532b295b0b87
+      noteName: projects/goog-vulnz/notes/CVE-2018-0732
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:22.082186Z'
+      vulnerabilityDetails:
+        cvssScore: 5.0
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: openssl-libs
+            version:
+              epoch: 1
+              name: 1.0.2k
+              revision: 12.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: openssl-libs
+            version:
+              epoch: 1
+              name: 1.0.2k
+              revision: 16.el7
+          severityName: MEDIUM
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:16.607495Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/2182ee48-e5d2-4811-a380-8982c0bb39f0
+      noteName: projects/goog-vulnz/notes/CVE-2018-7643
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:16.607495Z'
+      vulnerabilityDetails:
+        cvssScore: 6.8
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 28.base.el7_5.1
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 34.base.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:16.293385Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/2908de8b-cbee-43ca-8a0c-64384d0f91fb
+      noteName: projects/goog-vulnz/notes/CVE-2018-7569
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:16.293385Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 28.base.el7_5.1
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 34.base.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:20.039499Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/2f0439e2-bb70-4a8d-819d-fb452f0e35cb
+      noteName: projects/goog-vulnz/notes/CVE-2018-11237
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:21.373246Z'
+      vulnerabilityDetails:
+        cvssScore: 4.6
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc-common
+            version:
+              name: '2.17'
+              revision: 222.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc-common
+            version:
+              name: '2.17'
+              revision: 260.el7
+          severityName: MEDIUM
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc
+            version:
+              name: '2.17'
+              revision: 222.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc
+            version:
+              name: '2.17'
+              revision: 260.el7
+          severityName: MEDIUM
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:15.237464Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/64203688-93c5-4571-ba1d-f4e3309777ba
+      noteName: projects/goog-vulnz/notes/CVE-2018-10534
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:15.237464Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 28.base.el7_5.1
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 34.base.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:14.893185Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/6ae4be9a-e8de-4f22-af08-97da6d0e20c5
+      noteName: projects/goog-vulnz/notes/CVE-2018-10373
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:14.893185Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 28.base.el7_5.1
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 34.base.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:12.083698Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/6f18116b-6541-488a-8bd0-c5e829541175
+      noteName: projects/goog-vulnz/notes/CVE-2018-1000301
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:18.061129Z'
+      vulnerabilityDetails:
+        cvssScore: 6.4
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: libcurl
+            version:
+              name: 7.29.0
+              revision: 46.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: libcurl
+            version:
+              name: 7.29.0
+              revision: 51.el7
+          severityName: MEDIUM
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: nss-pem
+            version:
+              name: 1.0.3
+              revision: 4.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: nss-pem
+            version:
+              name: 1.0.3
+              revision: 5.el7
+          severityName: MEDIUM
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: curl
+            version:
+              name: 7.29.0
+              revision: 46.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: curl
+            version:
+              name: 7.29.0
+              revision: 51.el7
+          severityName: MEDIUM
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:20.428007Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/732d3566-186d-4a24-86f1-f0790e95d03b
+      noteName: projects/goog-vulnz/notes/CVE-2018-1060
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:20.749196Z'
+      vulnerabilityDetails:
+        cvssScore: 5.0
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: python
+            version:
+              name: 2.7.5
+              revision: 69.el7_5
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: python
+            version:
+              name: 2.7.5
+              revision: 76.el7
+          severityName: LOW
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: python-libs
+            version:
+              name: 2.7.5
+              revision: 69.el7_5
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: python-libs
+            version:
+              name: 2.7.5
+              revision: 76.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:21.747513Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/80c7a160-53b4-4d5c-aa2e-4374b138fe3b
+      noteName: projects/goog-vulnz/notes/CVE-2017-3735
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:21.747513Z'
+      vulnerabilityDetails:
+        cvssScore: 5.0
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: openssl-libs
+            version:
+              epoch: 1
+              name: 1.0.2k
+              revision: 12.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: openssl-libs
+            version:
+              epoch: 1
+              name: 1.0.2k
+              revision: 16.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:15.426536Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/8bd6a490-e3c7-478b-b452-6bf2522ffb97
+      noteName: projects/goog-vulnz/notes/CVE-2018-10535
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:15.426536Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 28.base.el7_5.1
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 34.base.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:10.648334Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/9aade647-9a48-4bac-95d1-568ec62110cf
+      noteName: projects/goog-vulnz/notes/CVE-2018-1000007
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:16.951780Z'
+      vulnerabilityDetails:
+        cvssScore: 5.0
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: libcurl
+            version:
+              name: 7.29.0
+              revision: 46.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: libcurl
+            version:
+              name: 7.29.0
+              revision: 51.el7
+          severityName: MEDIUM
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: nss-pem
+            version:
+              name: 1.0.3
+              revision: 4.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: nss-pem
+            version:
+              name: 1.0.3
+              revision: 5.el7
+          severityName: MEDIUM
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: curl
+            version:
+              name: 7.29.0
+              revision: 46.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: curl
+            version:
+              name: 7.29.0
+              revision: 51.el7
+          severityName: MEDIUM
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:15.887050Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/a8e3c1e7-2fa0-4f62-ac2c-5b41b99b03e2
+      noteName: projects/goog-vulnz/notes/CVE-2018-7208
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:15.887050Z'
+      vulnerabilityDetails:
+        cvssScore: 6.8
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 28.base.el7_5.1
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 34.base.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:11.755923Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/ad382860-3556-4bbf-ae70-318fa9b2d635
+      noteName: projects/goog-vulnz/notes/CVE-2018-1000122
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:17.857672Z'
+      vulnerabilityDetails:
+        cvssScore: 6.4
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: libcurl
+            version:
+              name: 7.29.0
+              revision: 46.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: libcurl
+            version:
+              name: 7.29.0
+              revision: 51.el7
+          severityName: MEDIUM
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: nss-pem
+            version:
+              name: 1.0.3
+              revision: 4.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: nss-pem
+            version:
+              name: 1.0.3
+              revision: 5.el7
+          severityName: MEDIUM
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: curl
+            version:
+              name: 7.29.0
+              revision: 46.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: curl
+            version:
+              name: 7.29.0
+              revision: 51.el7
+          severityName: MEDIUM
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:19.572247Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/b0703fc2-c70a-4dc2-a1cb-dc2891bd9083
+      noteName: projects/goog-vulnz/notes/CVE-2018-13988
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:19.572247Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glib2
+            version:
+              name: 2.54.2
+              revision: 2.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glib2
+            version:
+              name: 2.56.1
+              revision: 2.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:22.518505Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/b78439eb-2b34-4e6c-b378-8906a8cf5d1d
+      noteName: projects/goog-vulnz/notes/CVE-2018-0739
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:22.518505Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: openssl-libs
+            version:
+              epoch: 1
+              name: 1.0.2k
+              revision: 12.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: openssl-libs
+            version:
+              epoch: 1
+              name: 1.0.2k
+              revision: 16.el7
+          severityName: MEDIUM
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:18.723442Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/bf2f0e3f-b9b3-4cd4-8210-d071c8fb974e
+      noteName: projects/goog-vulnz/notes/CVE-2018-10767
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:18.723442Z'
+      vulnerabilityDetails:
+        cvssScore: 5.0
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glib2
+            version:
+              name: 2.54.2
+              revision: 2.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glib2
+            version:
+              name: 2.56.1
+              revision: 2.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:22.332633Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/c1847ee7-b486-4dd7-805b-1f76115f2109
+      noteName: projects/goog-vulnz/notes/CVE-2018-0737
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:22.332633Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: openssl-libs
+            version:
+              epoch: 1
+              name: 1.0.2k
+              revision: 12.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: openssl-libs
+            version:
+              epoch: 1
+              name: 1.0.2k
+              revision: 16.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:10.293274Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/c33d9067-8ff3-43c1-90cb-4dd40f77d862
+      noteName: projects/goog-vulnz/notes/CVE-2018-5730
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:10.293274Z'
+      vulnerabilityDetails:
+        cvssScore: 5.5
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: krb5-libs
+            version:
+              name: 1.15.1
+              revision: 19.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: krb5-libs
+            version:
+              name: 1.15.1
+              revision: 34.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:11.395148Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/ce1cb685-831f-4904-8d28-f5f36e2b5672
+      noteName: projects/goog-vulnz/notes/CVE-2018-1000121
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:17.498503Z'
+      vulnerabilityDetails:
+        cvssScore: 5.0
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: libcurl
+            version:
+              name: 7.29.0
+              revision: 46.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: libcurl
+            version:
+              name: 7.29.0
+              revision: 51.el7
+          severityName: LOW
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: nss-pem
+            version:
+              name: 1.0.3
+              revision: 4.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: nss-pem
+            version:
+              name: 1.0.3
+              revision: 5.el7
+          severityName: LOW
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: curl
+            version:
+              name: 7.29.0
+              revision: 46.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: curl
+            version:
+              name: 7.29.0
+              revision: 51.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:16.072654Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/d2877f04-0717-4bf1-9eda-88b396b5db4e
+      noteName: projects/goog-vulnz/notes/CVE-2018-7568
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:16.072654Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 28.base.el7_5.1
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 34.base.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:09.969698Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/e10665f1-ad5c-4bac-b060-e6a9e7ba4acd
+      noteName: projects/goog-vulnz/notes/CVE-2018-5729
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:09.969698Z'
+      vulnerabilityDetails:
+        cvssScore: 6.5
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: krb5-libs
+            version:
+              name: 1.15.1
+              revision: 19.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: krb5-libs
+            version:
+              name: 1.15.1
+              revision: 34.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:14.167757Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/ec692705-0202-406a-84e4-5ca765f92f92
+      noteName: projects/goog-vulnz/notes/CVE-2018-1113
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:14.167757Z'
+      vulnerabilityDetails:
+        cvssScore: 4.6
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: setup
+            version:
+              name: 2.8.71
+              revision: 9.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: setup
+            version:
+              name: 2.8.71
+              revision: 10.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:20.600108Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/ec74ee0c-cbe8-4280-b20a-bdf6761e8994
+      noteName: projects/goog-vulnz/notes/CVE-2018-1061
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:20.916348Z'
+      vulnerabilityDetails:
+        cvssScore: 5.0
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: python
+            version:
+              name: 2.7.5
+              revision: 69.el7_5
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: python
+            version:
+              name: 2.7.5
+              revision: 76.el7
+          severityName: MEDIUM
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: python-libs
+            version:
+              name: 2.7.5
+              revision: 69.el7_5
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: python-libs
+            version:
+              name: 2.7.5
+              revision: 76.el7
+          severityName: MEDIUM
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:19.881202Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/eca70133-d6e8-43fc-ac36-96fc41b22c72
+      noteName: projects/goog-vulnz/notes/CVE-2018-11236
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:21.205473Z'
+      vulnerabilityDetails:
+        cvssScore: 6.8
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc-common
+            version:
+              name: '2.17'
+              revision: 222.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc-common
+            version:
+              name: '2.17'
+              revision: 260.el7
+          severityName: MEDIUM
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc
+            version:
+              name: '2.17'
+              revision: 222.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glibc
+            version:
+              name: '2.17'
+              revision: 260.el7
+          severityName: MEDIUM
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:16.443454Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/f505e2a3-9b1a-49af-8d94-2df17ea535d9
+      noteName: projects/goog-vulnz/notes/CVE-2018-7642
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:16.443454Z'
+      vulnerabilityDetails:
+        cvssScore: 4.3
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 28.base.el7_5.1
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: binutils
+            version:
+              name: '2.27'
+              revision: 34.base.el7
+          severityName: LOW
+        severity: MEDIUM
+    - createTime: '2018-11-30T16:58:19.019054Z'
+      kind: PACKAGE_VULNERABILITY
+      name: projects/gcp-runtimes/occurrences/ff1e0e4a-efd1-44d9-8030-e6f978cb839b
+      noteName: projects/goog-vulnz/notes/CVE-2018-10768
+      resourceUrl: https://gcr.io/gcp-runtimes/centos7@sha256:edfa0a593dfe09e2d6459733e3b62d54984ef2c500cfaf4dc8efaa87fcc701f6
+      updateTime: '2018-11-30T16:58:19.019054Z'
+      vulnerabilityDetails:
+        cvssScore: 5.0
+        packageIssue:
+        - affectedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glib2
+            version:
+              name: 2.54.2
+              revision: 2.el7
+          fixedLocation:
+            cpeUri: cpe:/o:centos:centos:7
+            package: glib2
+            version:
+              name: 2.56.1
+              revision: 2.el7
+          severityName: LOW
+        severity: MEDIUM

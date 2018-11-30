@@ -20,7 +20,8 @@ the host machine.
 
 workspace(name = "base_images_docker")
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive") 
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "new_http_archive") 
 
 # Docker rules.
 http_archive(
