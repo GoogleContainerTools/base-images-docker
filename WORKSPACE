@@ -44,6 +44,8 @@ load(
     "docker_repositories",
 )
 
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
 git_repository(
     name = "bazel_skylib",
     remote = "https://github.com/bazelbuild/bazel-skylib.git",
