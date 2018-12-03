@@ -32,7 +32,7 @@ mkdir -p /tmp/install/./partial
 # Install command
 apt-get install --no-install-recommends -y -q -o Dir::Cache="/tmp/install" -o Dir::Cache::archives="." {packages} --download-only
 # Tar command to only include all the *.deb files and ignore other directories placed in the cache dir.
-tar -cpf {output}.tar --directory /tmp/install/. `cd /tmp/install/. && ls *.deb`""".format(
+tar -cpf {output}.tar --mtime='1970-01-01' --directory /tmp/install/. `cd /tmp/install/. && ls *.deb`""".format(
     output=ctx.attr.name,
     packages=' '.join(packages),
     add_additional_repo_commands=_generate_add_additional_repo_commands(ctx, additional_repos))
