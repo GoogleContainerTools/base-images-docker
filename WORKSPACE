@@ -21,6 +21,8 @@ the host machine.
 workspace(name = "base_images_docker")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+
 
 # Docker rules.
 http_archive(
@@ -162,17 +164,17 @@ UBUNTU_MAP = {
 [http_file(
     name = "ubuntu_%s_tar_download" % version,
     sha256 = map["sha256"],
-    url = map["url"],
+    urls = [map["url"]],
 ) for version, map in UBUNTU_MAP.items()]
 
 http_file(
     name = "bazel_gpg",
     sha256 = "30af2ca7abfb65987cd61802ca6e352aadc6129dfb5bfc9c81f16617bc3a4416",
-    url = "https://bazel.build/bazel-release.pub.gpg",
+    urls = ["https://bazel.build/bazel-release.pub.gpg"],
 )
 
 http_file(
     name = "launchpad_openjdk_gpg",
     sha256 = "54b6274820df34a936ccc6f5cb725a9b7bb46075db7faf0ef7e2d86452fa09fd",
-    url = "http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0xEB9B1D8886F44E2A",
+    urls = ["http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0xEB9B1D8886F44E2A"],
 )
