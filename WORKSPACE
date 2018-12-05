@@ -21,13 +21,14 @@ the host machine.
 workspace(name = "base_images_docker")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 # Docker rules.
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "f3e5c0500533d58be079db1a24ac909f2e0cd98c9d760f5e506e4d05b56c42dd",
-    strip_prefix = "rules_docker-a9bb1dab84cdf46e34d1b34b53a17bda129b5eba",
-    urls = ["https://github.com/bazelbuild/rules_docker/archive/a9bb1dab84cdf46e34d1b34b53a17bda129b5eba.tar.gz"],
+    sha256 = "3948019c0ba7a688342c0947db6a8b7ee54badc0e2d52addb83c6da0840ef679",
+    strip_prefix = "rules_docker-c66358ef1e9ccc9a540ea604e67619249c9ac144",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/c66358ef1e9ccc9a540ea604e67619249c9ac144.tar.gz"],
 )
  # Register the docker toolchain type
 register_toolchains(
@@ -75,7 +76,7 @@ exports_files(["docker-credential-gcr"])""",
 
 git_repository(
     name = "subpar",
-    commit = "7e12cc130eb8f09c8cb02c3585a91a4043753c56",
+    commit = "07ff5feb7c7b113eea593eb6ec50b51099cf0261",
     remote = "https://github.com/google/subpar",
 )
 
@@ -83,14 +84,14 @@ docker_repositories()
 
 docker_pull(
     name = "debian_base",
-    digest = "sha256:987494b558cc0c9c341b5808b6e259ee449cf70c6f7c7adce4fd8f15eef1dea2",
+    digest = "sha256:00109fa40230a081f5ecffe0e814725042ff62a03e2d1eae0563f1f82eaeae9b",
     registry = "gcr.io",
-    repository = "google-appengine/debian8",
+    repository = "google-appengine/debian9",
 )
 
 git_repository(
     name = "distroless",
-    commit = "813d1ddef217f3871e4cb0a73da100aeddc638ee",
+    commit = "446923c3756ceeaa75888f52fcbdd48bb314fbf8",
     remote = "https://github.com/GoogleContainerTools/distroless.git",
 )
 
@@ -164,17 +165,17 @@ UBUNTU_MAP = {
 [http_file(
     name = "ubuntu_%s_tar_download" % version,
     sha256 = map["sha256"],
-    url = map["url"],
+    urls = [map["url"]],
 ) for version, map in UBUNTU_MAP.items()]
 
 http_file(
     name = "bazel_gpg",
     sha256 = "30af2ca7abfb65987cd61802ca6e352aadc6129dfb5bfc9c81f16617bc3a4416",
-    url = "https://bazel.build/bazel-release.pub.gpg",
+    urls = ["https://bazel.build/bazel-release.pub.gpg"],
 )
 
 http_file(
     name = "launchpad_openjdk_gpg",
     sha256 = "54b6274820df34a936ccc6f5cb725a9b7bb46075db7faf0ef7e2d86452fa09fd",
-    url = "http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0xEB9B1D8886F44E2A",
+    urls = ["http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0xEB9B1D8886F44E2A"],
 )
