@@ -4,4 +4,4 @@ commandTests:
   setup: [["apt-get", "update"], ["apt-get", "install", "-y", "-q", "gnupg"]]
   command: 'apt-key'
   args: ['list']
-  expectedOutput: ['Bazel APT repository key', 'Launchpad OpenJDK builds']
+  expectedOutput: ['Bazel APT repository key']
