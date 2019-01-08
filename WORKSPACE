@@ -141,15 +141,17 @@ dpkg_list(
 
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "f70c35a8c779bb92f7521ecb5a1c6604e9c3edd431e50b6376d7497abc8ad3c1",
-    url = "https://github.com/bazelbuild/rules_go/releases/download/0.11.0/rules_go-0.11.0.tar.gz",
+    sha256 = "7be7dc01f1e0afdba6c8eb2b43d2fa01c743be1b9273ab1eaf6c233df078d705",
+    urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.16.5/rules_go-0.16.5.tar.gz"],
 )
 
-load("@io_bazel_rules_go//go:def.bzl", "go_register_toolchains", "go_rules_dependencies")
+load("@io_bazel_rules_go//go:def.bzl", "go_register_toolchains", "go_rules_dependencies", "go_host_sdk")
 
 go_rules_dependencies()
 
-go_register_toolchains()
+go_host_sdk(name = "go_sdk")
+
+go_register_toolchains(go_version = "host")
 
 UBUNTU_MAP = {
     "16_0_4": {
