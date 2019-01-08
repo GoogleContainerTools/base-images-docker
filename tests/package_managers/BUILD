@@ -104,14 +104,14 @@ container_test(
 
 bootstrap_image_macro(
     name = "bootstrap_ubuntu",
-    date = "2017/12/15",
+    date = "20181126",
     image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
     output_image_name = "ubuntu",
     packages = [
         "curl",
         "netbase",
     ],
-    store_location = "ubuntu/builds",
+    store_location = "ubuntu/16_0_4/builds",
 )
 
 rule_test(
