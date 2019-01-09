@@ -117,8 +117,7 @@ _attrs.update({
         mandatory = True,
     ),
     "gpg_image": attr.label(
-        allow_files = True,
-        single_file = True,
+        allow_single_file = True,
     ),
     # Redeclare following attributes of _extract to be non-mandatory.
     "commands": attr.string_list(doc = "commands to run"),

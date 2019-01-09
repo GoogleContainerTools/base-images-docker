@@ -72,15 +72,14 @@ def _extract_impl(ctx, name = "", image = None, commands = None, docker_run_flag
 _extract_attrs = {
     "image": attr.label(
         executable = True,
-        allow_files = True,
         mandatory = True,
-        single_file = True,
+        allow_single_file = True,
         cfg = "target",
     ),
     "commands": attr.string_list(
         doc = "commands to run",
         mandatory = True,
-        non_empty = True,
+        allow_empty = False,
     ),
     "docker_run_flags": attr.string_list(
         doc = "Extra flags to pass to the docker run command",
@@ -92,13 +91,11 @@ _extract_attrs = {
     ),
     "_extract_tpl": attr.label(
         default = Label("//util:extract.sh.tpl"),
-        allow_files = True,
-        single_file = True,
+        allow_single_file = True,
     ),
     "_image_id_extractor": attr.label(
         default = "@io_bazel_rules_docker//contrib:extract_image_id.py",
-        allow_files = True,
-        single_file = True,
+        allow_single_file = True,
     ),
 }
 
@@ -187,30 +184,26 @@ def _commit_impl(
 
 _commit_attrs = {
     "image": attr.label(
-        allow_files = True,
         mandatory = True,
-        single_file = True,
+        allow_single_file = True,
         cfg = "target",
     ),
     "commands": attr.string_list(
         doc = "commands to run",
         mandatory = True,
-        non_empty = True,
+        allow_empty = False,
     ),
     "_run_tpl": attr.label(
         default = Label("//util:commit.sh.tpl"),
-        allow_files = True,
-        single_file = True,
+        allow_single_file = True,
     ),
     "_image_utils": attr.label(
         default = "//util:image_util.sh",
-        allow_files = True,
-        single_file = True,
+        allow_single_file = True,
     ),
     "_image_id_extractor": attr.label(
         default = "@io_bazel_rules_docker//contrib:extract_image_id.py",
-        allow_files = True,
-        single_file = True,
+        allow_single_file = True,
     ),
 }
 _commit_outputs = {

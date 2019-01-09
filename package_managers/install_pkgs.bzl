@@ -133,13 +133,11 @@ docker rm $cid""".format(util_script=ctx.file._image_utils.path,
 _attrs = {
     "image_tar": attr.label(
         default = Label("//ubuntu:ubuntu_16_0_4_vanilla.tar"),
-        allow_files = True,
-        single_file = True,
+        allow_single_file = True,
         mandatory = True,
     ),
     "installables_tar": attr.label(
-        allow_files = True,
-        single_file = True,
+        allow_single_file = True,
         mandatory = True,
     ),
     "installation_cleanup_commands": attr.string(
@@ -150,8 +148,7 @@ _attrs = {
     ),
     "_installer_tpl": attr.label(
         default = Label("//package_managers:installer.sh.tpl"),
-        single_file = True,
-        allow_files = True,
+        allow_single_file = True,
     ),
     "_config_stripper": attr.label(
         default = "//util:config_stripper",
@@ -160,13 +157,11 @@ _attrs = {
     ),
     "_image_utils": attr.label(
         default = "//util:image_util.sh",
-        allow_files = True,
-        single_file = True,
+        allow_single_file = True,
     ),
     "_image_id_extractor": attr.label(
       default = "@io_bazel_rules_docker//contrib:extract_image_id.py",
-      allow_files = True,
-      single_file = True,
+      allow_single_file = True,
     ),
 }
 
