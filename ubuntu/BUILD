@@ -57,16 +57,30 @@ genrule(
     tars = [":ubuntu_%s_vanilla_reproducible" % version],
 ) for version in UBUNTU_VERSIONS]
 
-[bootstrap_image_macro(
-    name = "bootstrap_ubuntu_%s" % version,
-    date = "20181126",
-    image_tar = ":ubuntu_%s_vanilla.tar" % version,
-    output_image_name = "ubuntu_%s" % version,
+bootstrap_image_macro(
+    name = "bootstrap_ubuntu_16_0_4" % version,
+    date = "20181217",
+    image_tar = ":ubuntu_16_0_4_vanilla.tar" % version,
+    output_image_name = "ubuntu_16_0_4" % version,
     packages = [
         "ca-certificates",
         "curl",
         "libc-bin",
         "netbase",
     ],
-    store_location = "ubuntu/%s/builds" % version,
-) for version in UBUNTU_VERSIONS]
+    store_location = "ubuntu/16_0_4/builds" % version,
+)
+
+bootstrap_image_macro(
+    name = "bootstrap_ubuntu_18_0_4" % version,
+    date = "20181204",
+    image_tar = ":ubuntu_18_0_4_vanilla.tar" % version,
+    output_image_name = "ubuntu_18_0_4" % version,
+    packages = [
+        "ca-certificates",
+        "curl",
+        "libc-bin",
+        "netbase",
+    ],
+    store_location = "ubuntu/18_0_4/builds" % version,
+)
