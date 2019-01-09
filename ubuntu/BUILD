@@ -58,29 +58,29 @@ genrule(
 ) for version in UBUNTU_VERSIONS]
 
 bootstrap_image_macro(
-    name = "bootstrap_ubuntu_16_0_4" % version,
+    name = "bootstrap_ubuntu_16_0_4",
     date = "20181217",
-    image_tar = ":ubuntu_16_0_4_vanilla.tar" % version,
-    output_image_name = "ubuntu_16_0_4" % version,
+    image_tar = ":ubuntu_16_0_4_vanilla.tar",
+    output_image_name = "ubuntu_16_0_4",
     packages = [
         "ca-certificates",
         "curl",
         "libc-bin",
         "netbase",
     ],
-    store_location = "ubuntu/16_0_4/builds" % version,
+    store_location = "ubuntu/16_0_4/builds",
 )
 
 bootstrap_image_macro(
-    name = "bootstrap_ubuntu_18_0_4" % version,
+    name = "bootstrap_ubuntu_18_0_4",
     date = "20181204",
-    image_tar = ":ubuntu_18_0_4_vanilla.tar" % version,
-    output_image_name = "ubuntu_18_0_4" % version,
+    image_tar = ":ubuntu_18_0_4_vanilla.tar",
+    output_image_name = "ubuntu_18_0_4",
     packages = [
         "ca-certificates",
         "curl",
         "libc-bin",
         "netbase",
     ],
-    store_location = "ubuntu/18_0_4/builds" % version,
+    store_location = "ubuntu/18_0_4/builds",
 )
