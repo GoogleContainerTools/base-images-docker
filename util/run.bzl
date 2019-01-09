@@ -63,7 +63,7 @@ def _extract_impl(ctx, name = "", image = None, commands = None, docker_run_flag
 
     ctx.actions.run(
         outputs = [output_file],
-        inputs = [image, ctx.file._image_id_extractor],
+        tools = [image, ctx.file._image_id_extractor],
         executable = script,
     )
 
@@ -151,7 +151,7 @@ def _commit_impl(
     name = name or ctx.attr.name
     image = image or ctx.file.image
     commands = commands or ctx.attr.commands
-    script = ctx.new_file(name + ".build")
+    script = ctx.actions.declare_file(name + ".build")
     output_image_tar = output_image_tar or ctx.outputs.out
 
     # Generate a shell script to execute the run statement

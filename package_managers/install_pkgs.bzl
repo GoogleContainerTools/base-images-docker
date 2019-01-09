@@ -72,15 +72,15 @@ def _impl(ctx, image_tar=None, installables_tar=None, installation_cleanup_comma
 
   installables_tar_path = installables_tar.path
   # Generate the installer.sh script
-  install_script = ctx.new_file("%s.install" % (ctx.label.name))
-  ctx.template_action(
+  install_script = ctx.actions.declare_file("%s.install" % (ctx.label.name))
+  ctx.actions.expand_template(
       template=ctx.file._installer_tpl,
       substitutions= {
           "%{install_commands}": _generate_install_commands(installables_tar_path, installation_cleanup_commands),
           "%{installables_tar}": installables_tar_path,
       },
       output = install_script,
-      executable = True,
+      is_executable = True,
   )
   unstripped_tar = ctx.actions.declare_file(output_tar.basename + ".unstripped")
 
