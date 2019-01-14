@@ -145,13 +145,21 @@ http_archive(
     urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.16.5/rules_go-0.16.5.tar.gz"],
 )
 
-load("@io_bazel_rules_go//go:def.bzl", "go_register_toolchains", "go_rules_dependencies", "go_host_sdk")
+load("@io_bazel_rules_go//go:def.bzl", "go_register_toolchains", "go_rules_dependencies", "go_download_sdk")
+
+go_download_sdk(
+    name = "go_sdk",
+    sdks = {
+        "linux_amd64":   ("go1.11.4.linux-amd64.tar.gz",
+            "fb26c30e6a04ad937bbc657a1b5bba92f80096af1e8ee6da6430c045a8db3a5b"),
+        "darwin_amd64":      ("go1.11.4.darwin-amd64.tar.gz",
+            "48ea987fb610894b3108ecf42e7a4fd1c1e3eabcaeb570e388c75af1f1375f80"),
+    },
+)
 
 go_rules_dependencies()
 
-go_host_sdk(name = "go_sdk")
-
-go_register_toolchains(go_version = "host")
+go_register_toolchains()
 
 UBUNTU_MAP = {
     "16_0_4": {
