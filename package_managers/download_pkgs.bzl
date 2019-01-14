@@ -107,8 +107,7 @@ docker rm $cid
 _attrs = {
     "image_tar": attr.label(
         default = Label("//ubuntu:ubuntu_16_0_4_vanilla.tar"),
-        allow_files = True,
-        single_file = True,
+        allow_single_file = True,
     ),
     "packages": attr.string_list(
         mandatory = True,
@@ -116,8 +115,7 @@ _attrs = {
     "additional_repos": attr.string_list(),
     "_image_id_extractor": attr.label(
         default = "@io_bazel_rules_docker//contrib:extract_image_id.py",
-      allow_files = True,
-      single_file = True,
+      allow_single_file = True,
     ),
 }
 

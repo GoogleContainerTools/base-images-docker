@@ -24,7 +24,7 @@ def _impl(ctx):
     else:
         context_path = ""
 
-    unstripped_tar = ctx.new_file(ctx.label.name + ".unstripped")
+    unstripped_tar = ctx.actions.declare_file(ctx.label.name + ".unstripped")
 
     if bool(ctx.attr.base) == bool(ctx.attr.base_tar):
         fail('Please specify only one of base and base_tar')
@@ -71,7 +71,7 @@ docker save {tag} > {output}
             context=context_path,
             tag="bazel/%s:%s" % (ctx.label.package, ctx.label.name),
             output=unstripped_tar.path)
-    script = ctx.new_file(ctx.label.name + ".build")
+    script = ctx.actions.declare_file(ctx.label.name + ".build")
     ctx.file_action(
         output=script,
         content=build_contents

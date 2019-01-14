@@ -41,7 +41,7 @@ docker rm $cid
             ctx.attr.variant,
             ctx.attr.distro,
             ctx.outputs.out.path)
-    script = ctx.new_file(ctx.label.name + ".build")
+    script = ctx.actions.declare_file(ctx.label.name + ".build")
     ctx.file_action(
         output=script,
         content=build_contents
