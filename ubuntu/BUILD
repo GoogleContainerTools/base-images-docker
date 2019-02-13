@@ -59,7 +59,7 @@ genrule(
 
 bootstrap_image_macro(
     name = "bootstrap_ubuntu_16_0_4",
-    date = "20190129",
+    date = "20190122",
     image_tar = ":ubuntu_16_0_4_vanilla.tar",
     output_image_name = "ubuntu_16_0_4",
     packages = [
@@ -73,7 +73,7 @@ bootstrap_image_macro(
 
 bootstrap_image_macro(
     name = "bootstrap_ubuntu_18_0_4",
-    date = "20190128",
+    date = "20190210",
     image_tar = ":ubuntu_18_0_4_vanilla.tar",
     output_image_name = "ubuntu_18_0_4",
     packages = [
