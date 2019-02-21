@@ -89,4 +89,4 @@ else
   usage
 fi
 
-gcloud container builds submit . --config="$CONFIG" --verbosity=info --substitutions=_REPO="$REPO",_TAG="$TAG",_VERSION_NUMBER="$VERSION_NUMBER"
+gcloud builds submit . --config="$CONFIG" --verbosity=info --substitutions=_REPO="$REPO",_TAG="$TAG",_VERSION_NUMBER="$VERSION_NUMBER"
