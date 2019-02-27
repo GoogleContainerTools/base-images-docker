@@ -16,14 +16,16 @@ addons:
   apt:
     sources:
     - debian-sid    # Grab shellcheck from the Debian repo (o_O)
-    - sourceline: 'deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8'
-      key_url: 'https://storage.googleapis.com/bazel-apt/doc/apt-key.pub.gpg'
-    packages:
-    - bazel
-
 install:
   - go get -u github.com/bazelbuild/buildifier/buildifier
   - curl -LO https://storage.googleapis.com/container-diff/latest/container-diff-linux-amd64 && chmod +x container-diff-linux-amd64 && sudo mv container-diff-linux-amd64 /usr/local/bin/container-diff
+  - export PATH=$PATH:$HOME/bin && mkdir -p $HOME/bin
+  - wget https://github.com/bazelbuild/buildtools/releases/download/0.11.1/buildifier && chmod +x buildifier && mv buildifier $HOME/bin/
+  - wget https://github.com/bazelbuild/bazel/releases/download/0.19.2/bazel-0.19.2-linux-x86_64 && mv bazel-0.19.2-linux-x86_64 bazel && chmod +x bazel && mv bazel $HOME/bin/
+
+script:
+- ./test.sh
+©
 
 script:
  - make test
