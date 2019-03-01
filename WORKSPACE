@@ -65,7 +65,7 @@ git_repository(
     remote = "https://github.com/GoogleCloudPlatform/runtimes-common.git",
 )
 
-new_http_archive(
+http_archive(
     name = "docker_credential_gcr",
     build_file_content = """package(default_visibility = ["//visibility:public"])
 exports_files(["docker-credential-gcr"])""",
