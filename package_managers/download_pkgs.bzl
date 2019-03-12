@@ -32,8 +32,8 @@ mkdir -p /tmp/install/./partial
 # Install command
 apt-get install --no-install-recommends -y -q -o Dir::Cache="/tmp/install" -o Dir::Cache::archives="." {packages} --download-only
 # Tar command to only include all the *.deb files and ignore other directories placed in the cache dir.
-tar -cpf {output}.tar --mtime='1970-01-01' --directory /tmp/install/. `cd /tmp/install/. && ls *.deb`""".format(
-    output=ctx.attr.name,
+tar -cpf {installables}_packages.tar --mtime='1970-01-01' --directory /tmp/install/. `cd /tmp/install/. && ls *.deb`""".format(
+    installables=ctx.attr.name,
     packages=' '.join(packages),
     add_additional_repo_commands=_generate_add_additional_repo_commands(ctx, additional_repos))
 
@@ -85,7 +85,7 @@ docker load -i {image_tar}
 # Run the builder image.
 cid=$(docker run -w="/" -d --privileged $image_id sh -c $'{download_commands}')
 docker attach $cid
-docker cp $cid:{installables}.tar {output}
+docker cp $cid:{installables}_packages.tar {output}
 # Cleanup
 docker rm $cid
  """.format(image_tar=image_tar.short_path,
