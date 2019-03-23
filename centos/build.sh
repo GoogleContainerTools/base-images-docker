@@ -23,6 +23,6 @@ umount /target/proc/
 umount /target/sys/
 rm /target/chroot.sh
 
-tar -C /target -cf /workspace/centos/layer.tar .
+tar -C /target -cf /workspace/layer.tar .
 
 
