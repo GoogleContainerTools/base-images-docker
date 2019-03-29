@@ -22,13 +22,20 @@ workspace(name = "base_images_docker")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+git_repository(
+    name = "bazel_skylib",
+    remote = "https://github.com/bazelbuild/bazel-skylib.git",
+    tag = "0.6.0",
+)
 
 # Docker rules.
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "6e77e2093260a031e6e18fe3567c2abce6e10a31e08624498cefb5f0076f1da7",
-    strip_prefix = "rules_docker-9ecadcbf6ce49832cc6faa81b882be9fe91358b7",
-    urls = ["https://github.com/bazelbuild/rules_docker/archive/9ecadcbf6ce49832cc6faa81b882be9fe91358b7.tar.gz"],
+    sha256 = "8989b2f41bdb887d4e1db2b11b2b289467fbca1e99d1c085fe07315c96656c29",
+    strip_prefix = "rules_docker-b222896d5b00a993018dbf00afc9af239c25f442",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/b222896d5b00a993018dbf00afc9af239c25f442.tar.gz"],
 )
  # Register the docker toolchain type
 register_toolchains(
@@ -39,19 +46,10 @@ register_toolchains(
     "@io_bazel_rules_docker//toolchains/docker:default_osx_toolchain",
 )
 
-load(
-    "@io_bazel_rules_docker//docker:docker.bzl",
-    "docker_pull",
-    "docker_repositories",
-)
+load("@io_bazel_rules_docker//docker:docker.bzl" "docker_pull")
+load("@io_bazel_rules_docker//repositories:repositories.bzl", docker_repositories = "repositories")
 
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
-
-git_repository(
-    name = "bazel_skylib",
-    remote = "https://github.com/bazelbuild/bazel-skylib.git",
-    tag = "0.6.0",
-)
+docker_repositories()
 
 git_repository(
     name = "structure_test",
@@ -79,8 +77,6 @@ git_repository(
     commit = "07ff5feb7c7b113eea593eb6ec50b51099cf0261",
     remote = "https://github.com/google/subpar",
 )
-
-docker_repositories()
 
 docker_pull(
     name = "debian_base",

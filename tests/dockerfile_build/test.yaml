@@ -1,5 +1,4 @@
 schemaVersion: '2.0.0'
-commandTests:
 fileExistenceTests:
 - name: 'Bat'
   path: '/bat'
@@ -7,7 +6,6 @@ fileExistenceTests:
 - name: 'Baz'
   path: '/foo/bar/baz'
   shouldExist: true
-commandTests:
 fileContentTests:
 - name: 'Curl'
   path: '/var/lib/dpkg/status'

@@ -18,11 +18,6 @@ to new container image, or extract specified targets to a directory on
 the host machine.
 """
 
-load(
-    "@io_bazel_rules_docker//container:bundle.bzl",
-    "container_bundle",
-)
-
 def _extract_impl(ctx, name = "", image = None, commands = None, docker_run_flags = None, extract_file = "", output_file = "", script_file = ""):
     """Implementation for the container_run_and_extract rule.
 
