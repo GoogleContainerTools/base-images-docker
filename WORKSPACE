@@ -33,9 +33,9 @@ git_repository(
 # Docker rules.
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "8989b2f41bdb887d4e1db2b11b2b289467fbca1e99d1c085fe07315c96656c29",
-    strip_prefix = "rules_docker-b222896d5b00a993018dbf00afc9af239c25f442",
-    urls = ["https://github.com/bazelbuild/rules_docker/archive/b222896d5b00a993018dbf00afc9af239c25f442.tar.gz"],
+    sha256 = "fe519e726201215ca3059223fb5b4181e97fa0d8efa33be382bef64d0bc43248",
+    strip_prefix = "rules_docker-0475563f497ca8104bde290e64a3b39e2428f042",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/0475563f497ca8104bde290e64a3b39e2428f042.tar.gz"],
 )
  # Register the docker toolchain type
 register_toolchains(
