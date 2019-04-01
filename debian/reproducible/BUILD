@@ -39,7 +39,6 @@ DEBIAN_ENV = {
 }
 
 DEBIAN_MAP = {
-    8: "jessie",
     9: "stretch",
 }
 

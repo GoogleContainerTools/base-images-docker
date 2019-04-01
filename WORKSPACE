@@ -105,13 +105,13 @@ load(
 package_manager_repositories()
 
 # The Debian snapshot datetime to use. See http://snapshot.debian.org/ for more information.
-DEB_SNAPSHOT = "20190227T154250Z"
+DEB_SNAPSHOT = "20190401T163819Z"
 
 dpkg_src(
-    name = "debian_jessie",
+    name = "debian_stretch",
     arch = "amd64",
-    distro = "jessie",
-    sha256 = "7240a1c6ce11c3658d001261e77797818e610f7da6c2fb1f98a24fdbf4e8d84c",
+    distro = "stretch",
+    sha256 = "79a66cd92ba9096fce679e15d0b5feb9effcf618b0a6d065eb32684dbffd0311",
     snapshot = DEB_SNAPSHOT,
     url = "http://snapshot.debian.org/archive",
 )
@@ -135,7 +135,7 @@ dpkg_list(
         "wget",
     ],
     sources = [
-        "@debian_jessie//file:Packages.json",
+        "@debian_stretch//file:Packages.json",
     ],
 )
 
