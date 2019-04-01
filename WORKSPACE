@@ -128,7 +128,7 @@ dpkg_list(
         "libhogweed2",
         "libicu52",
         "libidn11",
-        "libnettle4",
+        "libnettle6",
         "libp11-kit0",
         "libpsl0",
         "libtasn1-6",
