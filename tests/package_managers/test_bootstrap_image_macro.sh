@@ -28,7 +28,7 @@ TEST_TARGET="tests/package_managers:test_bootstrap_ubuntu"
 TEST_DIR="tests/package_managers/tmp_git"
 TEST_STORE="$TEST_DIR/ubuntu/16_0_4/builds"
 TEST_SCRIPT_CMD="./bootstrap_image.sh -t $TEST_TARGET"
-DATE="20181126"
+DATE="20190301"
 
 TEST_BUILD_FILE="tests/package_managers/BUILD.bazel"
 # Build new BUILD file with bootstrap_image_macro target
