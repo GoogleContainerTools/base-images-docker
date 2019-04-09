@@ -9,7 +9,7 @@ load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 
 # TODO: Try to reuse this variable from WORKSPACE.
 # The Debian snapshot datetime to use. See http://snapshot.debian.org/ for more information.
-DEB_SNAPSHOT = "20190227T154250Z"
+DEB_SNAPSHOT = "20190401T163819Z"
 
 docker_build(
     name = "builder",
