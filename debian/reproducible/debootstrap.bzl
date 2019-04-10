@@ -62,7 +62,7 @@ debootstrap = rule(
             default = "minbase",
         ),
         "distro": attr.string(
-            default = "jessie",
+            default = "stretch",
         ),
         "_builder_image": attr.label(
             default = Label("//debian/reproducible:builder"),
@@ -84,7 +84,7 @@ load(
     "docker_build",
 )
 
-def debootstrap_image(name, variant="minbase", distro="jessie", overlay_tar="", env=None):
+def debootstrap_image(name, variant="minbase", distro="stretch", overlay_tar="", env=None):
     if not env:
         env = {}
     rootfs = "%s.rootfs" % name

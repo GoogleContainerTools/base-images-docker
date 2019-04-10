@@ -5,7 +5,6 @@ load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
 exports_files(glob(["*.yaml"]))
 
 DEBIAN_MAP = {
-    8: "jessie",
     9: "stretch",
 }
 

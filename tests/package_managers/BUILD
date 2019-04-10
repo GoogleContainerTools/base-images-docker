@@ -104,7 +104,7 @@ container_test(
 
 bootstrap_image_macro(
     name = "bootstrap_ubuntu",
-    date = "20181126",
+    date = "20190301",
     image_tar = "//ubuntu:ubuntu_16_0_4_vanilla.tar",
     output_image_name = "ubuntu",
     packages = [

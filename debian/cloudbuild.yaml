@@ -1,8 +1,8 @@
 # All items surrounded by ${} are variables to be replaced with real values.
 # ${_REPO}: The repository to push debian to, e.g. gcr.io/myproject
 # ${_TAG}: What the tag the image with, e.g. latest
-# ${_VERSION}: The version of debian to build, e.g. jessie
-# ${_VERSION_NUMBER}: The version number associated with the ${_VERSION} string, e.g. 8 for jessie
+# ${_VERSION}: The version of debian to build, e.g. stretch
+# ${_VERSION_NUMBER}: The version number associated with the ${_VERSION} string, e.g. 9 for stretch
 steps:
         - name: gcr.io/gcp-runtimes/check_if_tag_exists
           args:
@@ -34,5 +34,5 @@ steps:
         - name: gcr.io/gcp-runtimes/structure_test
           args: [
           '--image', '${_REPO}/debian${_VERSION_NUMBER}:${_TAG}',
-          '--config', '/workspace/tests/debian_${_VERSION_NUMBER}_test.yaml']          
+          '--config', '/workspace/tests/debian_${_VERSION_NUMBER}_test.yaml']
 images: ['${_REPO}/mkdebootstrap:${_VERSION}', '${_REPO}/debian${_VERSION_NUMBER}:${_TAG}']
