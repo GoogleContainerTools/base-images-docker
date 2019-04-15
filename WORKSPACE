@@ -46,7 +46,7 @@ register_toolchains(
     "@io_bazel_rules_docker//toolchains/docker:default_osx_toolchain",
 )
 
-load("@io_bazel_rules_docker//docker:docker.bzl" "docker_pull")
+load("@io_bazel_rules_docker//docker:docker.bzl", "docker_pull")
 load("@io_bazel_rules_docker//repositories:repositories.bzl", docker_repositories = "repositories")
 
 docker_repositories()
