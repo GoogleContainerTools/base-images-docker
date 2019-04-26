@@ -162,9 +162,9 @@ go_rules_dependencies()
 go_register_toolchains()
 
 UBUNTU_MAP = {
-    "16_0_4": {
-        "sha256": "e17b8c7a9d38c37e22a4498b0ff2e24fd30e15ce2fb6adae64c219d5d9a5ff4b",
-        "url": "https://storage.googleapis.com/ubuntu_tar/20190406/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
+   "16_0_4": {
+        "sha256": "fd9e05a2b68f63eaf4cc25033d2cb0589882c24397d4cf2e5068c4049cc1763e",
+        "url": "https://storage.googleapis.com/ubuntu_tar/20190425/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
     },
     "18_0_4": {
         "sha256": "65f7b277d131706107ba41d69468e31b0767420a01c8e5dec5ed9f15ff78fd9e",
@@ -189,3 +189,4 @@ http_file(
     sha256 = "54b6274820df34a936ccc6f5cb725a9b7bb46075db7faf0ef7e2d86452fa09fd",
     urls = ["http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0xEB9B1D8886F44E2A"],
 )
+
