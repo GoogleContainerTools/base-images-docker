@@ -11,7 +11,7 @@
 set -eu -o pipefail
 
 readonly VERSION=$1
-readonly GCS_BUCKET="gs://ubuntu_tar"
+readonly GCS_BUCKET="ubuntu_tar"
 
 case $VERSION in
   16_0_4)
@@ -38,18 +38,19 @@ readonly archive="ubuntu-${release}-core-cloudimg-amd64-root.tar.gz"
 curl -OR "${base_url}/${archive}"
 
 sha256sum --ignore-missing -c SHA256SUMS || exit 9
+checksum=$(sha256sum ${archive} | awk '{ print $1 }')
 
 # NOTE: Build dates are in GMT
 readonly build=$(TZ=Z stat -c '%y' "${archive}" | cut -d" " -f1 | sed s/-//g)
 readonly dest="${GCS_BUCKET}/${build}/${archive}"
-gsutil cp "${archive}" "${dest}"
 
-echo "Copy completed!"
-echo ""
-echo "Version:    ${VERSION} (${release})"
-echo "Location:   ${dest}"
-echo "Build date: ${build}"
-echo "SHA256SUM:  $(sha256sum ${archive} | awk '{ print $1 }')"
+gsutil cp "${archive}" "gs://${dest}"
 
+echo "Copy completed! Here is an updated WORKSPACE entry for you:"
+cat <<EOF
 
-
+    "${VERSION}": {
+        "sha256": "${checksum}",
+        "url": "https://storage.googleapis.com/${GCS_BUCKET}/${build}/${archive}",
+    },
+EOF
