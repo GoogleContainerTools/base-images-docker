@@ -41,7 +41,7 @@ docker rm $cid
             ctx.attr.variant,
             ctx.attr.distro,
             ctx.outputs.out.path)
-    script = ctx.new_file(ctx.label.name + ".build")
+    script = ctx.actions.declare_file(ctx.label.name + ".build")
     ctx.file_action(
         output=script,
         content=build_contents
@@ -62,7 +62,7 @@ debootstrap = rule(
             default = "minbase",
         ),
         "distro": attr.string(
-            default = "jessie",
+            default = "stretch",
         ),
         "_builder_image": attr.label(
             default = Label("//debian/reproducible:builder"),
@@ -84,7 +84,7 @@ load(
     "docker_build",
 )
 
-def debootstrap_image(name, variant="minbase", distro="jessie", overlay_tar="", env=None):
+def debootstrap_image(name, variant="minbase", distro="stretch", overlay_tar="", env=None):
     if not env:
         env = {}
     rootfs = "%s.rootfs" % name

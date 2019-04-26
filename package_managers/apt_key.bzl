@@ -92,7 +92,7 @@ def _impl(
         commands = commands,
         extract_file = extract_file_name,
         output_file = extract_file_out,
-        script_file = ctx.new_file(name + ".build"),
+        script_file = ctx.actions.declare_file(name + ".build"),
     )
 
     # Build the final image with additional gpg keys in it.
@@ -117,8 +117,7 @@ _attrs.update({
         mandatory = True,
     ),
     "gpg_image": attr.label(
-        allow_files = True,
-        single_file = True,
+        allow_single_file = True,
     ),
     # Redeclare following attributes of _extract to be non-mandatory.
     "commands": attr.string_list(doc = "commands to run"),

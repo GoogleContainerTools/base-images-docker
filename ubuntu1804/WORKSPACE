@@ -1,0 +1,73 @@
+# Copyright 2018 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+workspace(name = "ubuntu1804")
+
+load(
+    "@bazel_tools//tools/build_defs/repo:http.bzl",
+    "http_archive",
+    "http_file",
+)
+
+http_archive(
+    name = "bazel_toolchains",
+    sha256 = "91db7cf3a400da264e9123bb3d070e80184d9e40a87fc38b50e1dbb002b212fc",
+    strip_prefix = "bazel-toolchains-db36179f00b0b252a80824ed7dabc636c5e6c5fe",
+    urls = ["https://github.com/bazelbuild/bazel-toolchains/archive/db36179f00b0b252a80824ed7dabc636c5e6c5fe.tar.gz"],
+)
+
+http_archive(
+    name = "io_bazel_rules_docker",
+    sha256 = "4abb48f56b838957c9c72ac511b44f79612fcf39d08338fad14a8e3f6b0572ea",
+    strip_prefix = "rules_docker-b8ff6a85ec359db3fd5657accd3e524daf12016d",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/b8ff6a85ec359db3fd5657accd3e524daf12016d.tar.gz"],
+)
+
+http_archive(
+    name = "base_images_docker",
+    sha256 = "f9a0ac30b16aaefc4b5856ba133387bac97cd6976f0ea44f2050616b8cc8ed99",
+    strip_prefix = "base-images-docker-91965492ca08c8308de43877c9d608bc812fd143",
+    urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/91965492ca08c8308de43877c9d608bc812fd143.tar.gz"],
+)
+
+http_archive(
+    name = "bazel_skylib",
+    # Commit c00ef493869e2966d47508e8625aae723a4a3054 of 2018-12-10
+    sha256 = "7363ae6721c1648017e23a200013510c9e71ca69f398d52886ee6af7f26af436",
+    strip_prefix = "bazel-skylib-c00ef493869e2966d47508e8625aae723a4a3054",
+    urls = ["https://github.com/bazelbuild/bazel-skylib/archive/c00ef493869e2966d47508e8625aae723a4a3054.tar.gz"],
+)
+
+# Non-deterministic latest version of ubuntu1604 base tarball. This is used by
+# File Update Service to archive each version in our managed GCS bucket, and
+# should NOT be used by container release directly.
+# Note that this relies on that https://partner-images.canonical.com/core/bionic/current/...
+# always hosts the latest version of the tarball, and we intentionally do not include
+# sha256 in this http_file target as the file downloaded are not deterministic.
+http_file(
+    name = "ubuntu1804_tar_latest",
+    downloaded_file_path = "ubuntu1804.tar.gz",
+    urls = ["https://partner-images.canonical.com/core/bionic/current/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz"],
+)
+
+load(
+    "@io_bazel_rules_docker//repositories:repositories.bzl",
+    container_repositories = "repositories",
+)
+
+container_repositories()
+
+load(":deps.bzl", "deps")
+
+deps()

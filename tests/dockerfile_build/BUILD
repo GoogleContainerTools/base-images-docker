@@ -13,7 +13,7 @@ pkg_tar(
 
 dockerfile_build(
     name = "test_image",
-    base = "//debian/reproducible:debian8",
+    base = "//debian/reproducible:debian9",
     context = ":context.tar",
     dockerfile = ":Dockerfile",
 )

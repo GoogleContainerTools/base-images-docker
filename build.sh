@@ -4,7 +4,7 @@ usage() {
   echo "Usage: $0 [-r repository] [-v version] [-c config] [-o os]"
   echo
   echo "[repository]: remote repository to push the debian image to (e.g. 'gcr.io/gcp-runtimes/debian')"
-  echo "[version]: version of debian to build (e.g. 'jessie')"
+  echo "[version]: version of debian to build (e.g. 'stretch')"
   echo "[config]: the yaml file defining the steps of the build, defaults to cloudbuild.yaml"
   echo "[os]: which image to build, either debian or ubuntu. defaults to debian."
   echo
@@ -75,10 +75,7 @@ if [ -z "$REPO" ] || [ -z "$VERSION" ]; then
   usage
 fi
 
-if [ "$VERSION" == "jessie" ]
-then
-  export VERSION_NUMBER=8
-elif [ "$VERSION" == "stretch" ]
+if [ "$VERSION" == "stretch" ]
 then
   export VERSION_NUMBER=9
 elif [ "$VERSION" == "buster" ]
@@ -89,4 +86,4 @@ else
   usage
 fi
 
-gcloud container builds submit . --config="$CONFIG" --verbosity=info --substitutions=_REPO="$REPO",_TAG="$TAG",_VERSION_NUMBER="$VERSION_NUMBER"
+gcloud builds submit . --config="$CONFIG" --verbosity=info --substitutions=_REPO="$REPO",_TAG="$TAG",_VERSION_NUMBER="$VERSION_NUMBER"

@@ -10,8 +10,8 @@ every time.
 
 Use `gcloud container builds submit --config=debian/reproducible/cloudbuild.yaml .`
 to build the image in the cloud.
-To build locally, use: `bazel build //debian/reproducible:debian8`.
-To run tests locally, use: `bazel test //debian/reproducible:debian8_test`.
+To build locally, use: `bazel build //debian/reproducible:debian9`.
+To run tests locally, use: `bazel test //debian/reproducible:debian9_test`.
 
 
 ### Process

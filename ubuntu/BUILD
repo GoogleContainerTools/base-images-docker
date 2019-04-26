@@ -15,10 +15,17 @@ UBUNTU_ENV = {
     "DEBIAN_FRONTEND": "noninteractive",
 }
 
-# 'ubuntu_16_0_4' is a ubuntu_%s rootfs w/ ca-certificates, curl, and netbase
+# 'ubuntu_16_0_4' is a ubuntu_16_0_4 rootfs w/ ca-certificates, curl, and netbase
 dockerfile_build(
     name = "ubuntu_16_0_4",
     base = ":ubuntu_16_0_4_vanilla",
+    dockerfile = ":Dockerfile.ubuntu",
+)
+
+# 'ubuntu_18_0_4' is a ubuntu_18_0_4 rootfs w/ ca-certificates, curl, and netbase
+dockerfile_build(
+    name = "ubuntu_18_0_4",
+    base = ":ubuntu_18_0_4_vanilla",
     dockerfile = ":Dockerfile.ubuntu",
 )
 
@@ -59,7 +66,7 @@ genrule(
 
 bootstrap_image_macro(
     name = "bootstrap_ubuntu_16_0_4",
-    date = "20181217",
+    date = "20190409",
     image_tar = ":ubuntu_16_0_4_vanilla.tar",
     output_image_name = "ubuntu_16_0_4",
     packages = [
@@ -73,7 +80,7 @@ bootstrap_image_macro(
 
 bootstrap_image_macro(
     name = "bootstrap_ubuntu_18_0_4",
-    date = "20181204",
+    date = "20190406",
     image_tar = ":ubuntu_18_0_4_vanilla.tar",
     output_image_name = "ubuntu_18_0_4",
     packages = [
