@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_image",
+)
+
 """Rule for building debootstrap rootfs tarballs."""
 
 def _impl(ctx):
@@ -79,11 +85,6 @@ debootstrap = rule(
     implementation = _impl,
 )
 
-load(
-    "@io_bazel_rules_docker//docker:docker.bzl",
-    "docker_build",
-)
-
 def debootstrap_image(name, variant="minbase", distro="stretch", overlay_tar="", env=None):
     if not env:
         env = {}
@@ -97,9 +98,9 @@ def debootstrap_image(name, variant="minbase", distro="stretch", overlay_tar="",
     if overlay_tar:
         # The overlay tar has to come first to actuall overwrite existing files.
         tars.insert(0, overlay_tar)
-    docker_build(
+    container_image(
         name=name,
-        tars=tars,
+        files=tars,
         env=env,
         cmd="/bin/bash",
     )

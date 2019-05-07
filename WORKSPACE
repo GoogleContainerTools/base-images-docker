@@ -22,13 +22,20 @@ workspace(name = "base_images_docker")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+git_repository(
+    name = "bazel_skylib",
+    remote = "https://github.com/bazelbuild/bazel-skylib.git",
+    tag = "0.6.0",
+)
 
 # Docker rules.
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "6e77e2093260a031e6e18fe3567c2abce6e10a31e08624498cefb5f0076f1da7",
-    strip_prefix = "rules_docker-9ecadcbf6ce49832cc6faa81b882be9fe91358b7",
-    urls = ["https://github.com/bazelbuild/rules_docker/archive/9ecadcbf6ce49832cc6faa81b882be9fe91358b7.tar.gz"],
+    sha256 = "7355a42f93f4aecee147a734d1be9b91427d7fbf12292806cbdb22a3805011b9",
+    strip_prefix = "rules_docker-ea702043f0e59921a2a4dafaed8ac60c68011bbc",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/ea702043f0e59921a2a4dafaed8ac60c68011bbc.tar.gz"],
 )
  # Register the docker toolchain type
 register_toolchains(
@@ -40,18 +47,17 @@ register_toolchains(
 )
 
 load(
-    "@io_bazel_rules_docker//docker:docker.bzl",
-    "docker_pull",
-    "docker_repositories",
+    "@io_bazel_rules_docker//repositories:repositories.bzl",
+    container_repositories = "repositories",
+)
+container_repositories()
+
+
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_pull",
 )
 
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
-
-git_repository(
-    name = "bazel_skylib",
-    remote = "https://github.com/bazelbuild/bazel-skylib.git",
-    tag = "0.6.0",
-)
 
 git_repository(
     name = "structure_test",
@@ -80,9 +86,7 @@ git_repository(
     remote = "https://github.com/google/subpar",
 )
 
-docker_repositories()
-
-docker_pull(
+container_pull(
     name = "debian_base",
     digest = "sha256:00109fa40230a081f5ecffe0e814725042ff62a03e2d1eae0563f1f82eaeae9b",
     registry = "gcr.io",
@@ -91,15 +95,19 @@ docker_pull(
 
 git_repository(
     name = "distroless",
-    commit = "446923c3756ceeaa75888f52fcbdd48bb314fbf8",
+    commit = "a4fd5de337e31911aeee2ad5248284cebeb6a6f4",
     remote = "https://github.com/GoogleContainerTools/distroless.git",
 )
 
 load(
     "@distroless//package_manager:package_manager.bzl",
+    "package_manager_repositories",
+)
+
+load(
+    "@distroless//package_manager:dpkg.bzl",
     "dpkg_list",
     "dpkg_src",
-    "package_manager_repositories",
 )
 
 package_manager_repositories()
@@ -141,11 +149,26 @@ dpkg_list(
 
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "7be7dc01f1e0afdba6c8eb2b43d2fa01c743be1b9273ab1eaf6c233df078d705",
-    urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.16.5/rules_go-0.16.5.tar.gz"],
+    urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.18.3/rules_go-0.18.3.tar.gz"],
+    sha256 = "86ae934bd4c43b99893fc64be9d9fc684b81461581df7ea8fc291c816f5ee8c5",
 )
 
-load("@io_bazel_rules_go//go:def.bzl", "go_register_toolchains", "go_rules_dependencies", "go_download_sdk")
+http_archive(
+    name = "bazel_gazelle",
+    urls = ["https://github.com/bazelbuild/bazel-gazelle/releases/download/0.17.0/bazel-gazelle-0.17.0.tar.gz"],
+    sha256 = "3c681998538231a2d24d0c07ed5a7658cb72bfb5fd4bf9911157c0e9ac6a2687",
+)
+
+load("@io_bazel_rules_go//go:deps.bzl", "go_rules_dependencies", "go_register_toolchains", "go_download_sdk")
+
+go_rules_dependencies()
+
+go_register_toolchains()
+
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+
+gazelle_dependencies()
+
 
 go_download_sdk(
     name = "go_sdk",

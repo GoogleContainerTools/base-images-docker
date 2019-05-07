@@ -17,11 +17,6 @@
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 load("//package_managers:download_pkgs.bzl", "download_pkgs")
 load("//package_managers:install_pkgs.bzl", "install_pkgs")
-
-PACKAGES_FILE_NAME = "packages.tar"
-
-GET_OUTPUT_DIR = "/tmp"
-
 # Load all the stores get and put.
 load(
     "//store/git:git.bzl",
@@ -29,6 +24,11 @@ load(
     "git_store_put",
     _git_store_dependencies = "tools",
 )
+
+
+PACKAGES_FILE_NAME = "packages.tar"
+
+GET_OUTPUT_DIR = "/tmp"
 
 def _impl(ctx):
     store_key = "{0}/{1}".format(ctx.attr.date, PACKAGES_FILE_NAME)
