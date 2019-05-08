@@ -100,7 +100,7 @@ def debootstrap_image(name, variant="minbase", distro="stretch", overlay_tar="",
         tars.insert(0, overlay_tar)
     container_image(
         name=name,
-        files=tars,
+        tars=tars,
         env=env,
         cmd="/bin/bash",
     )
