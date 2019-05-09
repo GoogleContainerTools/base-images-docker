@@ -9,7 +9,6 @@ commandTests:
   command: 'apt-config'
   args: ['dump']
   expectedOutput: ['Acquire::Retries "3"']
-  name: 'apt-config'
 metadataTest:
   env:
         - key: PORT
