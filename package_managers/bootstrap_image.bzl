@@ -30,6 +30,7 @@ load(
     _git_store_dependencies = "tools",
 )
 
+
 def _impl(ctx):
     store_key = "{0}/{1}".format(ctx.attr.date, PACKAGES_FILE_NAME)
     get_file = "{0}/{1}/{2}".format(GET_OUTPUT_DIR, ctx.attr.name, PACKAGES_FILE_NAME)

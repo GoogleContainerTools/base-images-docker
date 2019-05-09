@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+load(
+    "@io_bazel_rules_docker//docker:docker.bzl",
+    "docker_build",
+)
+
 """Rule for building debootstrap rootfs tarballs."""
 
 def _impl(ctx):
@@ -77,11 +83,6 @@ debootstrap = rule(
         "out": "%{name}.tar.gz",
     },
     implementation = _impl,
-)
-
-load(
-    "@io_bazel_rules_docker//docker:docker.bzl",
-    "docker_build",
 )
 
 def debootstrap_image(name, variant="minbase", distro="stretch", overlay_tar="", env=None):
