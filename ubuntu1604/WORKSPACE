@@ -36,9 +36,9 @@ http_archive(
 
 http_archive(
     name = "base_images_docker",
-    sha256 = "f9a0ac30b16aaefc4b5856ba133387bac97cd6976f0ea44f2050616b8cc8ed99",
-    strip_prefix = "base-images-docker-91965492ca08c8308de43877c9d608bc812fd143",
-    urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/91965492ca08c8308de43877c9d608bc812fd143.tar.gz"],
+    sha256 = "26b6eb32e19deee8782bd734a2214c6a33dd5ec5b9fb3e92c69a2d5896ad89e3",
+    strip_prefix = "base-images-docker-6830adea69c63a5bf3cf8b93b2f5e56422181839",
+    urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/6830adea69c63a5bf3cf8b93b2f5e56422181839.tar.gz"],
 )
 
 http_archive(
