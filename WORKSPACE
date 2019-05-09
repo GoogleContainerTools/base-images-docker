@@ -33,9 +33,9 @@ git_repository(
 # Docker rules.
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "7355a42f93f4aecee147a734d1be9b91427d7fbf12292806cbdb22a3805011b9",
-    strip_prefix = "rules_docker-ea702043f0e59921a2a4dafaed8ac60c68011bbc",
-    urls = ["https://github.com/bazelbuild/rules_docker/archive/ea702043f0e59921a2a4dafaed8ac60c68011bbc.tar.gz"],
+    sha256 = "fe519e726201215ca3059223fb5b4181e97fa0d8efa33be382bef64d0bc43248",
+    strip_prefix = "rules_docker-0475563f497ca8104bde290e64a3b39e2428f042",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/0475563f497ca8104bde290e64a3b39e2428f042.tar.gz"],
 )
  # Register the docker toolchain type
 register_toolchains(
@@ -48,26 +48,26 @@ register_toolchains(
 
 load(
     "@io_bazel_rules_docker//repositories:repositories.bzl",
-    container_repositories = "repositories",
+    docker_repositories = "repositories",
 )
-container_repositories()
+docker_repositories()
 
 
 load(
-    "@io_bazel_rules_docker//container:container.bzl",
-    "container_pull",
+    "@io_bazel_rules_docker//docker:docker.bzl",
+    "docker_pull",
 )
 
 
 git_repository(
     name = "structure_test",
-    commit = "61f1d2f394e1fa1cd62f703cd51a8300e225da5a",
+    commit = "6d872049813aa2c4887f561f798ea753ffe2ab68",
     remote = "https://github.com/GoogleCloudPlatform/container-structure-test.git",
 )
 
 git_repository(
     name = "runtimes_common",
-    commit = "9828ee5659320cebbfd8d34707c36648ca087888",
+    commit = "85b0acbf902e468ae0ffa00d8c236007f0b00ad5",
     remote = "https://github.com/GoogleCloudPlatform/runtimes-common.git",
 )
 
@@ -86,7 +86,7 @@ git_repository(
     remote = "https://github.com/google/subpar",
 )
 
-container_pull(
+docker_pull(
     name = "debian_base",
     digest = "sha256:00109fa40230a081f5ecffe0e814725042ff62a03e2d1eae0563f1f82eaeae9b",
     registry = "gcr.io",

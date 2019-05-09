@@ -4,12 +4,10 @@ commandTests:
   command: 'dpkg'
   args: ['-l', 'curl']
   excludedOutput: ['.*no packages found matching.*']
-commandTests:
 - name: 'ca-certificates installed'
   command: 'dpkg'
   args: ['-l', 'ca-certificates']
   excludedOutput: ['.*no packages found matching.*']
-commandTests:
 - name: 'netbase installed'
   command: 'dpkg'
   args: ['-l', 'netbase']
@@ -26,7 +24,7 @@ fileExistenceTests:
 metadataTest:
   cmd: []
   env:
-        - key: PATH
-          value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-        - key: DEBIAN_FRONTEND
-          value: noninteractive
+    - key: PATH
+      value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    - key: DEBIAN_FRONTEND
+      value: noninteractive
