@@ -110,7 +110,10 @@ def strip_layer(path):
     with tarfile.open(name=path, mode='r') as it:
       with tarfile.open(fileobj=buf, mode='w') as ot:
         for tarinfo in it:
-          tarinfo.mtime = 0
+          # Use a deterministic mtime that doesn't confuse other programs,
+          # e.g. Python.
+          # Also see https://github.com/bazelbuild/bazel/issues/1299
+          tarinfo.mtime = 946684800 # 2000-01-01 00:00:00.000 UTC
           if tarinfo.isfile():
             f = it.extractfile(tarinfo)
             ot.addfile(tarinfo, f)
