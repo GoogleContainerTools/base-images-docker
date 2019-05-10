@@ -18,10 +18,6 @@ load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
 load("//package_managers:download_pkgs.bzl", "download_pkgs")
 load("//package_managers:install_pkgs.bzl", "install_pkgs")
 
-PACKAGES_FILE_NAME = "packages.tar"
-
-GET_OUTPUT_DIR = "/tmp"
-
 # Load all the stores get and put.
 load(
     "//store/git:git.bzl",
@@ -29,6 +25,10 @@ load(
     "git_store_put",
     _git_store_dependencies = "tools",
 )
+
+PACKAGES_FILE_NAME = "packages.tar"
+
+GET_OUTPUT_DIR = "/tmp"
 
 def _impl(ctx):
     store_key = "{0}/{1}".format(ctx.attr.date, PACKAGES_FILE_NAME)
@@ -54,13 +54,13 @@ else
 fi
 
 """.format(
-       output = ctx.outputs.packages_tar.path,
-       download_pkgs_script = "{0}.sh".format(download_pkgs_file_prefix),
-       download_pkgs_tar = "{0}.tar".format(download_pkgs_file_prefix),
-       key = store_key,
-       store_location = ctx.attr.store_location,
-       get_status = get_status.path,
-       get_file = get_file,
+        output = ctx.outputs.packages_tar.path,
+        download_pkgs_script = "{0}.sh".format(download_pkgs_file_prefix),
+        download_pkgs_tar = "{0}.tar".format(download_pkgs_file_prefix),
+        key = store_key,
+        store_location = ctx.attr.store_location,
+        get_status = get_status.path,
+        get_file = get_file,
     )
 
     fetch_or_download = ctx.actions.declare_file("{0}_fetch_or_download".format(ctx.attr.name))
@@ -73,42 +73,45 @@ fi
     ctx.actions.run(
         outputs = [ctx.outputs.packages_tar],
         inputs = ctx.attr.download_pkgs.default_runfiles.files.to_list() +
-                 [get_status,
-                  ctx.file.image_tar, fetch_or_download, ],
+                 [
+                     get_status,
+                     ctx.file.image_tar,
+                     fetch_or_download,
+                 ],
         executable = fetch_or_download,
         mnemonic = "RunFetchOrDownload",
         use_default_shell_env = True,
     )
+
     # This is not executed when you call the install_pkgs rule.
     # Only gets executed when you run _fetch target
     put_status = git_store_put(
         ctx = ctx,
         store_location = ctx.attr.store_location,
         artifact = ctx.outputs.packages_tar,
-        key = store_key
+        key = store_key,
     )
 
     return struct(
-        files = depset([ctx.outputs.packages_tar,]),
+        files = depset([ctx.outputs.packages_tar]),
         runfiles = ctx.runfiles(files = ctx.attr.download_pkgs.default_runfiles.files.to_list() +
-                                        [put_status, ctx.file.image_tar])
+                                        [put_status, ctx.file.image_tar]),
     )
 
 fetch_or_download_pkgs = rule(
     attrs = dict({
-        "image_tar": attr.label(
-            default = Label("//ubuntu:ubuntu_16_0_4_vanilla.tar"),
-            allow_files = True,
-            single_file = True,
-        ),
+        "date": attr.string(),
         "download_pkgs": attr.label(
             cfg = "target",
             executable = True,
             allow_files = True,
         ),
-        "store_location": attr.string(),
-        "date": attr.string(),
+        "image_tar": attr.label(
+            default = Label("//ubuntu:ubuntu_16_0_4_vanilla.tar"),
+            allow_single_file = True,
+        ),
         "output_image_name": attr.string(),
+        "store_location": attr.string(),
     }.items() + _git_store_dependencies.items()),
     outputs = {
         "packages_tar": "%{name}.tar",
@@ -131,44 +134,44 @@ Args:
   installation_cleanup_commands: cleanup commands to run after package installation.
 """
 
-def bootstrap_image_macro(name, image_tar, packages, store_location, date, output_image_name, additional_repos=[], installation_cleanup_commands=""):
-  """Downloads packages within a container
-  This rule creates a script to download packages within a container.
-  The script bundles all the packages in a tarball.
-  Args:
-    name: A unique name for this rule.
-    image_tar: The image tar for the container used to download packages.
-    packages: list of packages to download. e.g. ['curl', 'netbase']
-    additional_repos: list of additional debian package repos to use, in sources.list format
-    installation_cleanup_commands: cleanup commands to run after package installation.
-  """
-  download_target = "{0}_download".format(name)
-  download_pkgs(
-       name = download_target,
-       packages = packages,
-       image_tar = image_tar,
-       additional_repos = additional_repos,
-  )
+def bootstrap_image_macro(name, image_tar, packages, store_location, date, output_image_name, additional_repos = [], installation_cleanup_commands = ""):
+    """Downloads packages within a container
+    This rule creates a script to download packages within a container.
+    The script bundles all the packages in a tarball.
+    Args:
+      name: A unique name for this rule.
+      image_tar: The image tar for the container used to download packages.
+      packages: list of packages to download. e.g. ['curl', 'netbase']
+      additional_repos: list of additional debian package repos to use, in sources.list format
+      installation_cleanup_commands: cleanup commands to run after package installation.
+    """
+    download_target = "{0}_download".format(name)
+    download_pkgs(
+        name = download_target,
+        packages = packages,
+        image_tar = image_tar,
+        additional_repos = additional_repos,
+    )
 
-  fetch_target = "{0}_fetch".format(name)
-  fetch_or_download_pkgs(
-      name = fetch_target,
-      image_tar = image_tar,
-      download_pkgs = ":{0}".format(download_target),
-      store_location = store_location,
-      date = date,
-  )
+    fetch_target = "{0}_fetch".format(name)
+    fetch_or_download_pkgs(
+        name = fetch_target,
+        image_tar = image_tar,
+        download_pkgs = ":{0}".format(download_target),
+        store_location = store_location,
+        date = date,
+    )
 
-  install_target = "{0}_install".format(name)
-  install_pkgs(
-      name = install_target,
-      image_tar = image_tar,
-      installables_tar = ":{0}.tar".format(fetch_target),
-      output_image_name = output_image_name,
-      installation_cleanup_commands = installation_cleanup_commands,
-  )
+    install_target = "{0}_install".format(name)
+    install_pkgs(
+        name = install_target,
+        image_tar = image_tar,
+        installables_tar = ":{0}.tar".format(fetch_target),
+        output_image_name = output_image_name,
+        installation_cleanup_commands = installation_cleanup_commands,
+    )
 
-  docker_build(
-      name = name,
-      base = ":{0}.tar".format(install_target),
-  )
+    docker_build(
+        name = name,
+        base = ":{0}.tar".format(install_target),
+    )

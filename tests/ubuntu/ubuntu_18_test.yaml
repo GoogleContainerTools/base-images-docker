@@ -4,12 +4,10 @@ commandTests:
   command: 'sh'
   args: ['-c', 'echo $PATH']
   expectedOutput: ['/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin']
-commandTests:
 - name: 'curl installed'
   command: 'dpkg'
   args: ['-l', 'curl']
   excludedOutput: ['.*no packages found matching.*']
-commandTests:
 - name: 'ca-certificates installed'
   command: 'dpkg'
   args: ['-l', 'ca-certificates']
