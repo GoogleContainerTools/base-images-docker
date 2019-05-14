@@ -1,0 +1,115 @@
+# Copyright 2018 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+workspace(name = "debian9")
+
+load(
+    "@bazel_tools//tools/build_defs/repo:http.bzl",
+    "http_archive",
+)
+
+http_archive(
+    name = "io_bazel_rules_docker",
+    sha256 = "4abb48f56b838957c9c72ac511b44f79612fcf39d08338fad14a8e3f6b0572ea",
+    strip_prefix = "rules_docker-b8ff6a85ec359db3fd5657accd3e524daf12016d",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/b8ff6a85ec359db3fd5657accd3e524daf12016d.tar.gz"],
+)
+
+http_archive(
+    name = "base_images_docker",
+    sha256 = "26b6eb32e19deee8782bd734a2214c6a33dd5ec5b9fb3e92c69a2d5896ad89e3",
+    strip_prefix = "base-images-docker-6830adea69c63a5bf3cf8b93b2f5e56422181839",
+    urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/6830adea69c63a5bf3cf8b93b2f5e56422181839.tar.gz"],
+)
+
+http_archive(
+    name = "distroless",
+    sha256 = "24a81f5fe5f01078be07e9d76d4931a267d69fcc3c8acac65a23ab74fec45d83",
+    strip_prefix = "distroless-26290e32f6affe7a329f641693d0831e527bef45",
+    urls = ["https://github.com/GoogleContainerTools/distroless/archive/26290e32f6affe7a329f641693d0831e527bef45.tar.gz"],
+)
+
+http_archive(
+    name = "bazel_skylib",
+    # Commit c00ef493869e2966d47508e8625aae723a4a3054 of 2018-12-10
+    sha256 = "7363ae6721c1648017e23a200013510c9e71ca69f398d52886ee6af7f26af436",
+    strip_prefix = "bazel-skylib-c00ef493869e2966d47508e8625aae723a4a3054",
+    urls = ["https://github.com/bazelbuild/bazel-skylib/archive/c00ef493869e2966d47508e8625aae723a4a3054.tar.gz"],
+)
+
+load(
+    "@io_bazel_rules_docker//repositories:repositories.bzl",
+    container_repositories = "repositories",
+)
+
+container_repositories()
+
+load(
+    "@distroless//package_manager:package_manager.bzl",
+    "package_manager_repositories",
+)
+load(
+    "@distroless//package_manager:dpkg.bzl",
+    "dpkg_list",
+    "dpkg_src",
+)
+
+package_manager_repositories()
+
+load("//:revisions.bzl", "DEB_SNAPSHOT")
+
+dpkg_src(
+    name = "debian_stretch",
+    arch = "amd64",
+    distro = "jessie",
+    sha256 = DEB_SNAPSHOT.sha256,
+    snapshot = DEB_SNAPSHOT.revision,
+    url = "http://snapshot.debian.org/archive",
+)
+
+# These are needed to install debootstrap, only used for the builder image.
+dpkg_list(
+    name = "package_bundle",
+    packages = [
+        "ca-certificates",
+        "debootstrap",
+        "libffi6",
+        "libgmp10",
+        "libgnutls-deb0-28",
+        "libhogweed2",
+        "libicu52",
+        "libidn11",
+        "libnettle4",
+        "libp11-kit0",
+        "libpsl0",
+        "libtasn1-6",
+        "wget",
+    ],
+    sources = [
+        "@debian_stretch//file:Packages.json",
+    ],
+)
+
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_pull",
+)
+
+# Pull existing Debian base, only used to create builder image to debootstrap.
+container_pull(
+    name = "debian_base",
+    digest = "sha256:00109fa40230a081f5ecffe0e814725042ff62a03e2d1eae0563f1f82eaeae9b",
+    registry = "gcr.io",
+    repository = "google-appengine/debian9",
+)
