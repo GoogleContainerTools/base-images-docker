@@ -12,25 +12,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@base_images_docker//util:run.bzl", "container_run_and_extract")
+load(
+    "@bazel_toolchains//rules/container:docker_toolchains.bzl",
+    "toolchain_container",
+)
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
-load(
-    "@package_bundle//file:packages.bzl",
-    builder_packages = "packages",
-)
-load("//:debootstrap.bzl", "debootstrap_image")
-load("//:revisions.bzl", "DEB_SNAPSHOT")
 
 licenses(["notice"])  # Apache 2.0
 
 package(default_visibility = ["//visibility:public"])
 
-container_image(
+toolchain_container(
     name = "builder",
     base = "@debian_base//image",
-    debs = builder_packages.values(),
     files = [":mkimage.sh"],
+    packages = [
+        "debootstrap",
+    ],
+)
+
+container_run_and_extract(
+    name = "rootfs",
+    commands = [
+        " ".join([
+            "/mkimage.sh",
+            "minbase",
+            "stretch",
+        ]),
+    ],
+    docker_run_flags = ["--privileged"],
+    extract_file = "/workspace/rootfs.tar.gz",
+    image = ":builder.tar",
 )
 
 # The overlay directory contains files that should be overlaid into the rootfs at /.
@@ -47,13 +62,16 @@ DEBIAN_ENV = {
     "PORT": "8080",
 }
 
-debootstrap_image(
+container_image(
     name = "image",
-    builder_image = ":builder.tar",
-    distro = "stretch",
+    cmd = "/bin/bash",
     env = DEBIAN_ENV,
-    overlay_tar = ":overlay.tar",
-    snapshot = DEB_SNAPSHOT.revision,
+    tars = [
+        # The overlay tar has to come first to actuall overwrite existing files.
+        ":overlay.tar",
+        # TODO(xingao): Switch to use checked-in file.
+        ":rootfs/workspace/rootfs.tar.gz",
+    ],
 )
 
 container_test(

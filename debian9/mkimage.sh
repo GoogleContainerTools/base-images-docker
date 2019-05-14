@@ -3,34 +3,30 @@
 set -ex
 
 usage() {
-  echo "Usage: $0 [SNAPSHOT] [VARIANT] [DIST]"
+  echo "Usage: $0 [VARIANT] [DIST]"
   echo
-  echo "[SNAPSHOT]: The debian snapshot datetime to use."
   echo "[VARIANT]: The debian variant to use."
   echo "[DIST]: The debian dist to use."
   echo
   exit 1
 }
 
-if [ $# -ne 3 ]; then
+if [ $# -ne 2 ]; then
     usage
 fi
 
-SNAPSHOT=$1
-VARIANT=$2
-DIST=$3
+VARIANT=$1
+DIST=$2
 
-WORKDIR="/workspace/jessie"
+WORKDIR="/workspace/$DIST"
 mkdir -p "$WORKDIR"
 
-debootstrap --variant="$VARIANT" "$DIST" "$WORKDIR" http://snapshot.debian.org/archive/debian/"$SNAPSHOT"
+debootstrap --variant="$VARIANT" "$DIST" "$WORKDIR" http://httpredir.debian.org/debian
 
 rootfs_chroot() {
-
     PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' \
         chroot "$WORKDIR" "$@"
 }
-
 
 # Add some tools we need.
 rootfs_chroot apt-get install -y --no-install-recommends \
@@ -40,19 +36,14 @@ rootfs_chroot apt-get install -y --no-install-recommends \
 # We have our own version of initctl, tell dpkg to not overwrite it.
 rootfs_chroot dpkg-divert --local --rename --add /sbin/initctl
 
-# Add the SNAPSHOT security and updates mirrors, for a final upgrade.
-cat << EOF > $WORKDIR/etc/apt/sources.list
-deb http://snapshot.debian.org/archive/debian/$SNAPSHOT $DIST main
-deb http://snapshot.debian.org/archive/debian/$SNAPSHOT $DIST-updates main
-deb http://snapshot.debian.org/archive/debian-security/$SNAPSHOT $DIST/updates main
-EOF
+# Do a final upgrade.
 rootfs_chroot apt-get -o Acquire::Check-Valid-Until=false update
 rootfs_chroot apt-get -y -q upgrade
 
 # Clean some apt artifacts
 rootfs_chroot apt-get clean
 
-# Reset the mirrors to distro-based ones
+# Set the mirrors to distro-based ones
 cat << EOF > $WORKDIR/etc/apt/sources.list
 deb http://httpredir.debian.org/debian $DIST main
 deb http://httpredir.debian.org/debian $DIST-updates main
@@ -63,7 +54,7 @@ EOF
 rm -rf "${WORKDIR:?}"/dev "$WORKDIR"/proc
 mkdir -p "$WORKDIR"/dev "$WORKDIR"/proc
 
-rm -rf "$WORKDIR"/var/lib/apt/lists/snapshot*
+rm -rf "$WORKDIR"/var/lib/apt/lists/httpredir*
 rm -rf "$WORKDIR"/etc/apt/apt.conf.d/01autoremove-kernels
 
 # These are showing up as broken symlinks?

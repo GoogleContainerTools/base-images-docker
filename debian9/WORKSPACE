@@ -14,9 +14,13 @@
 
 workspace(name = "debian9")
 
-load(
-    "@bazel_tools//tools/build_defs/repo:http.bzl",
-    "http_archive",
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "bazel_toolchains",
+    sha256 = "91db7cf3a400da264e9123bb3d070e80184d9e40a87fc38b50e1dbb002b212fc",
+    strip_prefix = "bazel-toolchains-db36179f00b0b252a80824ed7dabc636c5e6c5fe",
+    urls = ["https://github.com/bazelbuild/bazel-toolchains/archive/db36179f00b0b252a80824ed7dabc636c5e6c5fe.tar.gz"],
 )
 
 http_archive(
@@ -34,13 +38,6 @@ http_archive(
 )
 
 http_archive(
-    name = "distroless",
-    sha256 = "24a81f5fe5f01078be07e9d76d4931a267d69fcc3c8acac65a23ab74fec45d83",
-    strip_prefix = "distroless-26290e32f6affe7a329f641693d0831e527bef45",
-    urls = ["https://github.com/GoogleContainerTools/distroless/archive/26290e32f6affe7a329f641693d0831e527bef45.tar.gz"],
-)
-
-http_archive(
     name = "bazel_skylib",
     # Commit c00ef493869e2966d47508e8625aae723a4a3054 of 2018-12-10
     sha256 = "7363ae6721c1648017e23a200013510c9e71ca69f398d52886ee6af7f26af436",
@@ -54,52 +51,6 @@ load(
 )
 
 container_repositories()
-
-load(
-    "@distroless//package_manager:package_manager.bzl",
-    "package_manager_repositories",
-)
-load(
-    "@distroless//package_manager:dpkg.bzl",
-    "dpkg_list",
-    "dpkg_src",
-)
-
-package_manager_repositories()
-
-load("//:revisions.bzl", "DEB_SNAPSHOT")
-
-dpkg_src(
-    name = "debian_stretch",
-    arch = "amd64",
-    distro = "jessie",
-    sha256 = DEB_SNAPSHOT.sha256,
-    snapshot = DEB_SNAPSHOT.revision,
-    url = "http://snapshot.debian.org/archive",
-)
-
-# These are needed to install debootstrap, only used for the builder image.
-dpkg_list(
-    name = "package_bundle",
-    packages = [
-        "ca-certificates",
-        "debootstrap",
-        "libffi6",
-        "libgmp10",
-        "libgnutls-deb0-28",
-        "libhogweed2",
-        "libicu52",
-        "libidn11",
-        "libnettle4",
-        "libp11-kit0",
-        "libpsl0",
-        "libtasn1-6",
-        "wget",
-    ],
-    sources = [
-        "@debian_stretch//file:Packages.json",
-    ],
-)
 
 load(
     "@io_bazel_rules_docker//container:container.bzl",
