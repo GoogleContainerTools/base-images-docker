@@ -1,0 +1,47 @@
+schemaVersion: '2.0.0'
+
+commandTests:
+- name: 'apt-get'
+  command: 'apt-get'
+  args: ['help']
+  excludedError: ['.*FAIL.*']
+  expectedOutput: ['.*Usage.*']
+- name: 'apt-config'
+  command: 'apt-config'
+  args: ['dump']
+  expectedOutput: ['Acquire::Retries "3"']
+metadataTest:
+  env:
+        - key: PORT
+          value: 8080
+        - key: DEBIAN_FRONTEND
+          value: noninteractive
+        - key: PATH
+          value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+fileContentTests:
+- name: 'Debian Sources'
+  excludedContents: ['.*gce_debian_mirror.*']
+  expectedContents: ['.*httpredir\.debian\.org.*']
+  path: '/etc/apt/sources.list'
+- name: 'Retry Policy'
+  expectedContents: ['Acquire::Retries 3;']
+  path: '/etc/apt/apt.conf.d/apt-retry'
+fileExistenceTests:
+- name: 'Root'
+  path: '/'
+  shouldExist: true
+- name: 'Netbase'
+  path: '/etc/protocols'
+  shouldExist: true
+- name: 'Machine ID'
+  path: '/etc/machine-id'
+  shouldExist: true
+licenseTests:
+- debian: true
+  files:
+
+# Debian 9 specific tests.
+fileContentTests:
+- name: 'Debian Sources Version'
+  expectedContents: ['stretch']
+  path: '/etc/apt/sources.list'
