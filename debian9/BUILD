@@ -34,6 +34,9 @@ toolchain_container(
     ],
 )
 
+# Generate a debian rootfs using debootstrap. See `mkimage.sh` for more details.
+# Do not use this directly in the container_image target below. Use the archived
+# version to ensure container reproducibility.
 container_run_and_extract(
     name = "rootfs",
     commands = [
@@ -69,8 +72,7 @@ container_image(
     tars = [
         # The overlay tar has to come first to actuall overwrite existing files.
         ":overlay.tar",
-        # TODO(xingao): Switch to use checked-in file.
-        ":rootfs/workspace/rootfs.tar.gz",
+        "@debian9_tar//file",
     ],
 )
 

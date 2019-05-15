@@ -20,5 +20,5 @@ gcsDeps:
   - name: "DEBIAN9_TAR"
     bucket: "container-deps"
     versionRegex: "\\d{8,}"
-    fileRegex: "^debian9/tar/\\d{8,}_debian9\\.tar\\.gz$"
+    fileRegex: "^debian9/tar/\\d{8,}_rootfs\\.tar\\.gz$"
     startsWith: "debian9/tar/"
