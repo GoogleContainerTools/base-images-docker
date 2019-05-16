@@ -14,53 +14,53 @@
 
 timeout: 21600s
 options:
-    machineType: 'N1_HIGHCPU_32'
+    machineType: "N1_HIGHCPU_32"
 
 steps:
 # Step: print the bazel version for record
-  - name: 'gcr.io/asci-toolchain/nosla-ubuntu16_04-bazel-docker-gcloud:latest'
-    args: ['bazel', 'version']
-    id: 'version'
-    waitFor: ['-']   # wait for nothing - start immediately
+  - name: "l.gcr.io/google/bazel"
+    args: ["version"]
+    id: "version"
+    waitFor: ["-"]   # wait for nothing - start immediately
 
 # Step: build the image
-  - name: 'gcr.io/asci-toolchain/nosla-ubuntu16_04-bazel-docker-gcloud:latest'
+  - name: "l.gcr.io/google/bazel"
     # Set Bazel output_base to /workspace, which is a mounted directory on Google Cloud Builder.
     # This is to make sure Bazel generated files can be accessed by multiple containers.
-    # TODO(xingao) Remove --loading_phase_threads=1. There is some race condition happening
-    # when multiple `gsutil cp` commands are called (by the gcs_file repository rule).
-    args: ['bazel', '--output_base=/workspace/ubuntu1804', 'run', '//:image', '--loading_phase_threads=1']
+    args: ["--output_base=/workspace/ubuntu1804", "run", "//:image"]
     # This is needed for GCB to correctly build/test targets in the Bazel project.
-    dir: 'ubuntu1804'
-    id: 'container-build'
-    waitFor: ['version']
+    dir: "ubuntu1804"
+    id: "container-build"
+    waitFor: ["version"]
 
 # Step: run structure tests on the new image
 # We use container_test rule, which is a Bazel wrapper of container_structure_test.
 # https://github.com/bazelbuild/rules_docker/blob/master/contrib/test.bzl
-  - name: 'gcr.io/asci-toolchain/nosla-ubuntu16_04-bazel-docker-gcloud:latest'
-    args: ['bazel', '--output_base=/workspace/ubuntu1804', 'test', '//:image-test']
+  - name: "l.gcr.io/google/bazel"
+    args: ["--output_base=/workspace/ubuntu1804", "test", "//:image-test"]
     # This is needed for GCB to correctly build/test targets in the Bazel project.
-    dir: 'ubuntu1804'
-    id: 'structure-test'
-    waitFor: ['container-build']
+    dir: "ubuntu1804"
+    id: "structure-test"
+    waitFor: ["container-build"]
 
 # Step: tag the image, first as the backup image.
-  - name: 'gcr.io/asci-toolchain/nosla-ubuntu16_04-bazel-docker-gcloud:latest'
-    args: ['docker', 'tag', 'bazel:image', 'gcr.io/asci-toolchain-backup/ubuntu1804-xingao-test:latest']
-    id: 'backup-container-tag'
-    waitFor: ['structure-test']
+  - name: "l.gcr.io/google/bazel"
+    entrypoint: "docker"
+    args: ["tag", "bazel:image", "gcr.io/asci-toolchain-backup/ubuntu1804-xingao-test:latest"]
+    id: "backup-container-tag"
+    waitFor: ["structure-test"]
 
 # Step: tag the image again with the final location.
-  - name: 'gcr.io/asci-toolchain/nosla-ubuntu16_04-bazel-docker-gcloud:latest'
-    args: ['docker', 'tag', 'bazel:image', 'gcr.io/asci-toolchain/ubuntu1804-xingao-test:latest']
-    id: 'container-tag'
-    waitFor: ['backup-container-tag']
+  - name: "l.gcr.io/google/bazel"
+    entrypoint: "docker"
+    args: ["tag", "bazel:image", "gcr.io/asci-toolchain/ubuntu1804-xingao-test:latest"]
+    id: "container-tag"
+    waitFor: ["backup-container-tag"]
 
 # Push the new image and its backup.
 # Push by using the `images` field here so they will show up in the build results
 # or the GCB Build information page.
 # https://cloud.google.com/cloud-build/docs/configuring-builds/store-images-artifacts
 images:
-  - 'gcr.io/asci-toolchain/ubuntu1804-xingao-test:latest'
-  - 'gcr.io/asci-toolchain-backup/ubuntu1804-xingao-test:latest'
+  - "gcr.io/asci-toolchain/ubuntu1804-xingao-test:latest"
+  - "gcr.io/asci-toolchain-backup/ubuntu1804-xingao-test:latest"
