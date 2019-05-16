@@ -1,0 +1,76 @@
+# Copyright 2018 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+workspace(name = "centos7")
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "io_bazel_rules_docker",
+    sha256 = "1a035f4e9c21e48668e09b327f89bd8197feb42b82d2b6904913c655f27a845a",
+    strip_prefix = "rules_docker-bb6d6606a6be348115af3552662799fd6d851a88",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/bb6d6606a6be348115af3552662799fd6d851a88.tar.gz"],
+)
+
+http_archive(
+    name = "base_images_docker",
+    sha256 = "16da54ef0734a0658d7006bc8bf6b9be26b963edec497b13974a1bfb46cefc41",
+    strip_prefix = "base-images-docker-7fdd2bb83a6957fe66712bd5238087b257b04378",
+    urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/7fdd2bb83a6957fe66712bd5238087b257b04378.tar.gz"],
+)
+
+http_archive(
+    name = "bazel_skylib",
+    # Commit c00ef493869e2966d47508e8625aae723a4a3054 of 2018-12-10
+    sha256 = "7363ae6721c1648017e23a200013510c9e71ca69f398d52886ee6af7f26af436",
+    strip_prefix = "bazel-skylib-c00ef493869e2966d47508e8625aae723a4a3054",
+    urls = ["https://github.com/bazelbuild/bazel-skylib/archive/c00ef493869e2966d47508e8625aae723a4a3054.tar.gz"],
+)
+
+load(
+    "@io_bazel_rules_docker//repositories:repositories.bzl",
+    container_repositories = "repositories",
+)
+
+container_repositories()
+
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_pull",
+)
+
+# Pull existing Centos base, only used by File Update Service to create a new
+# Centos base tarball.
+container_pull(
+    name = "centos_base",
+    registry = "l.gcr.io",
+    repository = "google/centos7",
+    tag = "latest",
+)
+
+load(":http_file_regex.bzl", "http_file_regex")
+
+# Non-deterministic latest version of Centos 7 release rpm. This is used by
+# File Update Service to archive each version in our managed GCS bucket, and
+# should NOT be used by container release directly.
+http_file_regex(
+    name = "centos7_latest",
+    downloaded_file_path = "centos7.rpm",
+    regex = ".*centos-release.*rpm",
+    url = "http://mirror.centos.org/centos/7/os/x86_64/Packages/",
+)
+
+load(":deps.bzl", "deps")
+
+deps()
