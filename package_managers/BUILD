@@ -15,3 +15,12 @@
 package(default_visibility = ["//visibility:public"])
 
 exports_files(["installer.sh.tpl"])
+
+load("@subpar//:subpar.bzl", "par_binary")
+par_binary(
+    name = "security_check",
+    srcs = ["security_check.py"],
+    main = "security_check.py",
+    visibility = ["//visibility:public"],
+    python_version = "PY2",
+)
