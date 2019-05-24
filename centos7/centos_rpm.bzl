@@ -12,11 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Repository rule for pulling a file matching certain regex from a base URL.
+"""Repository rule for pulling a Centos release rpm.
+
+Note this rule is very specific to download Centos release rpm and is not meant
+to be used to download other files.
 """
 
-_DEFAULT_FILE_NAME = "downloaded"
-
+_DOWNLOADED_FILE_NAME = "centos.rpm"
+_BASE_URL = "http://mirror.centos.org/centos/{}/os/x86_64/Packages/"
+_REGEX = ".*centos-release.*rpm"
 _BUILD = """
 package(default_visibility = ["//visibility:public"])
 filegroup(
@@ -25,33 +29,21 @@ filegroup(
 )
 """
 
-def _http_file_regex_impl(repository_ctx):
-    """Implementation of the gcs_file rule."""
-    repo_root = repository_ctx.path(".")
-    forbidden_files = [
-        repo_root,
-        repository_ctx.path("WORKSPACE"),
-        repository_ctx.path("BUILD"),
-        repository_ctx.path("BUILD.bazel"),
-        repository_ctx.path("file/BUILD"),
-        repository_ctx.path("file/BUILD.bazel"),
-    ]
-    downloaded_file_path = repository_ctx.attr.downloaded_file_path or _DEFAULT_FILE_NAME
-    download_path = repository_ctx.path("file/" + downloaded_file_path)
-    if download_path in forbidden_files or not str(download_path).startswith(str(repo_root)):
-        fail("'%s' cannot be used as downloaded_file_path in http_file_regex" % repository_ctx.attr.downloaded_file_path)
+def _centos_rpm_impl(repository_ctx):
+    """Implementation of the centos_rpm rule."""
+    download_path = repository_ctx.path("file/" + _DOWNLOADED_FILE_NAME)
 
     download_command = [
         "wget",
         "-q",
-        repository_ctx.attr.url,
+        _BASE_URL.format(repository_ctx.attr.version),
         "-np",  # Do not ascend to the parent directory when retrieving recursively.
         "-nd",  # Do not create a hierarchy of directories when retrieving recursively.
         "-r",  # Recursive
         "-R",  # Avoid downloading auto-generated index.html files.
         "*index.html*",
         "--accept-regex",  # Passing the file regex.
-        repository_ctx.attr.url + repository_ctx.attr.regex,
+        _BASE_URL.format(repository_ctx.attr.version) + _REGEX,
     ]
 
     download_result = repository_ctx.execute(download_command, working_directory = "file")
@@ -85,22 +77,14 @@ def _http_file_regex_impl(repository_ctx):
         ))
 
     # Add a top-level BUILD file to export all the downloaded files.
-    repository_ctx.file("file/BUILD", _BUILD.format(downloaded_file_path))
+    repository_ctx.file("file/BUILD", _BUILD.format(_DOWNLOADED_FILE_NAME))
 
-http_file_regex = repository_rule(
+centos_rpm = repository_rule(
     attrs = {
-        "downloaded_file_path": attr.string(
-            doc = ("Path assigned to the file downloaded. Default to `downloaded"),
-        ),
-        "regex": attr.string(
+        "version": attr.int(
             mandatory = True,
-            doc = ("The regex of file to download. It should be the part " +
-                   "to be appended to the url."),
-        ),
-        "url": attr.string(
-            mandatory = True,
-            doc = "The base/root url of the file. Regex is not allowed in the url.",
+            doc = "The major version of Centos",
         ),
     },
-    implementation = _http_file_regex_impl,
+    implementation = _centos_rpm_impl,
 )

@@ -59,16 +59,14 @@ container_pull(
     tag = "latest",
 )
 
-load(":http_file_regex.bzl", "http_file_regex")
+load(":centos_rpm.bzl", "centos_rpm")
 
 # Non-deterministic latest version of Centos 7 release rpm. This is used by
 # File Update Service to archive each version in our managed GCS bucket, and
 # should NOT be used by container release directly.
-http_file_regex(
+centos_rpm(
     name = "centos7_latest",
-    downloaded_file_path = "centos7.rpm",
-    regex = ".*centos-release.*rpm",
-    url = "http://mirror.centos.org/centos/7/os/x86_64/Packages/",
+    version = 7,
 )
 
 load(":deps.bzl", "deps")

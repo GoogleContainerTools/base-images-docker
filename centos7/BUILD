@@ -21,6 +21,8 @@ licenses(["notice"])  # Apache 2.0
 
 package(default_visibility = ["//visibility:public"])
 
+VERSION = "7"
+
 # Used by File Update Service only.
 pkg_tar(
     name = "chroot_tar",
@@ -48,7 +50,7 @@ container_image(
 # Used by File Update Service only.
 container_run_and_extract(
     name = "centos_layer",
-    commands = ["/build.sh"],
+    commands = ["/build.sh " + VERSION],
     docker_run_flags = ["--privileged"],
     extract_file = "/layer.tar",
     image = ":builder.tar",

@@ -2,7 +2,7 @@
 
 # This script runs inside a chroot and sets up a bootstrapped centos image.
 
-yum -y -q --releasever=7 install yum centos-release
+yum -y -q --releasever=${1} install yum centos-release
 yum install -q -y bind-utils     bash     yum     vim-minimal     centos-release     less     iputils     iproute     systemd     rootfiles     tar     passwd     yum-utils     yum-plugin-ovl    hostname
 yum -q -y erase kernel*     *firmware     firewalld-filesystem     os-prober     gettext*     GeoIP     bind-license     freetype     libteam     teamd
 rpm -e kernel
