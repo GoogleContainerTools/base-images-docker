@@ -34,12 +34,36 @@ http_archive(
     urls = ["https://github.com/bazelbuild/rules_docker/archive/bb6d6606a6be348115af3552662799fd6d851a88.tar.gz"],
 )
 
+"""
 http_archive(
     name = "base_images_docker",
     sha256 = "16da54ef0734a0658d7006bc8bf6b9be26b963edec497b13974a1bfb46cefc41",
     strip_prefix = "base-images-docker-7fdd2bb83a6957fe66712bd5238087b257b04378",
     urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/7fdd2bb83a6957fe66712bd5238087b257b04378.tar.gz"],
 )
+"""
+
+local_repository(
+    name = "base_images_docker",
+    path = "..",
+)
+
+load("@base_images_docker//package_managers:repositories.bzl", package_manager_deps = "deps")
+
+package_manager_deps()
+
+load("@io_bazel_rules_python//python:pip.bzl", "pip_import", "pip_repositories")
+
+pip_repositories()
+
+pip_import(
+    name = "pip_deps",
+    requirements = "@base_images_docker//package_managers:requirements-pip.txt",
+)
+
+load("@pip_deps//:requirements.bzl", "pip_install")
+
+pip_install()
 
 http_archive(
     name = "bazel_skylib",

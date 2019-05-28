@@ -13,6 +13,7 @@
 # limitations under the License.
 
 load("@base_images_docker//package_managers:download_pkgs.bzl", "download_pkgs")
+load("@base_images_docker//package_managers:security_check.bzl", "security_check")
 load(
     "@bazel_toolchains//rules/container:docker_toolchains.bzl",
     "toolchain_container",
@@ -56,6 +57,14 @@ toolchain_container(
     ],
     env = UBUNTU_ENV,
     installables_tar = "@ubuntu1604_debs//file",
+)
+
+# Run the security check script to generate a metadata YAML file indicating
+# whether the ubuntu 16.04 has critical security vulnerability fixes.
+security_check(
+    name = "security_metadata",
+    image = "gcr.io/asci-toolchain/ubuntu1604-xingao-test:latest",
+    severity = "CRITICAL",
 )
 
 container_test(
