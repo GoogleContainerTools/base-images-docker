@@ -37,7 +37,8 @@ http_archive(
     strip_prefix = "rules_docker-bb6d6606a6be348115af3552662799fd6d851a88",
     urls = ["https://github.com/bazelbuild/rules_docker/archive/bb6d6606a6be348115af3552662799fd6d851a88.tar.gz"],
 )
- # Register the docker toolchain type
+
+# Register the docker toolchain type
 register_toolchains(
     # Register the default docker toolchain that expects the 'docker'
     # executable to be in the PATH
@@ -50,14 +51,13 @@ load(
     "@io_bazel_rules_docker//repositories:repositories.bzl",
     container_repositories = "repositories",
 )
-container_repositories()
 
+container_repositories()
 
 load(
     "@io_bazel_rules_docker//container:container.bzl",
     "container_pull",
 )
-
 
 git_repository(
     name = "structure_test",
@@ -103,7 +103,6 @@ load(
     "@distroless//package_manager:package_manager.bzl",
     "package_manager_repositories",
 )
-
 load(
     "@distroless//package_manager:dpkg.bzl",
     "dpkg_list",
@@ -149,17 +148,17 @@ dpkg_list(
 
 http_archive(
     name = "io_bazel_rules_go",
-    urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.18.3/rules_go-0.18.3.tar.gz"],
     sha256 = "86ae934bd4c43b99893fc64be9d9fc684b81461581df7ea8fc291c816f5ee8c5",
+    urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.18.3/rules_go-0.18.3.tar.gz"],
 )
 
 http_archive(
     name = "bazel_gazelle",
-    urls = ["https://github.com/bazelbuild/bazel-gazelle/releases/download/0.17.0/bazel-gazelle-0.17.0.tar.gz"],
     sha256 = "3c681998538231a2d24d0c07ed5a7658cb72bfb5fd4bf9911157c0e9ac6a2687",
+    urls = ["https://github.com/bazelbuild/bazel-gazelle/releases/download/0.17.0/bazel-gazelle-0.17.0.tar.gz"],
 )
 
-load("@io_bazel_rules_go//go:deps.bzl", "go_rules_dependencies", "go_register_toolchains", "go_download_sdk")
+load("@io_bazel_rules_go//go:deps.bzl", "go_download_sdk", "go_register_toolchains", "go_rules_dependencies")
 
 go_rules_dependencies()
 
@@ -169,14 +168,17 @@ load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 
 gazelle_dependencies()
 
-
 go_download_sdk(
     name = "go_sdk",
     sdks = {
-        "linux_amd64":   ("go1.11.4.linux-amd64.tar.gz",
-            "fb26c30e6a04ad937bbc657a1b5bba92f80096af1e8ee6da6430c045a8db3a5b"),
-        "darwin_amd64":      ("go1.11.4.darwin-amd64.tar.gz",
-            "48ea987fb610894b3108ecf42e7a4fd1c1e3eabcaeb570e388c75af1f1375f80"),
+        "linux_amd64": (
+            "go1.11.4.linux-amd64.tar.gz",
+            "fb26c30e6a04ad937bbc657a1b5bba92f80096af1e8ee6da6430c045a8db3a5b",
+        ),
+        "darwin_amd64": (
+            "go1.11.4.darwin-amd64.tar.gz",
+            "48ea987fb610894b3108ecf42e7a4fd1c1e3eabcaeb570e388c75af1f1375f80",
+        ),
     },
 )
 
@@ -185,7 +187,7 @@ go_rules_dependencies()
 go_register_toolchains()
 
 UBUNTU_MAP = {
-   "16_0_4": {
+    "16_0_4": {
         "sha256": "fd9e05a2b68f63eaf4cc25033d2cb0589882c24397d4cf2e5068c4049cc1763e",
         "url": "https://storage.googleapis.com/ubuntu_tar/20190425/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
     },
@@ -213,3 +215,19 @@ http_file(
     urls = ["http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0xEB9B1D8886F44E2A"],
 )
 
+load("//package_managers:repositories.bzl", package_manager_deps = "deps")
+
+package_manager_deps()
+
+load("@io_bazel_rules_python//python:pip.bzl", "pip_import", "pip_repositories")
+
+pip_repositories()
+
+pip_import(
+    name = "pip_deps",
+    requirements = "//package_managers:requirements-pip.txt",
+)
+
+load("@pip_deps//:requirements.bzl", "pip_install")
+
+pip_install()

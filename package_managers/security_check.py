@@ -5,6 +5,7 @@ import json
 import subprocess
 import sys
 import logging
+import yaml
 
 import distutils.version as ver
 
@@ -99,6 +100,7 @@ def _check_for_vulnz(image, severity, whitelist):
     return unpatched
 
   base_image = _find_base_image(image)
+  base_image = None
   base_unpatched = {}
   if base_image:
     base_unpatched = _check_image(base_image, severity, whitelist)
@@ -250,26 +252,57 @@ def _get_version_number(version_obj):
 
   return ''.join([str(epoch), delimiter1, name, delimiter2, str(revision)])
 
+def _generate_yaml_output(output_yaml, vulnerabilities):
+  """Generate a YAML file mapping the key "tags" to the list of types of
+  vulnerabilities found.
 
-def security_check(image, severity=_MEDIUM, whitelist_file='whitelist.json'):
+  Args:
+    output_yaml: Path to the output YAML file to generate.
+    vulnerabilities: A dictionary mapping the name of the CVE entry to details
+                     about the vulnerability.
+  """
+  tags = set()
+  for v in vulnerabilities.itervalues():
+    details = v["vulnerabilityDetails"]
+    # The service that consumes the metadata expects the tags as follows:
+    # LOW -> cveLow
+    # MEDIUM -> sveMedium
+    # and so on...
+    sev = str(details['effectiveSeverity'])
+    tags.add("cve{}".format(sev.lower().capitalize()))
+  result = {"tags": list(tags)}
+  logging.info("Creating YAML output {}".format(output_yaml))
+  with open(output_yaml, "w") as ofp:
+    ofp.write(yaml.dump(result))
+
+def security_check(image, severity=_MEDIUM, whitelist_file='whitelist.json',
+                   output_yaml=None):
   """Main security check function.
 
   Args:
     image: full name of the docker image
     severity: the severity of vulnerability to trigger failure
     whitelist_file: file with list of whitelisted CVE
+    output_yaml: Output file which will be populated with a list of types of
+                 vulnerability that exist for the given image.
 
   Returns:
     Map of vulnerabilities, if present.
   """
 
   try:
+    logging.info("Loading whitelist JSON {}".format(whitelist_file))
     whitelist = json.load(open(whitelist_file, 'r'))
   except IOError:
     whitelist = []
   logging.info('whitelist=%s', whitelist)
 
-  return _check_for_vulnz(_sub_image(image), severity, whitelist)
+  result = _check_for_vulnz(_sub_image(image), severity, whitelist)
+
+  if output_yaml:
+    logging.info("Creating YAML output {}".format(output_yaml))
+    _generate_yaml_output(output_yaml, result)
+  return result
 
 
 def _main():
@@ -284,9 +317,13 @@ def _main():
   parser.add_argument('--whitelist-file', dest='whitelist',
                       help='The path to the whitelist json file',
                       default='whitelist.json')
+  parser.add_argument('--output-yaml', dest='output_yaml',
+                      help='The path to the output YAML file to'+\
+                      ' generate with a list of tags indicating the types of'+\
+                      ' vulnerability fixes available for the given image.')
   args = parser.parse_args()
-
-  return len(security_check(args.image, args.severity, args.whitelist))
+  security_check(args.image, args.severity, args.whitelist,
+                            args.output_yaml)
 
 
 if __name__ == '__main__':

@@ -12,20 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-package(default_visibility = ["//visibility:public"])
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-exports_files(["installer.sh.tpl"])
-
-load("@pip_deps//:requirements.bzl", "requirement")
-load("@subpar//:subpar.bzl", "par_binary")
-
-par_binary(
-    name = "security_check",
-    srcs = ["security_check.py"],
-    main = "security_check.py",
-    python_version = "PY2",
-    visibility = ["//visibility:public"],
-    deps = [
-        requirement("PyYaml"),
-    ],
-)
+def deps():
+    """
+    Import external dependencies needed by targets in this package.
+    """
+    http_archive(
+        name = "io_bazel_rules_python",
+        sha256 = "9a3d71e348da504a9c4c5e8abd4cb822f7afb32c613dc6ee8b8535333a81a938",
+        strip_prefix = "rules_python-fdbb17a4118a1728d19e638a5291b4c4266ea5b8",
+        urls = ["https://github.com/bazelbuild/rules_python/archive/fdbb17a4118a1728d19e638a5291b4c4266ea5b8.tar.gz"],
+    )
