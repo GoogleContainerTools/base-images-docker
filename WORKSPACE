@@ -192,8 +192,8 @@ UBUNTU_MAP = {
         "url": "https://storage.googleapis.com/ubuntu_tar/20190531/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
     },
     "18_0_4": {
-        "sha256": "65f7b277d131706107ba41d69468e31b0767420a01c8e5dec5ed9f15ff78fd9e",
-        "url": "https://storage.googleapis.com/ubuntu_tar/20190408/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
+        "sha256": "7949ade9f0e991e0f400cd58cb73fcc0879c28939073e8340c3ca4ca99901298",
+        "url": "https://storage.googleapis.com/ubuntu_tar/20190531/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
     },
 }
 
