@@ -90,9 +90,6 @@ def _impl(ctx, image_tar = None, packages = None, additional_repos = None, outpu
     output_script = output_script or ctx.outputs.build_script
     output_metadata = output_metadata or ctx.outputs.metadata_csv
 
-    print("output_tar: {}".format(output_tar))
-    print("output_metadata: {}".format(output_metadata))
-
     # Generate a shell script to run apt_get inside this docker image.
     # TODO(tejaldesai): Replace this by docker_run rule
     build_contents = """\
