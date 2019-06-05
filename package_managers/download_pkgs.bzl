@@ -16,8 +16,9 @@
 
 def _generate_add_additional_repo_commands(ctx, additional_repos):
     return """printf "{repos}" >> /etc/apt/sources.list.d/{name}_repos.list""".format(
-    name=ctx.attr.name,
-    repos='\n'.join(additional_repos))
+        name = ctx.attr.name,
+        repos = "\n".join(additional_repos),
+    )
 
 def _generate_download_commands(ctx, packages, additional_repos):
     return """#!/bin/bash
@@ -31,15 +32,30 @@ apt-get update -y
 mkdir -p /tmp/install/./partial
 # Install command
 apt-get install --no-install-recommends -y -q -o Dir::Cache="/tmp/install" -o Dir::Cache::archives="." {packages} --download-only
+# Generate csv listing the name & versions of the debian packages.
+echo Name,Version > {installables}_metadata.csv
+for item in `ls /tmp/install/*.deb`; do
+    echo -n "`dpkg-deb -f $item Package`," >> {installables}_metadata.csv
+    echo `dpkg-deb -f $item Version` >> {installables}_metadata.csv
+done;
 # Tar command to only include all the *.deb files and ignore other directories placed in the cache dir.
 tar -cpf {installables}_packages.tar --mtime='1970-01-01' --directory /tmp/install/. `cd /tmp/install/. && ls *.deb`""".format(
-    installables=ctx.attr.name,
-    packages=' '.join(packages),
-    add_additional_repo_commands=_generate_add_additional_repo_commands(ctx, additional_repos))
+        installables = ctx.attr.name,
+        packages = " ".join(packages),
+        add_additional_repo_commands = _generate_add_additional_repo_commands(ctx, additional_repos),
+    )
 
-def _run_download_script(ctx, build_contents, image_tar, output_tar, output_script, image_id_extractor):
+def _run_download_script(
+        ctx,
+        build_contents,
+        image_tar,
+        output_tar,
+        output_script,
+        output_metadata,
+        image_id_extractor):
     contents = build_contents.replace(image_tar.short_path, image_tar.path)
     contents = contents.replace(output_tar.short_path, output_tar.path)
+
     # The paths for running within bazel build are different and hence replace short_path
     # by full path
     ctx.actions.write(
@@ -48,12 +64,12 @@ def _run_download_script(ctx, build_contents, image_tar, output_tar, output_scri
     )
 
     ctx.actions.run(
-        outputs = [output_tar],
+        outputs = [output_tar, output_metadata],
         executable = output_script,
         inputs = [image_tar, image_id_extractor],
     )
 
-def _impl(ctx, image_tar=None, packages=None, additional_repos=None, output_executable=None, output_tar=None, output_script=None):
+def _impl(ctx, image_tar = None, packages = None, additional_repos = None, output_executable = None, output_tar = None, output_script = None, output_metadata = None):
     """Implementation for the download_pkgs rule.
 
     Args:
@@ -64,6 +80,7 @@ def _impl(ctx, image_tar=None, packages=None, additional_repos=None, output_exec
         output_executable: File, overrides ctx.outputs.executable
         output_tar: File, overrides ctx.outputs.pkg_tar
         output_script: File, overrides ctx.outputs.build_script
+        output_metadata: File, overrides ctx.outputs.metadata_csv
     """
     image_tar = image_tar or ctx.file.image_tar
     packages = packages or ctx.attr.packages
@@ -71,6 +88,10 @@ def _impl(ctx, image_tar=None, packages=None, additional_repos=None, output_exec
     output_executable = output_executable or ctx.outputs.executable
     output_tar = output_tar or ctx.outputs.pkg_tar
     output_script = output_script or ctx.outputs.build_script
+    output_metadata = output_metadata or ctx.outputs.metadata_csv
+
+    print("output_tar: {}".format(output_tar))
+    print("output_metadata: {}".format(output_metadata))
 
     # Generate a shell script to run apt_get inside this docker image.
     # TODO(tejaldesai): Replace this by docker_run rule
@@ -86,22 +107,33 @@ docker load -i {image_tar}
 cid=$(docker run -w="/" -d --privileged $image_id sh -c $'{download_commands}')
 docker attach $cid
 docker cp $cid:{installables}_packages.tar {output}
+docker cp $cid:{installables}_metadata.csv {output_metadata}
 # Cleanup
 docker rm $cid
- """.format(image_tar=image_tar.short_path,
-            installables=ctx.attr.name,
-            download_commands=_generate_download_commands(ctx, packages, additional_repos),
-            output=output_tar.short_path,
-            image_id_extractor_path = ctx.file._image_id_extractor.path,
-            )
-    _run_download_script(ctx, build_contents, image_tar, output_tar, output_script, ctx.file._image_id_extractor)
+ """.format(
+        image_tar = image_tar.short_path,
+        installables = ctx.attr.name,
+        download_commands = _generate_download_commands(ctx, packages, additional_repos),
+        output = output_tar.short_path,
+        output_metadata = output_metadata.path,
+        image_id_extractor_path = ctx.file._image_id_extractor.path,
+    )
+    _run_download_script(
+        ctx,
+        build_contents,
+        image_tar,
+        output_tar,
+        output_script,
+        output_metadata,
+        ctx.file._image_id_extractor,
+    )
     ctx.actions.write(
         output = output_executable,
         content = build_contents,
     )
     return struct(
-        runfiles = ctx.runfiles(files = [image_tar, output_script, ctx.file._image_id_extractor]),
-        files = depset([output_executable])
+        runfiles = ctx.runfiles(files = [image_tar, output_script, output_metadata, ctx.file._image_id_extractor]),
+        files = depset([output_executable]),
     )
 
 _attrs = {
@@ -115,13 +147,14 @@ _attrs = {
     "additional_repos": attr.string_list(),
     "_image_id_extractor": attr.label(
         default = "@io_bazel_rules_docker//contrib:extract_image_id.py",
-      allow_single_file = True,
+        allow_single_file = True,
     ),
 }
 
 _outputs = {
     "pkg_tar": "%{name}.tar",
     "build_script": "%{name}.sh",
+    "metadata_csv": "%{name}_metadata.csv",
 }
 
 # Export download_pkgs rule for other bazel rules to depend on.
