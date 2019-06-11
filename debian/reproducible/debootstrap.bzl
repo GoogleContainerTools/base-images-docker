@@ -58,6 +58,7 @@ docker rm $cid
         inputs=ctx.attr._builder_image.files.to_list() +
         ctx.attr._builder_image.data_runfiles.files.to_list() + ctx.attr._builder_image.default_runfiles.files.to_list(),
         executable=script,
+        use_default_shell_env = True,
     )
 
     return struct()

@@ -65,6 +65,7 @@ def _extract_impl(ctx, name = "", image = None, commands = None, docker_run_flag
         outputs = [output_file],
         tools = [image, ctx.file._image_id_extractor],
         executable = script,
+        use_default_shell_env = True,
     )
 
     return struct()
@@ -178,6 +179,7 @@ def _commit_impl(
         outputs = [output_image_tar],
         inputs = runfiles,
         executable = script,
+        use_default_shell_env = True,
     )
 
     return struct()

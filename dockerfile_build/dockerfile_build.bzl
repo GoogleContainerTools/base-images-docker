@@ -87,6 +87,7 @@ docker save {tag} > {output}
         inputs=inputs,
         executable=script,
         mnemonic="BuildTar",
+        use_default_shell_env = True,
     )
 
 
@@ -96,6 +97,7 @@ docker save {tag} > {output}
         executable=ctx.executable._config_stripper,
         arguments=['--in_tar_path=%s' % unstripped_tar.path, '--out_tar_path=%s' % ctx.outputs.out.path],
         mnemonic="StripTar",
+        use_default_shell_env = True,
     )
 
     return struct()

@@ -119,6 +119,7 @@ docker rm $cid""".format(util_script=ctx.file._image_utils.path,
     outputs=[unstripped_tar],
     inputs=[image_tar, install_script, installables_tar, ctx.file._image_utils, ctx.file._image_id_extractor],
     executable=script,
+    use_default_shell_env = True,
   )
 
   ctx.actions.run(
@@ -126,6 +127,7 @@ docker rm $cid""".format(util_script=ctx.file._image_utils.path,
     inputs=[unstripped_tar],
     executable=ctx.executable._config_stripper,
     arguments=['--in_tar_path=%s' % unstripped_tar.path, '--out_tar_path=%s' % output_tar.path],
+    use_default_shell_env = True,
   )
 
   return struct ()
