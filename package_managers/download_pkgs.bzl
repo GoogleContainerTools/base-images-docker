@@ -32,11 +32,32 @@ apt-get update -y
 mkdir -p /tmp/install/./partial
 # Install command
 apt-get install --no-install-recommends -y -q -o Dir::Cache="/tmp/install" -o Dir::Cache::archives="." {packages} --download-only
+
+items=$(ls /tmp/install/*.deb)
+if [ $items = ""]; then
+    echo "Did not find the .deb files for debian packages {packages} in /tmp/install. Did apt-get actually succeed?" && false
+fi
 # Generate csv listing the name & versions of the debian packages.
+# Example contents of a metadata CSV with debian packages gcc 8.1 & clang 9.1:
+# Name,Version
+# gcc,7.1
+# clang,9.1
+echo "Generating metadata CSV file {installables}_metadata.csv"
 echo Name,Version > {installables}_metadata.csv
-for item in `ls /tmp/install/*.deb`; do
-    echo -n "`dpkg-deb -f $item Package`," >> {installables}_metadata.csv
-    echo `dpkg-deb -f $item Version` >> {installables}_metadata.csv
+dpkg_deb_path=$(which dpkg-deb)
+for item in $items; do
+    echo "Adding information about $item to metadata CSV"
+    pkg_name=$($dpkg_deb_path -f $item Package)
+    if [ $pkg_name = ""]; then
+        echo "Failed to get name of the package for $item" && false
+    fi
+    pkg_version=$($dpkg_deb_path -f $item Version)
+    if [ $pkg_version = ""]; then
+        echo "Failed to get the version of the package for $item" && false
+    fi
+    echo "Package $pkg_name, Version $pkg_version"
+    echo -n "$pkg_name," >> {installables}_metadata.csv
+    echo $pkg_version >> {installables}_metadata.csv
 done;
 # Tar command to only include all the *.deb files and ignore other directories placed in the cache dir.
 tar -cpf {installables}_packages.tar --mtime='1970-01-01' --directory /tmp/install/. `cd /tmp/install/. && ls *.deb`""".format(
@@ -89,6 +110,9 @@ def _impl(ctx, image_tar = None, packages = None, additional_repos = None, outpu
     output_tar = output_tar or ctx.outputs.pkg_tar
     output_script = output_script or ctx.outputs.build_script
     output_metadata = output_metadata or ctx.outputs.metadata_csv
+
+    if len(packages) == 0:
+        fail("attribute 'packages' given to download_pkgs rule by {} was empty.".format(attr.label))
 
     # Generate a shell script to run apt_get inside this docker image.
     # TODO(tejaldesai): Replace this by docker_run rule
