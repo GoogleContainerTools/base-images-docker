@@ -37,7 +37,7 @@ steps:
 # We use container_test rule, which is a Bazel wrapper of container_structure_test.
 # https://github.com/bazelbuild/rules_docker/blob/master/contrib/test.bzl
   - name: "l.gcr.io/google/bazel"
-    args: ["--output_base=/workspace/ubuntu1604", "test", "//:image-test"]
+    args: ["--output_base=/workspace/ubuntu1604", "test", "--test_output=errors", "//:image-test"]
     # This is needed for GCB to correctly build/test targets in the Bazel project.
     dir: "ubuntu1604"
     id: "structure-test"

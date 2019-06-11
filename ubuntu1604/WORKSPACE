@@ -34,18 +34,12 @@ http_archive(
     urls = ["https://github.com/bazelbuild/rules_docker/archive/bb6d6606a6be348115af3552662799fd6d851a88.tar.gz"],
 )
 
-"""
+
 http_archive(
     name = "base_images_docker",
-    sha256 = "16da54ef0734a0658d7006bc8bf6b9be26b963edec497b13974a1bfb46cefc41",
-    strip_prefix = "base-images-docker-7fdd2bb83a6957fe66712bd5238087b257b04378",
-    urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/7fdd2bb83a6957fe66712bd5238087b257b04378.tar.gz"],
-)
-"""
-
-local_repository(
-    name = "base_images_docker",
-    path = "..",
+    sha256 = "b4c2e1c181d1e6ebdee0d25420f2759c366ff2f77f2b60a7d919b7412c6c76f5",
+    strip_prefix = "base-images-docker-0bd1ce8c8e7b83da47f844359fa4aad6a5ab79d3",
+    urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/0bd1ce8c8e7b83da47f844359fa4aad6a5ab79d3.tar.gz"],
 )
 
 load("@base_images_docker//package_managers:repositories.bzl", package_manager_deps = "deps")
