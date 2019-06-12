@@ -36,6 +36,12 @@ file_test(
     regexp = ".*docker cp .*:test_download_pkgs_at_root_packages.tar test_download_pkgs_at_root.tar.*",
 )
 
+file_test(
+    name = "test_download_pkgs_at_root_metadata_csv",
+    file = ":test_download_pkgs_at_root_metadata.csv",
+    regexp = "curl",
+)
+
 sh_test(
     name = "download_pkgs_at_root_run_test",
     srcs = [":download_pkgs_at_root_run_test.sh"],

@@ -41,6 +41,12 @@ file_test(
     regexp = ".*docker cp .*:test_download_pkgs_packages.tar tests/package_managers/test_download_pkgs.tar.*",
 )
 
+file_test(
+    name = "test_download_pkgs_metadata_csv",
+    file = ":test_download_pkgs",
+    regexp = "netbase",
+)
+
 sh_test(
     name = "download_pkgs_run_test",
     srcs = ["download_pkgs_run_test.sh"],
@@ -70,6 +76,12 @@ sh_test(
     name = "download_pkgs_with_additional_repos_run_test",
     srcs = ["download_pkgs_with_additional_repos_run_test.sh"],
     data = [":test_download_pkgs_with_additional_repos.tar"],
+)
+
+file_test(
+    name = "test_download_pkgs_with_additional_repos_metadata_csv",
+    file = ":test_download_pkgs_with_additional_repos_metadata.csv",
+    regexp = "bazel",
 )
 
 install_pkgs(
@@ -130,6 +142,12 @@ download_pkgs(
     packages = [
         "git",
     ],
+)
+
+file_test(
+    name = "test_download_pkg_git_metadata_csv",
+    file = ":download_pkg_git_metadata.csv",
+    regexp = "git",
 )
 
 install_pkgs(
