@@ -21,6 +21,6 @@ UBUNTU1604_TAR = struct(
 )
 
 DEBS_TARBALL = struct(
-    revision = "1559256929",
-    sha256 = "9c0028cf3deed74f50e334c11f4a24c59e5179e8c4ba2ac602a5eab371250785",
+    revision = "1561027616",
+    sha256 = "f022683d76102b75f7304e2c7b60e9d3a429abf3e0172320fc8869a63b8a6345",
 )
