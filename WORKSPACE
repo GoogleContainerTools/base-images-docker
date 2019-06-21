@@ -195,7 +195,6 @@ UBUNTU_MAP = {
         "sha256": "3ade995de56cdf07c56fecd4c3b89e63dc851f8fcddfb163d459b43c5fbe911b",
         "url": "https://storage.googleapis.com/ubuntu_tar/20190618/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
     },
-    },
 }
 
 [http_file(
