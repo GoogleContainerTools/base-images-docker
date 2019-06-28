@@ -27,7 +27,11 @@ steps:
   - name: "l.gcr.io/google/bazel"
     # Set Bazel output_base to /workspace, which is a mounted directory on Google Cloud Builder.
     # This is to make sure Bazel generated files can be accessed by multiple containers.
-    args: ["--output_base=/workspace/ubuntu1604", "run", "//:image"]
+    args: ["--output_base=/workspace/ubuntu1604", "run", "//:image",
+           "--incompatible_disable_deprecated_attr_params=false",
+           "--incompatible_new_actions_api=false",
+           "--incompatible_no_support_tools_in_action_inputs=false",
+           "--host_force_python=PY2"]
     # This is needed for GCB to correctly build/test targets in the Bazel project.
     dir: "ubuntu1604"
     id: "container-build"
