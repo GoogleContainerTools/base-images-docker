@@ -41,7 +41,11 @@ steps:
 # We use container_test rule, which is a Bazel wrapper of container_structure_test.
 # https://github.com/bazelbuild/rules_docker/blob/master/contrib/test.bzl
   - name: "l.gcr.io/google/bazel"
-    args: ["--output_base=/workspace/ubuntu1804", "test", "--test_output=errors", "//:image-test"]
+    args: ["--output_base=/workspace/ubuntu1804", "test", "--test_output=errors", "//:image-test"
+           "--incompatible_disable_deprecated_attr_params=false",
+           "--incompatible_new_actions_api=false",
+           "--incompatible_no_support_tools_in_action_inputs=false",
+           "--host_force_python=PY2"]
     # This is needed for GCB to correctly build/test targets in the Bazel project.
     dir: "ubuntu1804"
     id: "structure-test"
@@ -50,14 +54,22 @@ steps:
 # Step: tag the image, first as the backup image.
   - name: "l.gcr.io/google/bazel"
     entrypoint: "docker"
-    args: ["tag", "bazel:image", "gcr.io/asci-toolchain-backup/ubuntu1804-xingao-test:latest"]
+    args: ["tag", "bazel:image", "gcr.io/asci-toolchain-backup/ubuntu1804-xingao-test:latest"
+           "--incompatible_disable_deprecated_attr_params=false",
+           "--incompatible_new_actions_api=false",
+           "--incompatible_no_support_tools_in_action_inputs=false",
+           "--host_force_python=PY2"]
     id: "backup-container-tag"
     waitFor: ["structure-test"]
 
 # Step: tag the image again with the final location.
   - name: "l.gcr.io/google/bazel"
     entrypoint: "docker"
-    args: ["tag", "bazel:image", "gcr.io/asci-toolchain/ubuntu1804-xingao-test:latest"]
+    args: ["tag", "bazel:image", "gcr.io/asci-toolchain/ubuntu1804-xingao-test:latest"
+           "--incompatible_disable_deprecated_attr_params=false",
+           "--incompatible_new_actions_api=false",
+           "--incompatible_no_support_tools_in_action_inputs=false",
+           "--host_force_python=PY2"]
     id: "container-tag"
     waitFor: ["backup-container-tag"]
 
