@@ -8,6 +8,10 @@ steps:
            '-v', '/var/run:/var/run',
            'gcr.io/cloud-builders/bazel:latest',
            'run', '//ubuntu:bootstrap_${_IMAGE}',
+           '--incompatible_disable_deprecated_attr_params=false',
+           '--incompatible_new_actions_api=false',
+           '--incompatible_no_support_tools_in_action_inputs=false',
+           '--host_force_python=PY2',
            '--action_env=GIT_ROOT=/workspace',
            '--sandbox_writable_path=/workspace']
   - name: gcr.io/cloud-builders/docker:latest
