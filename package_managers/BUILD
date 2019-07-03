@@ -14,7 +14,10 @@
 
 package(default_visibility = ["//visibility:public"])
 
-exports_files(["installer.sh.tpl"])
+exports_files([
+    "installer.sh.tpl",
+    "security_check_whitelist.json",
+])
 
 load("@pip_deps//:requirements.bzl", "requirement")
 load("@subpar//:subpar.bzl", "par_binary")

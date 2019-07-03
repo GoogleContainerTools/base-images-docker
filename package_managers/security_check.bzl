@@ -67,6 +67,7 @@ security_check = rule(
         ),
         "whitelist": attr.label(
             doc = "The path to the whitelist json file",
+            default = Label("@base_images_docker//package_managers:security_check_whitelist.json"),
             allow_single_file = True,
         ),
         # The security checker python executable.
