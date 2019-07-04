@@ -33,18 +33,9 @@ git_repository(
 # Docker rules.
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "1a035f4e9c21e48668e09b327f89bd8197feb42b82d2b6904913c655f27a845a",
-    strip_prefix = "rules_docker-bb6d6606a6be348115af3552662799fd6d851a88",
-    urls = ["https://github.com/bazelbuild/rules_docker/archive/bb6d6606a6be348115af3552662799fd6d851a88.tar.gz"],
-)
-
-# Register the docker toolchain type
-register_toolchains(
-    # Register the default docker toolchain that expects the 'docker'
-    # executable to be in the PATH
-    "@io_bazel_rules_docker//toolchains/docker:default_linux_toolchain",
-    "@io_bazel_rules_docker//toolchains/docker:default_windows_toolchain",
-    "@io_bazel_rules_docker//toolchains/docker:default_osx_toolchain",
+    sha256 = "b16afde01b99f8b9a067b98903a5fa1879307f9344ccdbbc4aa796ae657e910f",
+    strip_prefix = "rules_docker-4ea9e6708ec5ac29dc18f991921e2c064969159a",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/4ea9e6708ec5ac29dc18f991921e2c064969159a.tar.gz"],
 )
 
 load(
@@ -53,6 +44,10 @@ load(
 )
 
 container_repositories()
+
+load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
+
+container_deps()
 
 load(
     "@io_bazel_rules_docker//container:container.bzl",

@@ -15,8 +15,8 @@
 """Rule for bootstrapping an image from using download_pkgs and install_pkgs """
 
 load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
-load("//package_managers:download_pkgs.bzl", "download_pkgs")
-load("//package_managers:install_pkgs.bzl", "install_pkgs")
+load("@io_bazel_rules_docker//docker/package_managers:download_pkgs.bzl", "download_pkgs")
+load("@io_bazel_rules_docker//docker/package_managers:install_pkgs.bzl", "install_pkgs")
 
 # Load all the stores get and put.
 load(
@@ -76,10 +76,10 @@ fi
                  [
                      get_status,
                      ctx.file.image_tar,
-                     fetch_or_download,
                  ],
         executable = fetch_or_download,
         mnemonic = "RunFetchOrDownload",
+        tools = [fetch_or_download],
         use_default_shell_env = True,
     )
 
