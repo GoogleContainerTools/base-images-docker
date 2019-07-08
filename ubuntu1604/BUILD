@@ -18,6 +18,7 @@ load(
     "@bazel_toolchains//rules/container:docker_toolchains.bzl",
     "toolchain_container",
 )
+load("@bazel_toolchains//rules/container:metadata_merge.bzl", "metadata_merge")
 load("@bazel_toolchains//rules/container:packages_metadata.bzl", "packages_metadata")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
@@ -48,13 +49,6 @@ download_pkgs(
     ],
 )
 
-# Transform the packages metadata csv produced by download_pkgs into a YAML
-# file.
-packages_metadata(
-    name = "metadata",
-    metadata_csv = ":debs_metadata.csv",
-)
-
 # Generate the container.
 toolchain_container(
     name = "image",
@@ -72,6 +66,23 @@ toolchain_container(
 security_check(
     name = "security_metadata",
     image = "gcr.io/asci-toolchain/ubuntu1604-xingao-test:latest",
+)
+
+# Transform the packages metadata csv produced by download_pkgs into a YAML
+# file.
+packages_metadata(
+    name = "debs_metadata",
+    metadata_csv = ":debs_metadata.csv",
+)
+
+# Merge the packages metadata & vulnerability YAML into a single merged YAML
+# file.
+metadata_merge(
+    name = "metadata",
+    srcs = [
+        ":debs_metadata.yaml",
+        ":security_metadata.yaml",
+    ],
 )
 
 container_test(
