@@ -28,6 +28,8 @@ gcsDeps:
     releasePolicies:
       - tag: "default"
         # Weekly release schedule at 5am every Monday.
+        # TODO (smukherj1): Change schedule to monthly once the automatic
+        # updates infrastructure is deemed to be stable.
         schedule: "0 0 5 * * Mon"
         # Release immediate for security vulnerabilities with severity medium
         # or higher.
