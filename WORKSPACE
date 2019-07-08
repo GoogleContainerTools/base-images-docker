@@ -112,13 +112,13 @@ load(
 package_manager_repositories()
 
 # The Debian snapshot datetime to use. See http://snapshot.debian.org/ for more information.
-DEB_SNAPSHOT = "20190507T102924Z"
+DEB_SNAPSHOT = "20190708T153325Z"
 
 dpkg_src(
     name = "debian_stretch",
     arch = "amd64",
     distro = "jessie",
-    sha256 = "7240a1c6ce11c3658d001261e77797818e610f7da6c2fb1f98a24fdbf4e8d84c",
+    sha256 = "9ea537c1c02d4a4275b140005fa2c366991dffc4261248457d24c4c65ba7c114",
     snapshot = DEB_SNAPSHOT,
     url = "http://snapshot.debian.org/archive",
 )
