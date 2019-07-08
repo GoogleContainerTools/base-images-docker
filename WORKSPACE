@@ -112,7 +112,7 @@ load(
 package_manager_repositories()
 
 # The Debian snapshot datetime to use. See http://snapshot.debian.org/ for more information.
-DEB_SNAPSHOT = "20190507T102924Z"
+DEB_SNAPSHOT = "20190708T153325Z"
 
 dpkg_src(
     name = "debian_stretch",
