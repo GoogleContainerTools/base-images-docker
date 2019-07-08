@@ -13,6 +13,7 @@
 # limitations under the License.
 
 revisionsFilePath: "ubuntu1604/revisions.bzl"
+metadataSummaryFilePath: "ubuntu1604/metadata_summary.yaml"
 
 gcsDeps:
 
@@ -22,6 +23,8 @@ gcsDeps:
     versionRegex: "\\d{8,}"
     fileRegex: "^ubuntu1604/tar/\\d{8,}_ubuntu1604\\.tar\\.gz$"
     startsWith: "ubuntu1604/tar/"
+    fusMetadataBucket: "container-deps"
+    fusMetadataObject: "ubuntu1604/metadata/debs/metadata.yaml"
 
   # The Debian packages tarball pulled from the GCS bucket required for the Ubuntu1604 container.
   - name: "DEBS_TARBALL"
