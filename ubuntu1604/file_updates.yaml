@@ -26,6 +26,10 @@
     target: "//:debs.tar"
     bucket: "container-deps"
     dir: "ubuntu1604/debs"
+    metadata:
+        target: "//:metadata.yaml"
+        bucket: "container-deps"
+        object: "ubuntu1604/metadata/debs/metadata.yaml"
 
 # Ubuntu1604 base image tarball.
 - triggerFile:

@@ -22,9 +22,9 @@ load(
 
 http_archive(
     name = "bazel_toolchains",
-    sha256 = "e886e0624871dcce823cccc7f9a634c58b0d68fdc3ad6577347826558f1581d8",
-    strip_prefix = "bazel-toolchains-9f6cd65b5fd8bc85634dafc99075556c06d8d3a6",
-    urls = ["https://github.com/bazelbuild/bazel-toolchains/archive/9f6cd65b5fd8bc85634dafc99075556c06d8d3a6.tar.gz"],
+    sha256 = "322ef052f15d61fdda3ff5c7be4b03d24e6543320b3b4b41da307aebd75b3c20",
+    strip_prefix = "bazel-toolchains-ae9c35af59cfe8af4a631550c0c8d37ff7f4e7da",
+    urls = ["https://github.com/bazelbuild/bazel-toolchains/archive/ae9c35af59cfe8af4a631550c0c8d37ff7f4e7da.tar.gz"],
 )
 
 http_archive(
@@ -34,12 +34,11 @@ http_archive(
     urls = ["https://github.com/bazelbuild/rules_docker/archive/bb6d6606a6be348115af3552662799fd6d851a88.tar.gz"],
 )
 
-
 http_archive(
     name = "base_images_docker",
-    sha256 = "b4c2e1c181d1e6ebdee0d25420f2759c366ff2f77f2b60a7d919b7412c6c76f5",
-    strip_prefix = "base-images-docker-0bd1ce8c8e7b83da47f844359fa4aad6a5ab79d3",
-    urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/0bd1ce8c8e7b83da47f844359fa4aad6a5ab79d3.tar.gz"],
+    sha256 = "0319ed0e058ec57cb15240cad44b52743b68239e5875fa41db51a6f6ac8e67be",
+    strip_prefix = "base-images-docker-d6f2757c3c48bd6c08e6484d02b84ed123d50ffa",
+    urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/d6f2757c3c48bd6c08e6484d02b84ed123d50ffa.tar.gz"],
 )
 
 load("@base_images_docker//package_managers:repositories.bzl", package_manager_deps = "deps")
@@ -83,6 +82,13 @@ load(
     "@io_bazel_rules_docker//repositories:repositories.bzl",
     container_repositories = "repositories",
 )
+load("@bazel_toolchains//repositories:repositories.bzl", bazel_toolchains_repos = "repositories")
+
+bazel_toolchains_repos()
+
+load("@bazel_toolchains//repositories:go_repositories.bzl", bazel_toolchains_go_repos = "go_deps")
+
+bazel_toolchains_go_repos()
 
 container_repositories()
 

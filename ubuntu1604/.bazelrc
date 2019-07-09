@@ -1,0 +1,3 @@
+build --host_force_python=PY2
+test --host_force_python=PY2
+
