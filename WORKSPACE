@@ -107,7 +107,7 @@ load(
 package_manager_repositories()
 
 # The Debian snapshot datetime to use. See http://snapshot.debian.org/ for more information.
-DEB_SNAPSHOT = "20190507T102924Z"
+DEB_SNAPSHOT = "20190708T153325Z"
 
 dpkg_src(
     name = "debian_stretch",
@@ -183,13 +183,13 @@ go_register_toolchains()
 
 UBUNTU_MAP = {
     "16_0_4": {
-        "sha256": "e6943860ea52053a47ffe160596b24045a5cf6dcc37404dd258266e18fafd87e",
-        "url": "https://storage.googleapis.com/ubuntu_tar/20190627/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
+        "sha256": "20c151c26c5a057a85d43bcc3dbee1d1fc536f76b84c550a1c2faa88af7727b6",
+        "url": "https://storage.googleapis.com/ubuntu_tar/20190708/ubuntu-xenial-core-cloudimg-amd64-root.tar.gz",
     },
     "18_0_4": {
-        "sha256": "63d6bf7644cb69313ad7f3371bccbe07932326ea29cf9cd369f29ad9da7b7b27",
-        "url": "https://storage.googleapis.com/ubuntu_tar/20190626/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
-    },
+        "sha256": "600f663706aa8e7cb30d114daee117536545b5a580bca6a97b3cb73d72acdcee",
+        "url": "https://storage.googleapis.com/ubuntu_tar/20190704/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
+    }
 }
 
 [http_file(
