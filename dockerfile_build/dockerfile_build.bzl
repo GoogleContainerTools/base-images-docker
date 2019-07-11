@@ -14,7 +14,7 @@
 
 """Rule for building debootstrap rootfs tarballs."""
 
-load("@io_bazel_rules_docker//docker:docker.bzl", "docker_build")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 
 def _impl(ctx):
     dockerfile_path = ctx.file.dockerfile.path
@@ -126,7 +126,7 @@ _dockerfile_build = rule(
         "_config_stripper": attr.label(
             cfg = "host",
             executable = True,
-            default = "//util:config_stripper",
+            default = "@io_bazel_rules_docker//docker/util:config_stripper",
         ),
     },
     executable = False,
@@ -143,7 +143,7 @@ def dockerfile_build(name, *args, **kwargs):
         *args,
         **kwargs
     )
-    docker_build(
+    container_image(
         name = name,
         base = intermediate_name + ".tar",
     )
