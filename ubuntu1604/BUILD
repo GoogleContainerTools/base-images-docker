@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 load("@base_images_docker//package_managers:security_check.bzl", "security_check")
 load(
     "@bazel_toolchains//rules/container:docker_toolchains.bzl",
