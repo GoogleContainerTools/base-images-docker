@@ -65,6 +65,13 @@ load(
     "@io_bazel_rules_docker//repositories:repositories.bzl",
     container_repositories = "repositories",
 )
+load("@bazel_toolchains//repositories:repositories.bzl", bazel_toolchains_repos = "repositories")
+
+bazel_toolchains_repos()
+
+load("@bazel_toolchains//repositories:go_repositories.bzl", bazel_toolchains_go_repos = "go_deps")
+
+bazel_toolchains_go_repos()
 
 container_repositories()
 
