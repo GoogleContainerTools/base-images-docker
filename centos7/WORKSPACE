@@ -18,16 +18,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "1a035f4e9c21e48668e09b327f89bd8197feb42b82d2b6904913c655f27a845a",
-    strip_prefix = "rules_docker-bb6d6606a6be348115af3552662799fd6d851a88",
-    urls = ["https://github.com/bazelbuild/rules_docker/archive/bb6d6606a6be348115af3552662799fd6d851a88.tar.gz"],
-)
-
-http_archive(
-    name = "base_images_docker",
-    sha256 = "16da54ef0734a0658d7006bc8bf6b9be26b963edec497b13974a1bfb46cefc41",
-    strip_prefix = "base-images-docker-7fdd2bb83a6957fe66712bd5238087b257b04378",
-    urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/7fdd2bb83a6957fe66712bd5238087b257b04378.tar.gz"],
+    sha256 = "b16afde01b99f8b9a067b98903a5fa1879307f9344ccdbbc4aa796ae657e910f",
+    strip_prefix = "rules_docker-4ea9e6708ec5ac29dc18f991921e2c064969159a",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/4ea9e6708ec5ac29dc18f991921e2c064969159a.tar.gz"],
 )
 
 http_archive(
@@ -44,6 +37,10 @@ load(
 )
 
 container_repositories()
+
+load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
+
+container_deps()
 
 load(
     "@io_bazel_rules_docker//container:container.bzl",

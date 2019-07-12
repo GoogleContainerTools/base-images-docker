@@ -22,41 +22,24 @@ load(
 
 http_archive(
     name = "bazel_toolchains",
-    sha256 = "322ef052f15d61fdda3ff5c7be4b03d24e6543320b3b4b41da307aebd75b3c20",
-    strip_prefix = "bazel-toolchains-ae9c35af59cfe8af4a631550c0c8d37ff7f4e7da",
-    urls = ["https://github.com/bazelbuild/bazel-toolchains/archive/ae9c35af59cfe8af4a631550c0c8d37ff7f4e7da.tar.gz"],
+    sha256 = "7d0c157364ce8dac5282af7c7b9e8d9e2c4ee7a6a30dfdb763e9e40b09a656e9",
+    strip_prefix = "bazel-toolchains-e6e7db64dfcfe82f54782a75ee549b0e392ecefc",
+    urls = ["https://github.com/bazelbuild/bazel-toolchains/archive/e6e7db64dfcfe82f54782a75ee549b0e392ecefc.tar.gz"],
 )
 
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "1a035f4e9c21e48668e09b327f89bd8197feb42b82d2b6904913c655f27a845a",
-    strip_prefix = "rules_docker-bb6d6606a6be348115af3552662799fd6d851a88",
-    urls = ["https://github.com/bazelbuild/rules_docker/archive/bb6d6606a6be348115af3552662799fd6d851a88.tar.gz"],
+    sha256 = "b16afde01b99f8b9a067b98903a5fa1879307f9344ccdbbc4aa796ae657e910f",
+    strip_prefix = "rules_docker-4ea9e6708ec5ac29dc18f991921e2c064969159a",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/4ea9e6708ec5ac29dc18f991921e2c064969159a.tar.gz"],
 )
 
 http_archive(
     name = "base_images_docker",
-    sha256 = "0319ed0e058ec57cb15240cad44b52743b68239e5875fa41db51a6f6ac8e67be",
-    strip_prefix = "base-images-docker-d6f2757c3c48bd6c08e6484d02b84ed123d50ffa",
-    urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/d6f2757c3c48bd6c08e6484d02b84ed123d50ffa.tar.gz"],
+    sha256 = "0ed911fde4427f7d3d9f2b32df13c2b4c43c855eaab52df6ab780e59a3e9270b",
+    strip_prefix = "base-images-docker-87df46c7f428f8b8d9be8fde2e653ae27bd9c7cd",
+    urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/87df46c7f428f8b8d9be8fde2e653ae27bd9c7cd.tar.gz"],
 )
-
-load("@base_images_docker//package_managers:repositories.bzl", package_manager_deps = "deps")
-
-package_manager_deps()
-
-load("@io_bazel_rules_python//python:pip.bzl", "pip_import", "pip_repositories")
-
-pip_repositories()
-
-pip_import(
-    name = "pip_deps",
-    requirements = "@base_images_docker//package_managers:requirements-pip.txt",
-)
-
-load("@pip_deps//:requirements.bzl", "pip_install")
-
-pip_install()
 
 http_archive(
     name = "bazel_skylib",
@@ -91,6 +74,14 @@ load("@bazel_toolchains//repositories:go_repositories.bzl", bazel_toolchains_go_
 bazel_toolchains_go_repos()
 
 container_repositories()
+
+load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
+
+container_deps()
+
+load("@io_bazel_rules_docker//repositories:pip_repositories.bzl", "pip_deps")
+
+pip_deps()
 
 load(":deps.bzl", "deps")
 
