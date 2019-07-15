@@ -16,19 +16,4 @@ package(default_visibility = ["//visibility:public"])
 
 exports_files([
     "installer.sh.tpl",
-    "security_check_whitelist.json",
 ])
-
-load("@pip_deps//:requirements.bzl", "requirement")
-load("@subpar//:subpar.bzl", "par_binary")
-
-par_binary(
-    name = "security_check",
-    srcs = ["security_check.py"],
-    main = "security_check.py",
-    python_version = "PY2",
-    visibility = ["//visibility:public"],
-    deps = [
-        requirement("PyYaml"),
-    ],
-)

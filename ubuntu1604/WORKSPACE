@@ -29,16 +29,9 @@ http_archive(
 
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "b16afde01b99f8b9a067b98903a5fa1879307f9344ccdbbc4aa796ae657e910f",
-    strip_prefix = "rules_docker-4ea9e6708ec5ac29dc18f991921e2c064969159a",
-    urls = ["https://github.com/bazelbuild/rules_docker/archive/4ea9e6708ec5ac29dc18f991921e2c064969159a.tar.gz"],
-)
-
-http_archive(
-    name = "base_images_docker",
-    sha256 = "0ed911fde4427f7d3d9f2b32df13c2b4c43c855eaab52df6ab780e59a3e9270b",
-    strip_prefix = "base-images-docker-87df46c7f428f8b8d9be8fde2e653ae27bd9c7cd",
-    urls = ["https://github.com/GoogleContainerTools/base-images-docker/archive/87df46c7f428f8b8d9be8fde2e653ae27bd9c7cd.tar.gz"],
+    sha256 = "137cb34dce01a1780b90bf728c4a4f7b333c9b27c91b59c6bfd2e4d421221671",
+    strip_prefix = "rules_docker-79c215fdd0c7c99d6d64d5919fbf3de76261d3a4",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/79c215fdd0c7c99d6d64d5919fbf3de76261d3a4.tar.gz"],
 )
 
 http_archive(
