@@ -27,7 +27,7 @@ steps:
   - name: "l.gcr.io/google/bazel"
     # Set Bazel output_base to /workspace, which is a mounted directory on Google Cloud Builder.
     # This is to make sure Bazel generated files can be accessed by multiple containers.
-    args: ["--output_base=/workspace/ubuntu1804", "run", "//:image",
+    args: ["--output_base=/workspace/output_base", "run", "//:image",
            "--incompatible_disable_deprecated_attr_params=false",
            "--incompatible_new_actions_api=false",
            "--incompatible_no_support_tools_in_action_inputs=false",
@@ -41,7 +41,7 @@ steps:
 # We use container_test rule, which is a Bazel wrapper of container_structure_test.
 # https://github.com/bazelbuild/rules_docker/blob/master/contrib/test.bzl
   - name: "l.gcr.io/google/bazel"
-    args: ["--output_base=/workspace/ubuntu1804", "test", "--test_output=errors", "//:image-test",
+    args: ["--output_base=/workspace/output_base", "test", "--test_output=errors", "//:image-test",
            "--incompatible_disable_deprecated_attr_params=false",
            "--incompatible_new_actions_api=false",
            "--incompatible_no_support_tools_in_action_inputs=false",
@@ -54,21 +54,26 @@ steps:
 # Step: tag the image, first as the backup image.
   - name: "l.gcr.io/google/bazel"
     entrypoint: "docker"
-    args: ["tag", "bazel:image", "gcr.io/asci-toolchain-backup/ubuntu1804-xingao-test:latest"]
+    args: ["tag", "bazel:image", "${_IMG_BACKUP_DEST}"]
     id: "backup-container-tag"
     waitFor: ["structure-test"]
 
 # Step: tag the image again with the final location.
   - name: "l.gcr.io/google/bazel"
     entrypoint: "docker"
-    args: ["tag", "bazel:image", "gcr.io/asci-toolchain/ubuntu1804-xingao-test:latest"]
+    args: ["tag", "bazel:image", "${_IMG_DEST}"]
     id: "container-tag"
     waitFor: ["backup-container-tag"]
+
+substitutions:
+    # Default values for substitution variables.
+    _IMG_DEST: gcr.io/asci-toolchain/ubuntu1804-xingao-test:latest
+    _IMG_BACKUP_DEST: gcr.io/asci-toolchain-backup/ubuntu1804-xingao-test:latest
 
 # Push the new image and its backup.
 # Push by using the `images` field here so they will show up in the build results
 # or the GCB Build information page.
 # https://cloud.google.com/cloud-build/docs/configuring-builds/store-images-artifacts
 images:
-  - "gcr.io/asci-toolchain/ubuntu1804-xingao-test:latest"
-  - "gcr.io/asci-toolchain-backup/ubuntu1804-xingao-test:latest"
+  - "${_IMG_DEST}"
+  - "${_IMG_BACKUP_DEST}"
