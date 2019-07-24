@@ -21,6 +21,8 @@
 
 # ================================= Ubuntu1604 =================================
 
+# TODO (smukherj1): Remove this spec once the manual test for the security
+# check tagged release is done.
 # Ubuntu1604 base additional debian package tarball.
 - triggerFile:
     target: "//:debs.tar"
