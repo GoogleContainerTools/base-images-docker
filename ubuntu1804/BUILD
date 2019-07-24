@@ -18,6 +18,14 @@ load(
 )
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
+load(
+    "@io_bazel_rules_docker//contrib/automatic_container_release/syntax:dependency_update.bzl",
+    "dependency_update_test",
+)
+load(
+    "@io_bazel_rules_docker//contrib/automatic_container_release/syntax:file_update.bzl",
+    "file_update_test",
+)
 load("@io_bazel_rules_docker//docker/package_managers:download_pkgs.bzl", "download_pkgs")
 
 licenses(["notice"])  # Apache 2.0
@@ -66,4 +74,14 @@ container_test(
     ],
     image = ":image",
     verbose = True,
+)
+
+file_update_test(
+    name = "file_update_test",
+    spec = "file_updates.yaml",
+)
+
+dependency_update_test(
+    name = "dependency_update_test",
+    spec = "deps_spec.yaml",
 )
