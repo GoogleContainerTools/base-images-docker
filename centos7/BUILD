@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@io_bazel_rules_docker//docker/security:security_check.bzl", "security_check")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
@@ -73,6 +74,13 @@ container_image(
     tars = [
         "@centos7_tar//file",
     ],
+)
+
+# Run the security check script to generate a metadata YAML file indicating
+# whether the centos 7 has critical security vulnerability fixes.
+security_check(
+    name = "metadata",
+    image = "gcr.io/asci-toolchain/centos7-xingao-test:latest",
 )
 
 container_test(

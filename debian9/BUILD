@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@io_bazel_rules_docker//docker/security:security_check.bzl", "security_check")
 load(
     "@bazel_toolchains//rules/container:docker_toolchains.bzl",
     "toolchain_container",
@@ -82,6 +83,13 @@ container_image(
         ":overlay.tar",
         "@debian9_tar//file",
     ],
+)
+
+# Run the security check script to generate a metadata YAML file indicating
+# whether the debian 9 has critical security vulnerability fixes.
+security_check(
+    name = "metadata",
+    image = "gcr.io/asci-toolchain/debian9-xingao-test:latest",
 )
 
 container_test(
