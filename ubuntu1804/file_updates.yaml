@@ -26,9 +26,17 @@
     target: "//:debs.tar"
     bucket: "container-deps"
     dir: "ubuntu1804/debs"
+    metadata:
+        target: "//:metadata.yaml"
+        bucket: "container-deps"
+        object: "ubuntu1804/metadata/debs/metadata.yaml"
 
 # Ubuntu1804 base image tarball.
 - triggerFile:
     target: "@ubuntu1804_tar_latest//file:ubuntu1804.tar.gz"
     bucket: "container-deps"
     dir: "ubuntu1804/tar"
+    metadata:
+        target: "//:metadata.yaml"
+        bucket: "container-deps"
+        object: "ubuntu1804/metadata/tar/metadata.yaml"

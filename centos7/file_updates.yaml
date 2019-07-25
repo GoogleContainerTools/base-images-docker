@@ -26,3 +26,7 @@
     target: "//:centos_layer/layer.tar"
     bucket: "container-deps"
     dir: "centos7/tar"
+    metadata:
+        target: "//:metadata.yaml"
+        bucket: "container-deps"
+        object: "centos7/metadata/tar/metadata.yaml"
