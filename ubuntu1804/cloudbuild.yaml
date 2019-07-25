@@ -67,13 +67,17 @@ steps:
 
 substitutions:
     # Default values for substitution variables.
-    _IMG_DEST: gcr.io/asci-toolchain/ubuntu1804-xingao-test:latest
-    _IMG_BACKUP_DEST: gcr.io/asci-toolchain-backup/ubuntu1804-xingao-test:latest
+    # These variables are altered in the cloudbuild trigger definition
+    _IMG_DEST: asci-toolchain/ubuntu1804-xingao-test:latest
+    _IMG_BACKUP_DEST: asci-toolchain-backup/ubuntu1804-xingao-test:latest
 
 # Push the new image and its backup.
 # Push by using the `images` field here so they will show up in the build results
 # or the GCB Build information page.
 # https://cloud.google.com/cloud-build/docs/configuring-builds/store-images-artifacts
 images:
-  - "${_IMG_DEST}"
-  - "${_IMG_BACKUP_DEST}"
+  - "gcr.io/${_IMG_DEST}"
+  - "us.gcr.io/${_IMG_DEST}"
+  - "eu.gcr.io/${_IMG_DEST}"
+  - "asia.gcr.io/${_IMG_DEST}"
+  - "gcr.io/${_IMG_BACKUP_DEST}"
