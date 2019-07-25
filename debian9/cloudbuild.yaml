@@ -46,16 +46,34 @@ steps:
 # Step: tag the image, first as the backup image.
   - name: "l.gcr.io/google/bazel"
     entrypoint: "docker"
-    args: ["tag", "bazel:image", "${_IMG_BACKUP_DEST}"]
+    args: ["tag", "bazel:image", "gcr.io/${_IMG_BACKUP_DEST}"]
     id: "backup-container-tag"
     waitFor: ["structure-test"]
 
-# Step: tag the image again with the final location.
+# Step: tag the image again with the final locations.
   - name: "l.gcr.io/google/bazel"
     entrypoint: "docker"
-    args: ["tag", "bazel:image", "${_IMG_DEST}"]
-    id: "container-tag"
+    args: ["tag", "bazel:image", "gcr.io/${_IMG_DEST}"]
+    id: "container-tag1"
     waitFor: ["backup-container-tag"]
+
+  - name: "l.gcr.io/google/bazel"
+    entrypoint: "docker"
+    args: ["tag", "bazel:image", "us.gcr.io/${_IMG_DEST}"]
+    id: "container-tag2"
+    waitFor: ["container-tag1"]
+
+  - name: "l.gcr.io/google/bazel"
+    entrypoint: "docker"
+    args: ["tag", "bazel:image", "eu.gcr.io/${_IMG_DEST}"]
+    id: "container-tag3"
+    waitFor: ["container-tag2"]
+
+  - name: "l.gcr.io/google/bazel"
+    entrypoint: "docker"
+    args: ["tag", "bazel:image", "asia.gcr.io/${_IMG_DEST}"]
+    id: "container-tag4"
+    waitFor: ["container-tag3"]
 
 substitutions:
     # Default values for substitution variables.
