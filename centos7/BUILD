@@ -80,7 +80,7 @@ container_image(
 # whether the centos 7 has critical security vulnerability fixes.
 security_check(
     name = "metadata",
-    image = "gcr.io/asci-toolchain/centos7-xingao-test:latest",
+    image = "gcr.io/gcp-runtimes/centos7:latest",
 )
 
 container_test(

@@ -89,7 +89,7 @@ container_image(
 # whether the debian 9 has critical security vulnerability fixes.
 security_check(
     name = "metadata",
-    image = "gcr.io/asci-toolchain/debian9-xingao-test:latest",
+    image = "gcr.io/google-appengine/debian9:latest",
 )
 
 container_test(
