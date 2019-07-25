@@ -60,7 +60,7 @@ steps:
 substitutions:
     # Default values for substitution variables.
     # These variables are altered in the cloudbuild trigger definition
-    _IMG_DEST: asci-toolchain/centos7-xingao-test:latest
+    _IMG_DEST: gcp-runtimes/centos7:latest
     _IMG_BACKUP_DEST: asci-toolchain-backup/centos7-xingao-test:latest
 
 # Push the new image and its backup.

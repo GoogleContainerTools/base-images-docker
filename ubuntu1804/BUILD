@@ -61,7 +61,7 @@ download_pkgs(
 # whether the ubuntu 18.04 has critical security vulnerability fixes.
 security_check(
     name = "security_metadata",
-    image = "gcr.io/asci-toolchain/ubuntu1804-xingao-test:latest",
+    image = "gcr.io/gcp-runtimes/ubuntu_18_0_4:latest",
 )
 
 # Transform the packages metadata csv produced by download_pkgs into a YAML

@@ -73,7 +73,7 @@ toolchain_container(
 # whether the ubuntu 16.04 has critical security vulnerability fixes.
 security_check(
     name = "security_metadata",
-    image = "gcr.io/asci-toolchain/ubuntu1604-xingao-test:latest",
+    image = "gcr.io/gcp-runtimes/ubuntu_16_0_4:latest",
 )
 
 # Transform the packages metadata csv produced by download_pkgs into a YAML
