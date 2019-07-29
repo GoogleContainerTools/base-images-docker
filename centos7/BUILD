@@ -15,6 +15,7 @@
 load("@io_bazel_rules_docker//docker/security:security_check.bzl", "security_check")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
+load("@io_bazel_rules_docker//contrib:repro_test.bzl", "container_repro_test")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
 load(
     "@io_bazel_rules_docker//contrib/automatic_container_release/syntax:dependency_update.bzl",
@@ -97,4 +98,10 @@ file_update_test(
 dependency_update_test(
     name = "dependency_update_test",
     spec = "deps_spec.yaml",
+)
+
+container_repro_test(
+    name = "img_repro_test",
+    image = ":image",
+    workspace_file = "//:WORKSPACE",
 )
