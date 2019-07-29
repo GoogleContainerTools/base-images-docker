@@ -23,6 +23,16 @@ steps:
     id: "version"
     waitFor: ["-"]   # wait for nothing - start immediately
 
+# Step: copy the bazel project into a separate dir to run repro tests in parallel.
+  - name: "l.gcr.io/google/bazel"
+    entrypoint: "sh"
+    args: ["-c", "cp -a centos7 /repro_test/centos7"]
+    volumes:
+      - name: "repro_vol"
+        path: "/repro_test"
+    id: "copy-to-reproduce"
+    waitFor: ["-"]   # wait for nothing - start immediately
+
 # Step: build the image
   - name: "l.gcr.io/google/bazel"
     # Set Bazel output_base to /workspace, which is a mounted directory on Google Cloud Builder.
@@ -43,12 +53,22 @@ steps:
     id: "structure-test"
     waitFor: ["container-build"]
 
+# Step: run reproduction test on the new image
+  - name: "l.gcr.io/google/bazel"
+    args: ["--output_base=/repro_test/output_base", "test", "//:img_repro_test", "--test_output=errors"]
+    dir: "/repro_test/centos7"
+    volumes:
+      - name: "repro_vol"
+        path: "/repro_test"
+    id: "repro-test"
+    waitFor: ["version", "copy-to-reproduce"]
+
 # Step: tag the image, first as the backup image.
   - name: "l.gcr.io/google/bazel"
     entrypoint: "docker"
     args: ["tag", "bazel:image", "gcr.io/${_IMG_BACKUP_DEST}"]
     id: "backup-container-tag"
-    waitFor: ["structure-test"]
+    waitFor: ["structure-test", "repro-test"]
 
 # Step: tag the image again with the final locations.
   - name: "l.gcr.io/google/bazel"
