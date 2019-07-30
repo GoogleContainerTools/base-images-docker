@@ -1,6 +1,6 @@
 PWD := $(shell pwd)
 
-CONTAINER_TEST_TARGETS = :image-test :file_update_test :dependency_update_test
+CONTAINER_TEST_TARGETS = :image-test :configs_test
 BAZEL_TEST_OPTS = --test_output=errors --strategy=TestRunner=standalone
 
 .PHONY: test
