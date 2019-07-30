@@ -12,19 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@io_bazel_rules_docker//docker/security:security_check.bzl", "security_check")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//contrib:repro_test.bzl", "container_repro_test")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
 load(
-    "@io_bazel_rules_docker//contrib/automatic_container_release/syntax:dependency_update.bzl",
-    "dependency_update_test",
+    "@io_bazel_rules_docker//contrib/automatic_container_release:configs_test.bzl",
+    "configs_test",
 )
-load(
-    "@io_bazel_rules_docker//contrib/automatic_container_release/syntax:file_update.bzl",
-    "file_update_test",
-)
+load("@io_bazel_rules_docker//docker/security:security_check.bzl", "security_check")
 load("@io_bazel_rules_docker//docker/util:run.bzl", "container_run_and_extract")
 
 licenses(["notice"])  # Apache 2.0
@@ -90,18 +86,14 @@ container_test(
     image = ":image",
 )
 
-file_update_test(
-    name = "file_update_test",
-    spec = "file_updates.yaml",
-)
-
-dependency_update_test(
-    name = "dependency_update_test",
-    spec = "deps_spec.yaml",
-)
-
 container_repro_test(
     name = "img_repro_test",
     image = ":image",
     workspace_file = "//:WORKSPACE",
+)
+
+configs_test(
+    name = "configs_test",
+    dependency_update_specs = ["deps_spec.yaml"],
+    file_update_specs = ["file_updates.yaml"],
 )
