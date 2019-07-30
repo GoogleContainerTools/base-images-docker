@@ -23,6 +23,13 @@ steps:
     id: "version"
     waitFor: ["-"]   # wait for nothing - start immediately
 
+# Step: pull the image used to validate YAML configs
+  - name: "l.gcr.io/google/bazel"
+    entrypoint: "docker"
+    args: ["pull", "gcr.io/asci-toolchain/container_release_tools/dependency_update/validators/semantics:latest"]
+    id: "pull_validator"
+    waitFor: ["-"]   # wait for nothing - start immediately
+
 # Step: copy the bazel project into a separate dir to run repro tests in parallel.
   - name: "l.gcr.io/google/bazel"
     entrypoint: "sh"
@@ -47,11 +54,14 @@ steps:
 # We use container_test rule, which is a Bazel wrapper of container_structure_test.
 # https://github.com/bazelbuild/rules_docker/blob/master/contrib/test.bzl
   - name: "l.gcr.io/google/bazel"
-    args: ["--output_base=/workspace/output_base", "test", "//:image-test", "--test_output=errors"]
+    args: ["--output_base=/workspace/output_base", "test",
+           "--test_output=errors",
+           "//:image-test",
+           "//:configs_test"]
     # This is needed for GCB to correctly build/test targets in the Bazel project.
     dir: "debian9"
     id: "structure-test"
-    waitFor: ["container-build"]
+    waitFor: ["container-build", "pull_validator"]
 
 # Step: run reproduction test on the new image
   - name: "l.gcr.io/google/bazel"
