@@ -63,7 +63,6 @@ steps:
            "--incompatible_disable_deprecated_attr_params=false",
            "--incompatible_new_actions_api=false",
            "--incompatible_no_support_tools_in_action_inputs=false",
-           "--host_force_python=PY2",
            "//:image-test",
            "//:configs_test"]
     # This is needed for GCB to correctly build/test targets in the Bazel project.
