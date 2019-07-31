@@ -209,20 +209,3 @@ http_file(
     sha256 = "54b6274820df34a936ccc6f5cb725a9b7bb46075db7faf0ef7e2d86452fa09fd",
     urls = ["http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0xEB9B1D8886F44E2A"],
 )
-
-load("//package_managers:repositories.bzl", package_manager_deps = "deps")
-
-package_manager_deps()
-
-load("@io_bazel_rules_python//python:pip.bzl", "pip_import", "pip_repositories")
-
-pip_repositories()
-
-pip_import(
-    name = "pip_deps",
-    requirements = "//package_managers:requirements-pip.txt",
-)
-
-load("@pip_deps//:requirements.bzl", "pip_install")
-
-pip_install()
