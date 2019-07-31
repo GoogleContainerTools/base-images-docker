@@ -16,9 +16,17 @@ load(
     "@bazel_toolchains//rules/container:docker_toolchains.bzl",
     "toolchain_container",
 )
+load("@bazel_toolchains//rules/container:metadata_merge.bzl", "metadata_merge")
+load("@bazel_toolchains//rules/container:packages_metadata.bzl", "packages_metadata")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
+load("@io_bazel_rules_docker//contrib:repro_test.bzl", "container_repro_test")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
+load(
+    "@io_bazel_rules_docker//contrib/automatic_container_release:configs_test.bzl",
+    "configs_test",
+)
 load("@io_bazel_rules_docker//docker/package_managers:download_pkgs.bzl", "download_pkgs")
+load("@io_bazel_rules_docker//docker/security:security_check.bzl", "security_check")
 
 licenses(["notice"])  # Apache 2.0
 
@@ -46,6 +54,30 @@ download_pkgs(
     ],
 )
 
+# Run the security check script to generate a metadata YAML file indicating
+# whether the ubuntu 18.04 has critical security vulnerability fixes.
+security_check(
+    name = "security_metadata",
+    image = "gcr.io/gcp-runtimes/ubuntu_18_0_4:latest",
+)
+
+# Transform the packages metadata csv produced by download_pkgs into a YAML
+# file.
+packages_metadata(
+    name = "debs_metadata",
+    metadata_csv = ":debs_metadata.csv",
+)
+
+# Merge the packages metadata & vulnerability YAML into a single merged YAML
+# file.
+metadata_merge(
+    name = "metadata",
+    srcs = [
+        ":debs_metadata.yaml",
+        ":security_metadata.yaml",
+    ],
+)
+
 # Generate the container.
 toolchain_container(
     name = "image",
@@ -66,4 +98,16 @@ container_test(
     ],
     image = ":image",
     verbose = True,
+)
+
+container_repro_test(
+    name = "img_repro_test",
+    image = ":image",
+    workspace_file = "//:WORKSPACE",
+)
+
+configs_test(
+    name = "configs_test",
+    dependency_update_specs = ["deps_spec.yaml"],
+    file_update_specs = ["file_updates.yaml"],
 )

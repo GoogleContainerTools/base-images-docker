@@ -23,11 +23,28 @@ steps:
     id: "version"
     waitFor: ["-"]   # wait for nothing - start immediately
 
+# Step: pull the image used to validate YAML configs
+  - name: "l.gcr.io/google/bazel"
+    entrypoint: "docker"
+    args: ["pull", "gcr.io/asci-toolchain/container_release_tools/dependency_update/validators/semantics:latest"]
+    id: "pull_validator"
+    waitFor: ["-"]   # wait for nothing - start immediately
+
+# Step: copy the bazel project into a separate dir to run repro tests in parallel.
+  - name: "l.gcr.io/google/bazel"
+    entrypoint: "sh"
+    args: ["-c", "cp -a centos7 /repro_test/centos7"]
+    volumes:
+      - name: "repro_vol"
+        path: "/repro_test"
+    id: "copy-to-reproduce"
+    waitFor: ["-"]   # wait for nothing - start immediately
+
 # Step: build the image
   - name: "l.gcr.io/google/bazel"
     # Set Bazel output_base to /workspace, which is a mounted directory on Google Cloud Builder.
     # This is to make sure Bazel generated files can be accessed by multiple containers.
-    args: ["--output_base=/workspace/centos7", "run", "//:image"]
+    args: ["--output_base=/workspace/output_base", "run", "//:image"]
     # This is needed for GCB to correctly build/test targets in the Bazel project.
     dir: "centos7"
     id: "container-build"
@@ -37,30 +54,70 @@ steps:
 # We use container_test rule, which is a Bazel wrapper of container_structure_test.
 # https://github.com/bazelbuild/rules_docker/blob/master/contrib/test.bzl
   - name: "l.gcr.io/google/bazel"
-    args: ["--output_base=/workspace/centos7", "test", "//:image-test", "--test_output=errors"]
+    args: ["--output_base=/workspace/output_base", "test",
+           "--test_output=errors",
+           "//:image-test",
+           "//:configs_test"]
     # This is needed for GCB to correctly build/test targets in the Bazel project.
     dir: "centos7"
     id: "structure-test"
-    waitFor: ["container-build"]
+    waitFor: ["container-build", "pull_validator"]
+
+# Step: run reproduction test on the new image
+  - name: "l.gcr.io/google/bazel"
+    args: ["--output_base=/repro_test/output_base", "test", "//:img_repro_test", "--test_output=errors"]
+    dir: "/repro_test/centos7"
+    volumes:
+      - name: "repro_vol"
+        path: "/repro_test"
+    id: "repro-test"
+    waitFor: ["version", "copy-to-reproduce"]
 
 # Step: tag the image, first as the backup image.
   - name: "l.gcr.io/google/bazel"
     entrypoint: "docker"
-    args: ["tag", "bazel:image", "gcr.io/asci-toolchain-backup/centos7-xingao-test:latest"]
+    args: ["tag", "bazel:image", "gcr.io/${_IMG_BACKUP_DEST}"]
     id: "backup-container-tag"
-    waitFor: ["structure-test"]
+    waitFor: ["structure-test", "repro-test"]
 
-# Step: tag the image again with the final location.
+# Step: tag the image again with the final locations.
   - name: "l.gcr.io/google/bazel"
     entrypoint: "docker"
-    args: ["tag", "bazel:image", "gcr.io/asci-toolchain/centos7-xingao-test:latest"]
-    id: "container-tag"
+    args: ["tag", "bazel:image", "gcr.io/${_IMG_DEST}"]
+    id: "container-tag1"
     waitFor: ["backup-container-tag"]
+
+  - name: "l.gcr.io/google/bazel"
+    entrypoint: "docker"
+    args: ["tag", "bazel:image", "us.gcr.io/${_IMG_DEST}"]
+    id: "container-tag2"
+    waitFor: ["container-tag1"]
+
+  - name: "l.gcr.io/google/bazel"
+    entrypoint: "docker"
+    args: ["tag", "bazel:image", "eu.gcr.io/${_IMG_DEST}"]
+    id: "container-tag3"
+    waitFor: ["container-tag2"]
+
+  - name: "l.gcr.io/google/bazel"
+    entrypoint: "docker"
+    args: ["tag", "bazel:image", "asia.gcr.io/${_IMG_DEST}"]
+    id: "container-tag4"
+    waitFor: ["container-tag3"]
+
+substitutions:
+    # Default values for substitution variables.
+    # These variables are altered in the cloudbuild trigger definition
+    _IMG_DEST: gcp-runtimes/centos7:latest
+    _IMG_BACKUP_DEST: asci-toolchain-backup/centos7-xingao-test:latest
 
 # Push the new image and its backup.
 # Push by using the `images` field here so they will show up in the build results
 # or the GCB Build information page.
 # https://cloud.google.com/cloud-build/docs/configuring-builds/store-images-artifacts
 images:
-  - "gcr.io/asci-toolchain/centos7-xingao-test:latest"
-  - "gcr.io/asci-toolchain-backup/centos7-xingao-test:latest"
+  - "gcr.io/${_IMG_DEST}"
+  - "us.gcr.io/${_IMG_DEST}"
+  - "eu.gcr.io/${_IMG_DEST}"
+  - "asia.gcr.io/${_IMG_DEST}"
+  - "gcr.io/${_IMG_BACKUP_DEST}"

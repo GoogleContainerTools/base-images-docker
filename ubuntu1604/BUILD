@@ -19,7 +19,12 @@ load(
 load("@bazel_toolchains//rules/container:metadata_merge.bzl", "metadata_merge")
 load("@bazel_toolchains//rules/container:packages_metadata.bzl", "packages_metadata")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
+load("@io_bazel_rules_docker//contrib:repro_test.bzl", "container_repro_test")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
+load(
+    "@io_bazel_rules_docker//contrib/automatic_container_release:configs_test.bzl",
+    "configs_test",
+)
 load("@io_bazel_rules_docker//docker/package_managers:download_pkgs.bzl", "download_pkgs")
 load("@io_bazel_rules_docker//docker/security:security_check.bzl", "security_check")
 
@@ -65,7 +70,7 @@ toolchain_container(
 # whether the ubuntu 16.04 has critical security vulnerability fixes.
 security_check(
     name = "security_metadata",
-    image = "gcr.io/asci-toolchain/ubuntu1604-xingao-test:latest",
+    image = "gcr.io/gcp-runtimes/ubuntu_16_0_4:latest",
 )
 
 # Transform the packages metadata csv produced by download_pkgs into a YAML
@@ -92,4 +97,16 @@ container_test(
     ],
     image = ":image",
     verbose = True,
+)
+
+container_repro_test(
+    name = "img_repro_test",
+    image = ":image",
+    workspace_file = "//:WORKSPACE",
+)
+
+configs_test(
+    name = "configs_test",
+    dependency_update_specs = ["deps_spec.yaml"],
+    file_update_specs = ["file_updates.yaml"],
 )
