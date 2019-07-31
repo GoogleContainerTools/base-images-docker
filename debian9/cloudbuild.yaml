@@ -109,7 +109,7 @@ substitutions:
     # Default values for substitution variables.
     # These variables are altered in the cloudbuild trigger definition
     _IMG_DEST: google-appengine/debian9:latest
-    _IMG_BACKUP_DEST: asci-toolchain-backup/debian9-xingao-test:latest
+    _IMG_BACKUP_DEST: asci-toolchain-backup/debian9:latest
 
 # Push the new image and its backup.
 # Push by using the `images` field here so they will show up in the build results
