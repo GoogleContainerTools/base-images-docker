@@ -36,19 +36,19 @@ rootfs_chroot apt-get install -y --no-install-recommends \
 # We have our own version of initctl, tell dpkg to not overwrite it.
 rootfs_chroot dpkg-divert --local --rename --add /sbin/initctl
 
-# Do a final upgrade.
-rootfs_chroot apt-get -o Acquire::Check-Valid-Until=false update
-rootfs_chroot apt-get -y -q upgrade
-
-# Clean some apt artifacts
-rootfs_chroot apt-get clean
-
 # Set the mirrors to distro-based ones
 cat << EOF > $WORKDIR/etc/apt/sources.list
 deb http://httpredir.debian.org/debian $DIST main
 deb http://httpredir.debian.org/debian $DIST-updates main
 deb http://security.debian.org $DIST/updates main
 EOF
+
+# Do a final upgrade.
+rootfs_chroot apt-get -o Acquire::Check-Valid-Until=false update
+rootfs_chroot apt-get -y -q upgrade
+
+# Clean some apt artifacts
+rootfs_chroot apt-get clean
 
 # Delete dirs we don't need, leaving the entries.
 rm -rf "${WORKDIR:?}"/dev "$WORKDIR"/proc
