@@ -116,7 +116,7 @@ substitutions:
     # Default values for substitution variables.
     # These variables are altered in the cloudbuild trigger definition
     _IMG_DEST: gcp-runtimes/ubuntu_18_0_4:latest
-    _IMG_BACKUP_DEST: asci-toolchain-backup/ubuntu1804-xingao-test:latest
+    _IMG_BACKUP_DEST: asci-toolchain-backup/ubuntu1804:latest
 
 # Push the new image and its backup.
 # Push by using the `images` field here so they will show up in the build results
