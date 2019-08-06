@@ -14,6 +14,10 @@ rm -rf /etc/firewalld
 passwd -l root
 echo 'container' > /etc/yum/vars/infra
 rm -rf /var/cache/yum/x86_64
+rm -rf /var/lib/yum/history
+rm -rf /var/lib/yum/yumdb
+rm -f /var/lib/yum/uuid
+rm -f /var/log/yum.log
 rm -f /tmp/ks-script*
 rm -rf /etc/sysconfig/network-scripts/ifcfg-*
 rm -rf /etc/udev/hwdb.bin
@@ -22,7 +26,12 @@ rm -rf /usr/lib/udev/hwdb.d/*
 umount /run
 systemd-tmpfiles --create --boot
 rm /var/run/nologin
-rpm --rebuilddb
+#rpm --rebuilddb
+rm -rf /var/lib/rpm/*
+rm -rf /var/lib/systemd/random-seed
+rm -rf /var/cache/ldconfig/aux-cache
+rm -rf /etc/pki/ca-trust/extracted/java
+
 rm /etc/resolv.conf
 
 rm -rf /root/.bash_history
