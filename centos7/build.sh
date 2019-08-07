@@ -35,4 +35,4 @@ umount /target/proc/
 umount /target/sys/
 rm /target/chroot.sh
 
-tar -C /target -cf /layer.tar .
+tar -C /target --mtime='1970-01-01' -cf /layer.tar .
