@@ -34,6 +34,6 @@ umount /target/dev/
 umount /target/proc/
 umount /target/sys/
 rm /target/chroot.sh
-echo 7 > /etc/yum/vars/releasevar
+echo 7 > /target/etc/yum/vars/releasevar
 
 tar -C /target --mtime='1970-01-01' -cf /layer.tar .
