@@ -31,7 +31,7 @@ gcsDeps:
         # Weekly release schedule at 5am every Monday.
         # TODO (smukherj1): Change schedule to monthly once the automatic
         # updates infrastructure is deemed to be stable.
-        schedule: "0 0 5 * * Mon"
+        schedule: "0 0 5 * * *"
         # Release immediate for security vulnerabilities with severity medium
         # or higher.
       - tag: "cveMedium"
