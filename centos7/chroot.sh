@@ -36,4 +36,6 @@ rm /etc/resolv.conf
 
 rm -rf /root/.bash_history
 
+echo 7 > /etc/yum/vars/releasever
+
 echo 'success'
