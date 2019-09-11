@@ -71,11 +71,11 @@ DEBS_TARBALL:
   - name: ca-certificates
     version: 20170717~16.04.2
   - name: curl
-    version: 7.47.0-1ubuntu2.13
+    version: 7.47.0-1ubuntu2.14
   - name: libasn1-8-heimdal
     version: 1.7~git20150920+dfsg-4ubuntu1.16.04.1
   - name: libcurl3-gnutls
-    version: 7.47.0-1ubuntu2.13
+    version: 7.47.0-1ubuntu2.14
   - name: libffi6
     version: 3.2.1-4
   - name: libgmp10
