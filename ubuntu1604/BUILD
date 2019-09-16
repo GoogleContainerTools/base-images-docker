@@ -12,12 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load(
-    "@bazel_toolchains//rules/container:docker_toolchains.bzl",
-    "toolchain_container",
-)
-load("@bazel_toolchains//rules/container:metadata_merge.bzl", "metadata_merge")
-load("@bazel_toolchains//rules/container:packages_metadata.bzl", "packages_metadata")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//contrib:repro_test.bzl", "container_repro_test")
 load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
@@ -25,8 +19,14 @@ load(
     "@io_bazel_rules_docker//contrib/automatic_container_release:configs_test.bzl",
     "configs_test",
 )
+load("@io_bazel_rules_docker//contrib/automatic_container_release:metadata_merge.bzl", "metadata_merge")
+load("@io_bazel_rules_docker//contrib/automatic_container_release:packages_metadata.bzl", "packages_metadata")
 load("@io_bazel_rules_docker//docker/package_managers:download_pkgs.bzl", "download_pkgs")
 load("@io_bazel_rules_docker//docker/security:security_check.bzl", "security_check")
+load(
+    "@io_bazel_rules_docker//docker/toolchain_container:toolchain_container.bzl",
+    "toolchain_container",
+)
 
 licenses(["notice"])  # Apache 2.0
 

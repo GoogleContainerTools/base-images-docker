@@ -20,8 +20,7 @@ the host machine.
 
 workspace(name = "base_images_docker")
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 git_repository(
@@ -33,9 +32,9 @@ git_repository(
 # Docker rules.
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "b16afde01b99f8b9a067b98903a5fa1879307f9344ccdbbc4aa796ae657e910f",
-    strip_prefix = "rules_docker-4ea9e6708ec5ac29dc18f991921e2c064969159a",
-    urls = ["https://github.com/bazelbuild/rules_docker/archive/4ea9e6708ec5ac29dc18f991921e2c064969159a.tar.gz"],
+    sha256 = "9ff889216e28c918811b77999257d4ac001c26c1f7c7fb17a79bc28abf74182e",
+    strip_prefix = "rules_docker-0.10.1",
+    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.10.1/rules_docker-v0.10.1.tar.gz"],
 )
 
 load(
@@ -189,7 +188,7 @@ UBUNTU_MAP = {
     "18_0_4": {
         "sha256": "600f663706aa8e7cb30d114daee117536545b5a580bca6a97b3cb73d72acdcee",
         "url": "https://storage.googleapis.com/ubuntu_tar/20190704/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz",
-    }
+    },
 }
 
 [http_file(
