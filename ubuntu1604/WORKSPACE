@@ -23,8 +23,8 @@ load(":revisions.bzl", "RULES_DOCKER")
 
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = RULES_DOCKER.sha256,,
-    strip_prefix = "rules_docker-" + RULES_DOCKER.commit,,
+    sha256 = RULES_DOCKER.sha256,
+    strip_prefix = "rules_docker-" + RULES_DOCKER.commit,
     urls = ["https://github.com/bazelbuild/rules_docker/archive/" + RULES_DOCKER.commit + ".tar.gz"],
 )
 
