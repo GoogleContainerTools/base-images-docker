@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load(
-    "@bazel_toolchains//rules/container:docker_toolchains.bzl",
-    "toolchain_container",
-)
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//contrib:repro_test.bzl", "container_repro_test")
@@ -26,6 +22,10 @@ load(
 )
 load("@io_bazel_rules_docker//docker/security:security_check.bzl", "security_check")
 load("@io_bazel_rules_docker//docker/util:run.bzl", "container_run_and_extract")
+load(
+    "@io_bazel_rules_docker//docker/toolchain_container:toolchain_container.bzl",
+    "toolchain_container",
+)
 
 licenses(["notice"])  # Apache 2.0
 

@@ -17,17 +17,10 @@ workspace(name = "debian9")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
-    name = "bazel_toolchains",
-    sha256 = "7d0c157364ce8dac5282af7c7b9e8d9e2c4ee7a6a30dfdb763e9e40b09a656e9",
-    strip_prefix = "bazel-toolchains-e6e7db64dfcfe82f54782a75ee549b0e392ecefc",
-    urls = ["https://github.com/bazelbuild/bazel-toolchains/archive/e6e7db64dfcfe82f54782a75ee549b0e392ecefc.tar.gz"],
-)
-
-http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "01f1826346a828410666d69df1a748f3a5a3b33924b9369c25064a7a553b133a",
-    strip_prefix = "rules_docker-f829974af764c60d57ef6630ea4b8499529d0093",
-    urls = ["https://github.com/bazelbuild/rules_docker/archive/f829974af764c60d57ef6630ea4b8499529d0093.tar.gz"],
+    sha256 = "9ff889216e28c918811b77999257d4ac001c26c1f7c7fb17a79bc28abf74182e",
+    strip_prefix = "rules_docker-0.10.1",
+    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.10.1/rules_docker-v0.10.1.tar.gz"],
 )
 
 http_archive(

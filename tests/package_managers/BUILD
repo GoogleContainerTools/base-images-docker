@@ -18,7 +18,6 @@ load(
     "@bazel_tools//tools/build_rules:test_rules.bzl",
     "rule_test",
 )
-load("@io_bazel_rules_docker//contrib:compare_ids_test.bzl", "compare_ids_test")
 load("//package_managers:bootstrap_image.bzl", "bootstrap_image_macro")
 
 bootstrap_image_macro(
