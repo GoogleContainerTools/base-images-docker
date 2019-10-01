@@ -1,4 +1,4 @@
-This is an experimental Debian 9 container.
+This is a Debian 10 container.
 
 ## Reproducible Debian Builds
 
