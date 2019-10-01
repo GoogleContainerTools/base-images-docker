@@ -1,0 +1,65 @@
+# Copyright 2018 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+workspace(name = "debian10")
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load(":revisions.bzl", "RULES_DOCKER")
+
+http_archive(
+    name = "io_bazel_rules_docker",
+    sha256 = RULES_DOCKER.sha256,
+    strip_prefix = "rules_docker-" + RULES_DOCKER.commit,
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/" + RULES_DOCKER.commit + ".tar.gz"],
+)
+
+http_archive(
+    name = "bazel_skylib",
+    # Commit c00ef493869e2966d47508e8625aae723a4a3054 of 2018-12-10
+    sha256 = "7363ae6721c1648017e23a200013510c9e71ca69f398d52886ee6af7f26af436",
+    strip_prefix = "bazel-skylib-c00ef493869e2966d47508e8625aae723a4a3054",
+    urls = ["https://github.com/bazelbuild/bazel-skylib/archive/c00ef493869e2966d47508e8625aae723a4a3054.tar.gz"],
+)
+
+load(
+    "@io_bazel_rules_docker//repositories:repositories.bzl",
+    container_repositories = "repositories",
+)
+
+container_repositories()
+
+load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
+
+container_deps()
+
+load("@io_bazel_rules_docker//repositories:pip_repositories.bzl", "pip_deps")
+
+pip_deps()
+
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_pull",
+)
+
+# Pull existing Debian base, only used to create builder image to debootstrap.
+container_pull(
+    name = "debian_base",
+    digest = "sha256:00109fa40230a081f5ecffe0e814725042ff62a03e2d1eae0563f1f82eaeae9b",
+    registry = "gcr.io",
+    repository = "google-appengine/debian10",
+)
+
+load(":deps.bzl", "deps")
+
+deps()
