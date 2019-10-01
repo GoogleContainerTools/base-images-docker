@@ -87,13 +87,6 @@ container_pull(
     repository = "google-appengine/debian9",
 )
 
-container_pull(
-    name = "debian_base",
-    digest = "sha256:00109fa40230a081f5ecffe0e814725042ff62a03e2d1eae0563f1f82eaeae9b",
-    registry = "gcr.io",
-    repository = "google-appengine/debian10",
-)
-
 git_repository(
     name = "distroless",
     commit = "a4fd5de337e31911aeee2ad5248284cebeb6a6f4",

@@ -53,11 +53,17 @@ load(
 )
 
 # Pull existing Debian base, only used to create builder image to debootstrap.
+#container_pull(
+#    name = "debian_base",
+#    digest = "sha256:00109fa40230a081f5ecffe0e814725042ff62a03e2d1eae0563f1f82eaeae9b",
+#    registry = "gcr.io",
+#    repository = "google-appengine/debian10",
+#)
 container_pull(
     name = "debian_base",
-    digest = "sha256:00109fa40230a081f5ecffe0e814725042ff62a03e2d1eae0563f1f82eaeae9b",
-    registry = "gcr.io",
-    repository = "google-appengine/debian10",
+    registry = "index.docker.io",
+    repository = "library/debian",
+    tag = "10",
 )
 
 load(":deps.bzl", "deps")
