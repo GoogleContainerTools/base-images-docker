@@ -13,7 +13,7 @@ UBUNTU1604_TAR:
   - name: libgmp10
     version: 2:6.1.0+dfsg-2
   - name: libgnutls30
-    version: 3.4.10-4ubuntu1.5
+    version: 3.4.10-4ubuntu1.6
   - name: libgssapi-krb5-2
     version: 1.13.2+dfsg-5ubuntu2.1
   - name: libgssapi3-heimdal
