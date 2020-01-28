@@ -119,9 +119,9 @@ DEBS_TARBALL:
   - name: librtmp1
     version: 2.4+20151223.gitfa8646d-1ubuntu0.1
   - name: libsasl2-2
-    version: 2.1.26.dfsg1-14ubuntu0.1
+    version: 2.1.26.dfsg1-14ubuntu0.2
   - name: libsasl2-modules-db
-    version: 2.1.26.dfsg1-14ubuntu0.1
+    version: 2.1.26.dfsg1-14ubuntu0.2
   - name: libsqlite3-0
     version: 3.11.0-1ubuntu1.3
   - name: libssl1.0.0
