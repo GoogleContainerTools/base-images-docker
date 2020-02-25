@@ -25,7 +25,6 @@ rm -rf /var/lib/yum/uuid
 echo 'container' > /etc/yum/vars/infra
 rm -rf /var/cache/yum/x86_64
 rm -f /var/log/yum.log
-rm -rf /var/lib/rpm/*
 rm -rf /var/lib/systemd/random-seed
 rm -rf /etc/pki/ca-trust/extracted/java
 #rpm --rebuilddb
