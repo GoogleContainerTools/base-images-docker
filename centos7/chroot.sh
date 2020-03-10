@@ -26,8 +26,6 @@ rm -rf /usr/lib/udev/hwdb.d/*
 umount /run
 systemd-tmpfiles --create --boot
 rm /var/run/nologin
-#rpm --rebuilddb
-rm -rf /var/lib/rpm/*
 rm -rf /var/lib/systemd/random-seed
 rm -rf /var/cache/ldconfig/aux-cache
 rm -rf /etc/pki/ca-trust/extracted/java
