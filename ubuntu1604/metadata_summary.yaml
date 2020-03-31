@@ -55,7 +55,7 @@ UBUNTU1604_TAR:
   - name: libsasl2-modules-db
     version: 2.1.26.dfsg1-14ubuntu0.2
   - name: libsqlite3-0
-    version: 3.11.0-1ubuntu1.3
+    version: 3.11.0-1ubuntu1.4
   - name: libssl1.0.0
     version: 1.0.2g-1ubuntu4.15
   - name: libtasn1-6
