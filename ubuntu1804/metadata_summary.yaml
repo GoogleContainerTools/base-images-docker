@@ -89,9 +89,9 @@ DEBS_TARBALL:
   - name: libkrb5support0
     version: 1.16-2ubuntu0.1
   - name: libldap-2.4-2
-    version: 2.4.45+dfsg-1ubuntu1.4
+    version: 2.4.45+dfsg-1ubuntu1.5
   - name: libldap-common
-    version: 2.4.45+dfsg-1ubuntu1.4
+    version: 2.4.45+dfsg-1ubuntu1.5
   - name: libnghttp2-14
     version: 1.30.0-1ubuntu1
   - name: libpsl5
