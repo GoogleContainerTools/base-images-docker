@@ -69,7 +69,7 @@ UBUNTU1604_TAR:
 DEBS_TARBALL:
   packages:
   - name: ca-certificates
-    version: 20170717~16.04.2
+    version: 20190110~16.04.1
   - name: curl
     version: 7.47.0-1ubuntu2.14
   - name: libasn1-8-heimdal
