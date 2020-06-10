@@ -105,7 +105,7 @@ DEBS_TARBALL:
   - name: libsasl2-modules-db
     version: 2.1.27~101-g0780600+dfsg-3ubuntu2.1
   - name: libsqlite3-0
-    version: 3.22.0-1ubuntu0.3
+    version: 3.22.0-1ubuntu0.4
   - name: libssl1.1
     version: 1.1.1-1ubuntu2.1~18.04.6
   - name: libwind0-heimdal
