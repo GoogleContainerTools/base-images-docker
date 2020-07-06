@@ -74,6 +74,8 @@ DEBS_TARBALL:
     version: 7.47.0-1ubuntu2.15
   - name: libasn1-8-heimdal
     version: 1.7~git20150920+dfsg-4ubuntu1.16.04.1
+  - name: libc-bin
+    version: 2.23-0ubuntu11.2
   - name: libcurl3-gnutls
     version: 7.47.0-1ubuntu2.15
   - name: libffi6
