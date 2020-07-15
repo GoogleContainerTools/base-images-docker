@@ -28,14 +28,6 @@ http_archive(
     urls = ["https://github.com/bazelbuild/rules_docker/archive/" + RULES_DOCKER.commit + ".tar.gz"],
 )
 
-http_archive(
-    name = "bazel_skylib",
-    # Commit c00ef493869e2966d47508e8625aae723a4a3054 of 2018-12-10
-    sha256 = "7363ae6721c1648017e23a200013510c9e71ca69f398d52886ee6af7f26af436",
-    strip_prefix = "bazel-skylib-c00ef493869e2966d47508e8625aae723a4a3054",
-    urls = ["https://github.com/bazelbuild/bazel-skylib/archive/c00ef493869e2966d47508e8625aae723a4a3054.tar.gz"],
-)
-
 # Non-deterministic latest version of ubuntu1604 base tarball. This is used by
 # File Update Service to archive each version in our managed GCS bucket, and
 # should NOT be used by container release directly.
