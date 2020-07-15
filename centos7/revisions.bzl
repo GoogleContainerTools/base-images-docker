@@ -21,6 +21,6 @@ CENTOS7_TAR = struct(
 )
 
 RULES_DOCKER = struct(
-    commit = "f1557ebc5381e2a662314e21585aa8080e9508be",
-    sha256 = "ffd6ee22fceb7db4d6e6f75bf69ecf439da7500ec2969fc5d371d165ceb22e3f",
+    commit = "faaa10a72fa9abde070e2a20d6046e9f9b849e9a",
+    sha256 = "feb53c560be2f97b7d02b23a1738a3154ba89fe630f09a7a838dcad38731b0b8",
 )
