@@ -3,11 +3,11 @@ UBUNTU1804_TAR:
   - name: ca-certificates
     version: 20190110~18.04.1
   - name: curl
-    version: 7.58.0-2ubuntu3.9
+    version: 7.58.0-2ubuntu3.10
   - name: libasn1-8-heimdal
     version: 7.5.0+dfsg-1
   - name: libcurl4
-    version: 7.58.0-2ubuntu3.9
+    version: 7.58.0-2ubuntu3.10
   - name: libgssapi-krb5-2
     version: 1.16-2ubuntu0.1
   - name: libgssapi3-heimdal
@@ -61,11 +61,11 @@ DEBS_TARBALL:
   - name: ca-certificates
     version: 20190110~18.04.1
   - name: curl
-    version: 7.58.0-2ubuntu3.9
+    version: 7.58.0-2ubuntu3.10
   - name: libasn1-8-heimdal
     version: 7.5.0+dfsg-1
   - name: libcurl4
-    version: 7.58.0-2ubuntu3.9
+    version: 7.58.0-2ubuntu3.10
   - name: libgssapi-krb5-2
     version: 1.16-2ubuntu0.1
   - name: libgssapi3-heimdal
