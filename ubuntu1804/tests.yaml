@@ -22,7 +22,7 @@ fileExistenceTests:
 
 fileContentTests:
 - name: 'Ubuntu Distro Check'
-  expectedContents: ['.*NAME="Ubuntu".*', '.*VERSION="18.04.4 LTS \(Bionic Beaver\)".*']
+  expectedContents: ['.*NAME="Ubuntu".*', '.*VERSION="18.04.5 LTS \(Bionic Beaver\)".*']
   path: '/etc/os-release'
 
 commandTests:
