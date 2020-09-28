@@ -57,7 +57,7 @@ UBUNTU1604_TAR:
   - name: libsqlite3-0
     version: 3.11.0-1ubuntu1.5
   - name: libssl1.0.0
-    version: 1.0.2g-1ubuntu4.16
+    version: 1.0.2g-1ubuntu4.17
   - name: libtasn1-6
     version: 4.7-3ubuntu0.16.04.3
   - name: libwind0-heimdal
@@ -65,7 +65,7 @@ UBUNTU1604_TAR:
   - name: netbase
     version: "5.3"
   - name: openssl
-    version: 1.0.2g-1ubuntu4.16
+    version: 1.0.2g-1ubuntu4.17
 DEBS_TARBALL:
   packages:
   - name: ca-certificates
@@ -125,7 +125,7 @@ DEBS_TARBALL:
   - name: libsqlite3-0
     version: 3.11.0-1ubuntu1.5
   - name: libssl1.0.0
-    version: 1.0.2g-1ubuntu4.16
+    version: 1.0.2g-1ubuntu4.17
   - name: libtasn1-6
     version: 4.7-3ubuntu0.16.04.3
   - name: libwind0-heimdal
@@ -133,4 +133,4 @@ DEBS_TARBALL:
   - name: netbase
     version: "5.3"
   - name: openssl
-    version: 1.0.2g-1ubuntu4.16
+    version: 1.0.2g-1ubuntu4.17
