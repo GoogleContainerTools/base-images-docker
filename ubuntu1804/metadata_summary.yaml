@@ -1,7 +1,7 @@
 UBUNTU1804_TAR:
   packages:
   - name: ca-certificates
-    version: 20190110~18.04.1
+    version: 20201027ubuntu0.18.04.1
   - name: curl
     version: 7.58.0-2ubuntu3.10
   - name: libasn1-8-heimdal
@@ -59,7 +59,7 @@ UBUNTU1804_TAR:
 DEBS_TARBALL:
   packages:
   - name: ca-certificates
-    version: 20190110~18.04.1
+    version: 20201027ubuntu0.18.04.1
   - name: curl
     version: 7.58.0-2ubuntu3.10
   - name: libasn1-8-heimdal
