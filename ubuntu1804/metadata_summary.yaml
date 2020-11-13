@@ -1,11 +1,13 @@
 UBUNTU1804_TAR:
   packages:
   - name: ca-certificates
-    version: 20190110~18.04.1
+    version: 20201027ubuntu0.18.04.1
   - name: curl
     version: 7.58.0-2ubuntu3.10
   - name: libasn1-8-heimdal
     version: 7.5.0+dfsg-1
+  - name: libc-bin
+    version: 2.27-3ubuntu1.3
   - name: libcurl4
     version: 7.58.0-2ubuntu3.10
   - name: libgssapi-krb5-2
@@ -59,11 +61,13 @@ UBUNTU1804_TAR:
 DEBS_TARBALL:
   packages:
   - name: ca-certificates
-    version: 20190110~18.04.1
+    version: 20201027ubuntu0.18.04.1
   - name: curl
     version: 7.58.0-2ubuntu3.10
   - name: libasn1-8-heimdal
     version: 7.5.0+dfsg-1
+  - name: libc-bin
+    version: 2.27-3ubuntu1.3
   - name: libcurl4
     version: 7.58.0-2ubuntu3.10
   - name: libgssapi-krb5-2
@@ -89,9 +93,9 @@ DEBS_TARBALL:
   - name: libkrb5support0
     version: 1.16-2ubuntu0.1
   - name: libldap-2.4-2
-    version: 2.4.45+dfsg-1ubuntu1.6
+    version: 2.4.45+dfsg-1ubuntu1.7
   - name: libldap-common
-    version: 2.4.45+dfsg-1ubuntu1.6
+    version: 2.4.45+dfsg-1ubuntu1.7
   - name: libnghttp2-14
     version: 1.30.0-1ubuntu1
   - name: libpsl5
