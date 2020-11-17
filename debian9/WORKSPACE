@@ -15,13 +15,12 @@
 workspace(name = "debian9")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load(":revisions.bzl", "RULES_DOCKER")
 
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = RULES_DOCKER.sha256,
-    strip_prefix = "rules_docker-" + RULES_DOCKER.commit,
-    urls = ["https://github.com/bazelbuild/rules_docker/archive/" + RULES_DOCKER.commit + ".tar.gz"],
+    sha256 = "4521794f0fba2e20f3bf15846ab5e01d5332e587e9ce81629c7f96c793bb7036",
+    strip_prefix = "rules_docker-0.14.4",
+    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.14.4/rules_docker-v0.14.4.tar.gz"],
 )
 
 load(
