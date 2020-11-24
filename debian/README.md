@@ -10,7 +10,7 @@ This image are available at `launcher.gcr.io/google/debian9`
 and `gcr.io/google-appengine/debian9`.
 
 The image is built using docker's
-[`mkimage.sh`](https://github.com/docker/docker/blob/master/contrib/mkimage.sh).
+[`mkimage.sh`](./reproducible/mkimage.sh).
 
 ## Usage
 
