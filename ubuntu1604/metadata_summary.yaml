@@ -71,11 +71,11 @@ DEBS_TARBALL:
   - name: ca-certificates
     version: 20201027ubuntu0.16.04.1
   - name: curl
-    version: 7.47.0-1ubuntu2.16
+    version: 7.47.0-1ubuntu2.18
   - name: libasn1-8-heimdal
     version: 1.7~git20150920+dfsg-4ubuntu1.16.04.1
   - name: libcurl3-gnutls
-    version: 7.47.0-1ubuntu2.16
+    version: 7.47.0-1ubuntu2.18
   - name: libffi6
     version: 3.2.1-4
   - name: libgmp10
@@ -125,7 +125,7 @@ DEBS_TARBALL:
   - name: libsqlite3-0
     version: 3.11.0-1ubuntu1.5
   - name: libssl1.0.0
-    version: 1.0.2g-1ubuntu4.17
+    version: 1.0.2g-1ubuntu4.18
   - name: libtasn1-6
     version: 4.7-3ubuntu0.16.04.3
   - name: libwind0-heimdal
@@ -133,4 +133,4 @@ DEBS_TARBALL:
   - name: netbase
     version: "5.3"
   - name: openssl
-    version: 1.0.2g-1ubuntu4.17
+    version: 1.0.2g-1ubuntu4.18
