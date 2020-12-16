@@ -3,15 +3,13 @@ UBUNTU1804_TAR:
   - name: ca-certificates
     version: 20201027ubuntu0.18.04.1
   - name: curl
-    version: 7.58.0-2ubuntu3.10
+    version: 7.58.0-2ubuntu3.12
   - name: libasn1-8-heimdal
     version: 7.5.0+dfsg-1
-  - name: libc-bin
-    version: 2.27-3ubuntu1.3
   - name: libcurl4
-    version: 7.58.0-2ubuntu3.10
+    version: 7.58.0-2ubuntu3.12
   - name: libgssapi-krb5-2
-    version: 1.16-2ubuntu0.1
+    version: 1.16-2ubuntu0.2
   - name: libgssapi3-heimdal
     version: 7.5.0+dfsg-1
   - name: libhcrypto4-heimdal
@@ -23,19 +21,19 @@ UBUNTU1804_TAR:
   - name: libhx509-5-heimdal
     version: 7.5.0+dfsg-1
   - name: libk5crypto3
-    version: 1.16-2ubuntu0.1
+    version: 1.16-2ubuntu0.2
   - name: libkeyutils1
     version: 1.5.9-9.2ubuntu2
   - name: libkrb5-26-heimdal
     version: 7.5.0+dfsg-1
   - name: libkrb5-3
-    version: 1.16-2ubuntu0.1
+    version: 1.16-2ubuntu0.2
   - name: libkrb5support0
-    version: 1.16-2ubuntu0.1
+    version: 1.16-2ubuntu0.2
   - name: libldap-2.4-2
-    version: 2.4.45+dfsg-1ubuntu1.6
+    version: 2.4.45+dfsg-1ubuntu1.8
   - name: libldap-common
-    version: 2.4.45+dfsg-1ubuntu1.6
+    version: 2.4.45+dfsg-1ubuntu1.8
   - name: libnghttp2-14
     version: 1.30.0-1ubuntu1
   - name: libpsl5
@@ -51,23 +49,25 @@ UBUNTU1804_TAR:
   - name: libsqlite3-0
     version: 3.22.0-1ubuntu0.4
   - name: libssl1.1
-    version: 1.1.1-1ubuntu2.1~18.04.6
+    version: 1.1.1-1ubuntu2.1~18.04.7
   - name: libwind0-heimdal
     version: 7.5.0+dfsg-1
   - name: netbase
     version: "5.4"
   - name: openssl
-    version: 1.1.1-1ubuntu2.1~18.04.6
+    version: 1.1.1-1ubuntu2.1~18.04.7
 DEBS_TARBALL:
   packages:
   - name: ca-certificates
     version: 20201027ubuntu0.18.04.1
   - name: curl
-    version: 7.58.0-2ubuntu3.10
+    version: 7.58.0-2ubuntu3.12
   - name: libasn1-8-heimdal
     version: 7.5.0+dfsg-1
+  - name: libc-bin
+    version: 2.27-3ubuntu1.4
   - name: libcurl4
-    version: 7.58.0-2ubuntu3.10
+    version: 7.58.0-2ubuntu3.12
   - name: libgssapi-krb5-2
     version: 1.16-2ubuntu0.2
   - name: libgssapi3-heimdal
@@ -109,10 +109,10 @@ DEBS_TARBALL:
   - name: libsqlite3-0
     version: 3.22.0-1ubuntu0.4
   - name: libssl1.1
-    version: 1.1.1-1ubuntu2.1~18.04.6
+    version: 1.1.1-1ubuntu2.1~18.04.7
   - name: libwind0-heimdal
     version: 7.5.0+dfsg-1
   - name: netbase
     version: "5.4"
   - name: openssl
-    version: 1.1.1-1ubuntu2.1~18.04.6
+    version: 1.1.1-1ubuntu2.1~18.04.7
