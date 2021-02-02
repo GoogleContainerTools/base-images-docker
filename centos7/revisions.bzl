@@ -16,8 +16,8 @@
 # For more details, check the deps_spec.yaml file in the current folder.
 
 CENTOS7_TAR = struct(
-    revision = "1611257615",
-    sha256 = "1295e147d86845530de9e97288d0e27264c09a55cf8b40564e9f838feb15ebba",
+    revision = "1612290799",
+    sha256 = "44c30ef92f3015d2a1fd9f6f9be3b86ed1463c0fb1884a6ba100bc973d506b7d",
 )
 
 RULES_DOCKER = struct(
