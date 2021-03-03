@@ -69,7 +69,7 @@ UBUNTU1604_TAR:
 DEBS_TARBALL:
   packages:
   - name: ca-certificates
-    version: 20201027ubuntu0.16.04.1
+    version: 20210119~16.04.1
   - name: curl
     version: 7.47.0-1ubuntu2.18
   - name: libasn1-8-heimdal
@@ -109,7 +109,7 @@ DEBS_TARBALL:
   - name: libkrb5support0
     version: 1.13.2+dfsg-5ubuntu2.2
   - name: libldap-2.4-2
-    version: 2.4.42+dfsg-2ubuntu3.11
+    version: 2.4.42+dfsg-2ubuntu3.13
   - name: libnettle6
     version: 3.2-1ubuntu0.16.04.1
   - name: libp11-kit0
@@ -125,7 +125,7 @@ DEBS_TARBALL:
   - name: libsqlite3-0
     version: 3.11.0-1ubuntu1.5
   - name: libssl1.0.0
-    version: 1.0.2g-1ubuntu4.18
+    version: 1.0.2g-1ubuntu4.19
   - name: libtasn1-6
     version: 4.7-3ubuntu0.16.04.3
   - name: libwind0-heimdal
@@ -133,4 +133,4 @@ DEBS_TARBALL:
   - name: netbase
     version: "5.3"
   - name: openssl
-    version: 1.0.2g-1ubuntu4.18
+    version: 1.0.2g-1ubuntu4.19
