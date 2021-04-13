@@ -93,7 +93,7 @@ DEBS_TARBALL:
   - name: libheimntlm0-heimdal
     version: 1.7~git20150920+dfsg-4ubuntu1.16.04.1
   - name: libhogweed4
-    version: 3.2-1ubuntu0.16.04.1
+    version: 3.2-1ubuntu0.16.04.2
   - name: libhx509-5-heimdal
     version: 1.7~git20150920+dfsg-4ubuntu1.16.04.1
   - name: libidn11
@@ -111,7 +111,7 @@ DEBS_TARBALL:
   - name: libldap-2.4-2
     version: 2.4.42+dfsg-2ubuntu3.13
   - name: libnettle6
-    version: 3.2-1ubuntu0.16.04.1
+    version: 3.2-1ubuntu0.16.04.2
   - name: libp11-kit0
     version: 0.23.2-5~ubuntu16.04.2
   - name: libroken18-heimdal
