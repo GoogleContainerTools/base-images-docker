@@ -1,13 +1,13 @@
 UBUNTU1604_TAR:
   packages:
   - name: ca-certificates
-    version: 20201027ubuntu0.16.04.1
+    version: 20210119~16.04.1
   - name: curl
-    version: 7.47.0-1ubuntu2.18
+    version: 7.47.0-1ubuntu2.19
   - name: libasn1-8-heimdal
     version: 1.7~git20150920+dfsg-4ubuntu1.16.04.1
   - name: libcurl3-gnutls
-    version: 7.47.0-1ubuntu2.18
+    version: 7.47.0-1ubuntu2.19
   - name: libffi6
     version: 3.2.1-4
   - name: libgmp10
@@ -25,7 +25,7 @@ UBUNTU1604_TAR:
   - name: libheimntlm0-heimdal
     version: 1.7~git20150920+dfsg-4ubuntu1.16.04.1
   - name: libhogweed4
-    version: 3.2-1ubuntu0.16.04.1
+    version: 3.2-1ubuntu0.16.04.2
   - name: libhx509-5-heimdal
     version: 1.7~git20150920+dfsg-4ubuntu1.16.04.1
   - name: libidn11
@@ -41,9 +41,9 @@ UBUNTU1604_TAR:
   - name: libkrb5support0
     version: 1.13.2+dfsg-5ubuntu2.2
   - name: libldap-2.4-2
-    version: 2.4.42+dfsg-2ubuntu3.11
+    version: 2.4.42+dfsg-2ubuntu3.13
   - name: libnettle6
-    version: 3.2-1ubuntu0.16.04.1
+    version: 3.2-1ubuntu0.16.04.2
   - name: libp11-kit0
     version: 0.23.2-5~ubuntu16.04.2
   - name: libroken18-heimdal
@@ -57,7 +57,7 @@ UBUNTU1604_TAR:
   - name: libsqlite3-0
     version: 3.11.0-1ubuntu1.5
   - name: libssl1.0.0
-    version: 1.0.2g-1ubuntu4.18
+    version: 1.0.2g-1ubuntu4.19
   - name: libtasn1-6
     version: 4.7-3ubuntu0.16.04.3
   - name: libwind0-heimdal
@@ -65,7 +65,7 @@ UBUNTU1604_TAR:
   - name: netbase
     version: "5.3"
   - name: openssl
-    version: 1.0.2g-1ubuntu4.18
+    version: 1.0.2g-1ubuntu4.19
 DEBS_TARBALL:
   packages:
   - name: ca-certificates
@@ -93,7 +93,7 @@ DEBS_TARBALL:
   - name: libheimntlm0-heimdal
     version: 1.7~git20150920+dfsg-4ubuntu1.16.04.1
   - name: libhogweed4
-    version: 3.2-1ubuntu0.16.04.1
+    version: 3.2-1ubuntu0.16.04.2
   - name: libhx509-5-heimdal
     version: 1.7~git20150920+dfsg-4ubuntu1.16.04.1
   - name: libidn11
@@ -111,7 +111,7 @@ DEBS_TARBALL:
   - name: libldap-2.4-2
     version: 2.4.42+dfsg-2ubuntu3.13
   - name: libnettle6
-    version: 3.2-1ubuntu0.16.04.1
+    version: 3.2-1ubuntu0.16.04.2
   - name: libp11-kit0
     version: 0.23.2-5~ubuntu16.04.2
   - name: libroken18-heimdal
