@@ -38,8 +38,8 @@ rootfs_chroot dpkg-divert --local --rename --add /sbin/initctl
 
 # Set the mirrors to distro-based ones
 cat << EOF > $WORKDIR/etc/apt/sources.list
-deb http://httpredir.debian.org/debian $DIST main
-deb http://httpredir.debian.org/debian $DIST-updates main
+deb http://deb.debian.org/debian $DIST main
+deb http://deb.debian.org/debian $DIST-updates main
 deb http://security.debian.org $DIST/updates main
 EOF
 
