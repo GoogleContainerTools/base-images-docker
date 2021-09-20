@@ -87,23 +87,16 @@ container_pull(
     repository = "google-appengine/debian9",
 )
 
-git_repository(
+local_repository(
     name = "distroless",
-    commit = "a4fd5de337e31911aeee2ad5248284cebeb6a6f4",
-    remote = "https://github.com/GoogleContainerTools/distroless.git",
+    path = "$HOME/distroless",
 )
 
-load(
-    "@distroless//package_manager:package_manager.bzl",
-    "package_manager_repositories",
-)
 load(
     "@distroless//package_manager:dpkg.bzl",
     "dpkg_list",
     "dpkg_src",
 )
-
-package_manager_repositories()
 
 # The Debian snapshot datetime to use. See http://snapshot.debian.org/ for more information.
 DEB_SNAPSHOT = "20190708T153325Z"
