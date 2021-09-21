@@ -1,0 +1,62 @@
+# Copyright 2018 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+workspace(name = "debian11")
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "io_bazel_rules_docker",
+    sha256 = "4521794f0fba2e20f3bf15846ab5e01d5332e587e9ce81629c7f96c793bb7036",
+    strip_prefix = "rules_docker-0.14.4",
+    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.14.4/rules_docker-v0.14.4.tar.gz"],
+)
+
+load(
+    "@io_bazel_rules_docker//repositories:repositories.bzl",
+    container_repositories = "repositories",
+)
+
+container_repositories()
+
+load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
+
+container_deps()
+
+load("@io_bazel_rules_docker//repositories:pip_repositories.bzl", "pip_deps")
+
+pip_deps()
+
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_pull",
+)
+
+# Pull existing Debian base, only used to create builder image to debootstrap.
+#container_pull(
+#    name = "debian_base",
+#    digest = "sha256:00109fa40230a081f5ecffe0e814725042ff62a03e2d1eae0563f1f82eaeae9b",
+#    registry = "gcr.io",
+#    repository = "google-appengine/debian11",
+#)
+container_pull(
+    name = "debian_base",
+    registry = "index.docker.io",
+    repository = "library/debian",
+    tag = "11",
+)
+
+load(":deps.bzl", "deps")
+
+deps()

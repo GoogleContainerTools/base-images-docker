@@ -13,7 +13,9 @@ test:
 	cd ubuntu1804 && bazel test $(BAZEL_TEST_OPTS) $(CONTAINER_TEST_TARGETS) && cd ..
 	cd debian9 && bazel test $(BAZEL_TEST_OPTS) $(CONTAINER_TEST_TARGETS) && cd ..
 	cd debian10 && bazel test $(BAZEL_TEST_OPTS) $(CONTAINER_TEST_TARGETS) && cd ..
+	cd debian11 && bazel test $(BAZEL_TEST_OPTS) $(CONTAINER_TEST_TARGETS) && cd ..
 	cd centos7 && bazel test $(BAZEL_TEST_OPTS) $(CONTAINER_TEST_TARGETS) && cd ..
+	cd centos8 && bazel test $(BAZEL_TEST_OPTS) $(CONTAINER_TEST_TARGETS) && cd ..
 
 complex-test:
 	tests/package_managers/test_bootstrap_image_macro.sh
