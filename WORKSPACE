@@ -87,12 +87,18 @@ container_pull(
     repository = "google-appengine/debian9",
 )
 
+# If you're trying to build this locally on a modern distro, switch distroless
+# to a local_repository, clone it down to the specified path, and run
+# bazel build //package_manager:dpkg_parser.par before building here.
 git_repository(
     name = "distroless",
     commit = "a4fd5de337e31911aeee2ad5248284cebeb6a6f4",
     remote = "https://github.com/GoogleContainerTools/distroless.git",
 )
 
+# If you're trying to build this locally on a modern distro, the load
+# statement with package_manager.bzl and package_manager_repositories
+# below must be removed after adjusting the distroless repo above.
 load(
     "@distroless//package_manager:package_manager.bzl",
     "package_manager_repositories",
@@ -103,6 +109,8 @@ load(
     "dpkg_src",
 )
 
+# If you're trying to build this locally on a modern distro, remove
+# or comment out package_manager_repositories() below.
 package_manager_repositories()
 
 # The Debian snapshot datetime to use. See http://snapshot.debian.org/ for more information.
