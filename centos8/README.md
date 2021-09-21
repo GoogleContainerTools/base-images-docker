@@ -5,7 +5,7 @@ This directory contains scripts and Dockerfiles for building a CentOS container 
 ### Overview
 
 We bootstrap the image following a process based on a combination of https://wiki.centos.org/HowTos/ManualInstall
-and https://github.com/CentOS/sig-cloud-instance-build/blob/master/docker/centos-7.ks.
+and https://github.com/CentOS/sig-cloud-instance-build/blob/master/docker/centos-8.ks.
 
 We avoid using kickstart to make it easier to run in a container environment like Cloud Build, but still reuse the
 package list and cleanup steps from the kickstart installation.
