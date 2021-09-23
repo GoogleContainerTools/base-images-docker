@@ -19,8 +19,8 @@ to be used to download other files.
 """
 
 _DOWNLOADED_FILE_NAME = "centos.rpm"
-_BASE_URL = "http://mirror.centos.org/centos/{}/os/x86_64/Packages/"
-_REGEX = ".*centos-release.*rpm"
+_BASE_URL = "http://mirror.centos.org/centos/{}/BaseOS/x86_64/os/Packages/"
+_REGEX = ".*centos-linux-release.*rpm"
 _BUILD = """
 package(default_visibility = ["//visibility:public"])
 filegroup(
