@@ -83,7 +83,7 @@ container_image(
 )
 
 # Run the security check script to generate a metadata YAML file indicating
-# whether the debian 11 has critical security vulnerability fixes.
+# whether debian11 has critical security vulnerability fixes.
 security_check(
     name = "metadata",
     image = "gcr.io/google-appengine/debian11:latest",
