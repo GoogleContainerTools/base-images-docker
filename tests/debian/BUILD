@@ -6,6 +6,8 @@ exports_files(glob(["*.yaml"]))
 
 DEBIAN_MAP = {
     9: "stretch",
+    10: "buster",
+    11: "bullseye",
 }
 
 [container_test(

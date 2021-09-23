@@ -58,6 +58,3 @@ metadataTest:
     - key: PATH
       value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-licenseTests:
-- debian: true
-  files:
