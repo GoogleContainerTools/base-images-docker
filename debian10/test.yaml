@@ -33,7 +33,7 @@ fileContentTests:
 - name: 'Retry Policy'
   expectedContents: ['Acquire::Retries 3;']
   path: '/etc/apt/apt.conf.d/apt-retry'
-# Debian 9 specific tests.
+# Debian 10 specific tests.
 - name: 'Debian Sources Version'
   expectedContents: ['buster']
   path: '/etc/apt/sources.list'
