@@ -47,8 +47,8 @@ load(
 # Centos base tarball.
 #container_pull(
 #    name = "centos_base",
-#    registry = "l.gcr.io",
-#    repository = "google/centos8",
+#    registry = "gcr.io",
+#    repository = "gcp-runtimes/centos8",
 #    tag = "latest",
 #)
 container_pull(
