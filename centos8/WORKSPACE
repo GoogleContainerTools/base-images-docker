@@ -45,11 +45,17 @@ load(
 
 # Pull existing Centos base, only used by File Update Service to create a new
 # Centos base tarball.
+#container_pull(
+#    name = "centos_base",
+#    registry = "gcr.io",
+#    repository = "gcp-runtimes/centos8",
+#    tag = "latest",
+#)
 container_pull(
     name = "centos_base",
-    registry = "gcr.io",
-    repository = "gcp-runtimes/centos8",
-    tag = "latest",
+    registry = "index.docker.io",
+    repository = "library/centos",
+    tag = "8",
 )
 
 load(":centos_rpm.bzl", "centos_rpm")
