@@ -33,7 +33,7 @@ fileContentTests:
 - name: 'Retry Policy'
   expectedContents: ['Acquire::Retries 3;']
   path: '/etc/apt/apt.conf.d/apt-retry'
-# Debian 9 specific tests.
+# Debian 11 specific tests.
 - name: 'Debian Sources Version'
   expectedContents: ['bullseye']
   path: '/etc/apt/sources.list'
@@ -58,6 +58,3 @@ metadataTest:
     - key: PATH
       value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-licenseTests:
-- debian: true
-  files:
