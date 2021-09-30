@@ -1,0 +1,59 @@
+# Copyright 2021 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+workspace(name = "ubuntu2004")
+
+load(
+    "@bazel_tools//tools/build_defs/repo:http.bzl",
+    "http_archive",
+    "http_file",
+)
+
+http_archive(
+    name = "io_bazel_rules_docker",
+    sha256 = "4521794f0fba2e20f3bf15846ab5e01d5332e587e9ce81629c7f96c793bb7036",
+    strip_prefix = "rules_docker-0.14.4",
+    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.14.4/rules_docker-v0.14.4.tar.gz"],
+)
+
+# Non-deterministic latest version of ubuntu2004 base tarball. This is used by
+# File Update Service to archive each version in our managed GCS bucket, and
+# should NOT be used by container release directly.
+# Note that this relies on that https://partner-images.canonical.com/oci/focal/current/...
+# always hosts the latest version of the tarball, and we intentionally do not include
+# sha256 in this http_file target as the file downloaded are not deterministic.
+http_file(
+    name = "ubuntu2004_tar_latest",
+    downloaded_file_path = "ubuntu2004.tar.gz",
+    urls = ["https://partner-images.canonical.com/oci/focal/current/ubuntu-focal-oci-amd64-root.tar.gz"],
+)
+
+load(
+    "@io_bazel_rules_docker//repositories:repositories.bzl",
+    container_repositories = "repositories",
+)
+
+container_repositories()
+
+load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
+
+container_deps()
+
+load("@io_bazel_rules_docker//repositories:pip_repositories.bzl", "pip_deps")
+
+pip_deps()
+
+load(":deps.bzl", "deps")
+
+deps()
