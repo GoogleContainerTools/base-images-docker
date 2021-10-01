@@ -37,13 +37,6 @@ UBUNTU_ENV = {
     "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
 }
 
-## temporary bootstrapper
-container_image(
-    name = "ubuntu2004_dockerhub",
-    base = "@ubuntu_dockerhub//image",
-)
-## temporary bootstrapper
-
 container_image(
     name = "ubuntu2004_vanilla",
     env = UBUNTU_ENV,
@@ -52,7 +45,7 @@ container_image(
 
 download_pkgs(
     name = "debs",
-    image_tar = ":ubuntu2004_dockerhub.tar",
+    image_tar = ":ubuntu2004_vanilla.tar",
     packages = [
         "ca-certificates",
         "curl",
