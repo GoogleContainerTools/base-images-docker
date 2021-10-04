@@ -11,6 +11,7 @@ test:
 	bazel test --test_output=errors //... --action_env=GIT_ROOT=$(PWD) --sandbox_writable_path=$(PWD) --verbose_failures --incompatible_bzl_disallow_load_after_statement=false
 	cd ubuntu1604 && bazel test $(BAZEL_TEST_OPTS) $(CONTAINER_TEST_TARGETS) && cd ..
 	cd ubuntu1804 && bazel test $(BAZEL_TEST_OPTS) $(CONTAINER_TEST_TARGETS) && cd ..
+	cd ubuntu2004 && bazel test $(BAZEL_TEST_OPTS) $(CONTAINER_TEST_TARGETS) && cd ..
 	cd debian9 && bazel test $(BAZEL_TEST_OPTS) $(CONTAINER_TEST_TARGETS) && cd ..
 	cd debian10 && bazel test $(BAZEL_TEST_OPTS) $(CONTAINER_TEST_TARGETS) && cd ..
 	cd debian11 && bazel test $(BAZEL_TEST_OPTS) $(CONTAINER_TEST_TARGETS) && cd ..
