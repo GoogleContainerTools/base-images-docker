@@ -76,14 +76,14 @@ container_image(
     cmd = "/bin/bash",
     env = DEBIAN_ENV,
     tars = [
-        # The overlay tar has to come first to actuall overwrite existing files.
+        # The overlay tar has to come first to actually overwrite existing files.
         ":overlay.tar",
         "@debian11_tar//file",
     ],
 )
 
 # Run the security check script to generate a metadata YAML file indicating
-# whether the debian 9 has critical security vulnerability fixes.
+# whether debian11 has critical security vulnerability fixes.
 security_check(
     name = "metadata",
     image = "gcr.io/google-appengine/debian11:latest",

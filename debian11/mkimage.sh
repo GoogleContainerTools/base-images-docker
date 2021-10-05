@@ -40,7 +40,7 @@ rootfs_chroot dpkg-divert --local --rename --add /sbin/initctl
 cat << EOF > $WORKDIR/etc/apt/sources.list
 deb http://deb.debian.org/debian $DIST main
 deb http://deb.debian.org/debian $DIST-updates main
-deb http://security.debian.org $DIST/updates main
+deb http://deb.debian.org/debian-security $DIST-security main
 EOF
 
 # Do a final upgrade.
