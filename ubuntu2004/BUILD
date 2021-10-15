@@ -59,7 +59,6 @@ download_pkgs(
 security_check(
     name = "security_metadata",
     image = "gcr.io/gcp-runtimes/ubuntu_20_0_4:latest",
-
 )
 
 # Transform the packages metadata csv produced by download_pkgs into a YAML

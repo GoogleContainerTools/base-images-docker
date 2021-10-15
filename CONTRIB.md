@@ -1,6 +1,6 @@
 # Environment Setup
 
-To build and test these images you will need to install `bazel`.
+To build and test these images you will need to install `bazel`. This build is known to work with version 3.4.1
 
 To install a pre-commit hook that will automatically run tests, run the following command:
 
