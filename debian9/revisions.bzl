@@ -16,8 +16,8 @@
 # For more details, check the deps_spec.yaml file in the current folder.
 
 DEBIAN9_TAR = struct(
-    revision = "1639175559",
-    sha256 = "5c375eb17edf8fcd34b6b67dcb5bac2e0c9d90767cfd269e11420739ae98a615",
+    revision = "1642534283",
+    sha256 = "22b89d8b6f4675a31a61e3ce2bac69d2761ecc1467657e11fc74f6df5ef7cb1f",
 )
 
 RULES_DOCKER = struct(
