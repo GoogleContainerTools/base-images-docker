@@ -1,1 +1,1 @@
-This is am Ubuntu 2004 container avaiable on cloud  marketplace.
+This is an Ubuntu 2004 container avaiable on cloud  marketplace.
