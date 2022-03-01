@@ -64,6 +64,8 @@ DEBS_TARBALL:
     version: 7.58.0-2ubuntu3.16
   - name: libasn1-8-heimdal
     version: 7.5.0+dfsg-1
+  - name: libc-bin
+    version: 2.27-3ubuntu1.5
   - name: libcurl4
     version: 7.58.0-2ubuntu3.16
   - name: libgssapi-krb5-2
@@ -101,9 +103,9 @@ DEBS_TARBALL:
   - name: librtmp1
     version: 2.4+20151223.gitfa8646d.1-1
   - name: libsasl2-2
-    version: 2.1.27~101-g0780600+dfsg-3ubuntu2.3
+    version: 2.1.27~101-g0780600+dfsg-3ubuntu2.4
   - name: libsasl2-modules-db
-    version: 2.1.27~101-g0780600+dfsg-3ubuntu2.3
+    version: 2.1.27~101-g0780600+dfsg-3ubuntu2.4
   - name: libsqlite3-0
     version: 3.22.0-1ubuntu0.4
   - name: libssl1.1
