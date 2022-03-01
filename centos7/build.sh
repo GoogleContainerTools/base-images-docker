@@ -20,7 +20,6 @@ chroot /target ./chroot.sh ${1}
 yum clean all
 echo 'container' > /etc/yum/vars/infra
 rm -rf /var/lib/systemd/random-seed
-rm -rf /etc/pki/ca-trust/extracted/java
 #rpm --rebuilddb
 
 umount /target/dev/
