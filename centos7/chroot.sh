@@ -28,7 +28,6 @@ systemd-tmpfiles --create --boot
 rm /var/run/nologin
 rm -rf /var/lib/systemd/random-seed
 rm -rf /var/cache/ldconfig/aux-cache
-rm -rf /etc/pki/ca-trust/extracted/java
 
 rm /etc/resolv.conf
 
