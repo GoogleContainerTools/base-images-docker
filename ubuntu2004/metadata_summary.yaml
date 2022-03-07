@@ -8,6 +8,8 @@ UBUNTU2004_TAR:
     version: 7.7.0+dfsg-1ubuntu1
   - name: libbrotli1
     version: 1.0.7-6ubuntu0.1
+  - name: libc-bin
+    version: 2.31-0ubuntu9.7
   - name: libcurl4
     version: 7.68.0-1ubuntu2.7
   - name: libgssapi-krb5-2
@@ -45,9 +47,9 @@ UBUNTU2004_TAR:
   - name: librtmp1
     version: 2.4+20151223.gitfa8646d.1-2build1
   - name: libsasl2-2
-    version: 2.1.27+dfsg-2
+    version: 2.1.27+dfsg-2ubuntu0.1
   - name: libsasl2-modules-db
-    version: 2.1.27+dfsg-2
+    version: 2.1.27+dfsg-2ubuntu0.1
   - name: libsqlite3-0
     version: 3.31.1-4ubuntu0.2
   - name: libssh-4
@@ -117,10 +119,10 @@ DEBS_TARBALL:
   - name: libssh-4
     version: 0.9.3-2ubuntu2.2
   - name: libssl1.1
-    version: 1.1.1f-1ubuntu2.10
+    version: 1.1.1f-1ubuntu2.11
   - name: libwind0-heimdal
     version: 7.7.0+dfsg-1ubuntu1
   - name: netbase
     version: "6.1"
   - name: openssl
-    version: 1.1.1f-1ubuntu2.10
+    version: 1.1.1f-1ubuntu2.11
