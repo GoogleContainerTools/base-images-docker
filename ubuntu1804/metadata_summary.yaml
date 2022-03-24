@@ -66,8 +66,6 @@ DEBS_TARBALL:
     version: 7.58.0-2ubuntu3.16
   - name: libasn1-8-heimdal
     version: 7.5.0+dfsg-1
-  - name: libc-bin
-    version: 2.27-3ubuntu1.5
   - name: libcurl4
     version: 7.58.0-2ubuntu3.16
   - name: libgssapi-krb5-2
