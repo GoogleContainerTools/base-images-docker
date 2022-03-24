@@ -72,8 +72,6 @@ DEBS_TARBALL:
     version: 7.7.0+dfsg-1ubuntu1
   - name: libbrotli1
     version: 1.0.7-6ubuntu0.1
-  - name: libc-bin
-    version: 2.31-0ubuntu9.7
   - name: libcurl4
     version: 7.68.0-1ubuntu2.7
   - name: libgssapi-krb5-2
