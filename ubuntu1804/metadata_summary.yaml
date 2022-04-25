@@ -83,7 +83,7 @@ DEBS_TARBALL:
   - name: libk5crypto3
     version: 1.16-2ubuntu0.2
   - name: libkeyutils1
-    version: 1.5.9-9.2ubuntu2
+    version: 1.5.9-9.2ubuntu2.1
   - name: libkrb5-26-heimdal
     version: 7.5.0+dfsg-1
   - name: libkrb5-3
