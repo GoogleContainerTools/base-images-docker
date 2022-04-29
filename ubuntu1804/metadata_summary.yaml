@@ -63,11 +63,11 @@ DEBS_TARBALL:
   - name: ca-certificates
     version: 20210119~18.04.2
   - name: curl
-    version: 7.58.0-2ubuntu3.16
+    version: 7.58.0-2ubuntu3.17
   - name: libasn1-8-heimdal
     version: 7.5.0+dfsg-1
   - name: libcurl4
-    version: 7.58.0-2ubuntu3.16
+    version: 7.58.0-2ubuntu3.17
   - name: libgssapi-krb5-2
     version: 1.16-2ubuntu0.2
   - name: libgssapi3-heimdal
@@ -83,7 +83,7 @@ DEBS_TARBALL:
   - name: libk5crypto3
     version: 1.16-2ubuntu0.2
   - name: libkeyutils1
-    version: 1.5.9-9.2ubuntu2
+    version: 1.5.9-9.2ubuntu2.1
   - name: libkrb5-26-heimdal
     version: 7.5.0+dfsg-1
   - name: libkrb5-3
