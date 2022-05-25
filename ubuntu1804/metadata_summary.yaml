@@ -66,6 +66,8 @@ DEBS_TARBALL:
     version: 7.58.0-2ubuntu3.18
   - name: libasn1-8-heimdal
     version: 7.5.0+dfsg-1
+  - name: libc-bin
+    version: 2.27-3ubuntu1.6
   - name: libcurl4
     version: 7.58.0-2ubuntu3.18
   - name: libgssapi-krb5-2
@@ -91,9 +93,9 @@ DEBS_TARBALL:
   - name: libkrb5support0
     version: 1.16-2ubuntu0.2
   - name: libldap-2.4-2
-    version: 2.4.45+dfsg-1ubuntu1.10
+    version: 2.4.45+dfsg-1ubuntu1.11
   - name: libldap-common
-    version: 2.4.45+dfsg-1ubuntu1.10
+    version: 2.4.45+dfsg-1ubuntu1.11
   - name: libnghttp2-14
     version: 1.30.0-1ubuntu1
   - name: libpsl5
