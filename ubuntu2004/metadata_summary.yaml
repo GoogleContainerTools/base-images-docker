@@ -8,8 +8,6 @@ UBUNTU2004_TAR:
     version: 7.7.0+dfsg-1ubuntu1
   - name: libbrotli1
     version: 1.0.7-6ubuntu0.1
-  - name: libc-bin
-    version: 2.31-0ubuntu9.9
   - name: libcurl4
     version: 7.68.0-1ubuntu2.11
   - name: libgssapi-krb5-2
@@ -35,9 +33,9 @@ UBUNTU2004_TAR:
   - name: libkrb5support0
     version: 1.17-6ubuntu4.1
   - name: libldap-2.4-2
-    version: 2.4.49+dfsg-2ubuntu1.8
+    version: 2.4.49+dfsg-2ubuntu1.9
   - name: libldap-common
-    version: 2.4.49+dfsg-2ubuntu1.8
+    version: 2.4.49+dfsg-2ubuntu1.9
   - name: libnghttp2-14
     version: 1.40.0-1build1
   - name: libpsl5
@@ -72,8 +70,6 @@ DEBS_TARBALL:
     version: 7.7.0+dfsg-1ubuntu1
   - name: libbrotli1
     version: 1.0.7-6ubuntu0.1
-  - name: libc-bin
-    version: 2.31-0ubuntu9.9
   - name: libcurl4
     version: 7.68.0-1ubuntu2.11
   - name: libgssapi-krb5-2
@@ -99,9 +95,9 @@ DEBS_TARBALL:
   - name: libkrb5support0
     version: 1.17-6ubuntu4.1
   - name: libldap-2.4-2
-    version: 2.4.49+dfsg-2ubuntu1.8
+    version: 2.4.49+dfsg-2ubuntu1.9
   - name: libldap-common
-    version: 2.4.49+dfsg-2ubuntu1.8
+    version: 2.4.49+dfsg-2ubuntu1.9
   - name: libnghttp2-14
     version: 1.40.0-1build1
   - name: libpsl5
