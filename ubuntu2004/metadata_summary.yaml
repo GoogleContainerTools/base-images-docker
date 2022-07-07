@@ -65,13 +65,13 @@ DEBS_TARBALL:
   - name: ca-certificates
     version: 20211016~20.04.1
   - name: curl
-    version: 7.68.0-1ubuntu2.11
+    version: 7.68.0-1ubuntu2.12
   - name: libasn1-8-heimdal
     version: 7.7.0+dfsg-1ubuntu1
   - name: libbrotli1
     version: 1.0.7-6ubuntu0.1
   - name: libcurl4
-    version: 7.68.0-1ubuntu2.11
+    version: 7.68.0-1ubuntu2.12
   - name: libgssapi-krb5-2
     version: 1.17-6ubuntu4.1
   - name: libgssapi3-heimdal
@@ -115,10 +115,10 @@ DEBS_TARBALL:
   - name: libssh-4
     version: 0.9.3-2ubuntu2.2
   - name: libssl1.1
-    version: 1.1.1f-1ubuntu2.15
+    version: 1.1.1f-1ubuntu2.16
   - name: libwind0-heimdal
     version: 7.7.0+dfsg-1ubuntu1
   - name: netbase
     version: "6.1"
   - name: openssl
-    version: 1.1.1f-1ubuntu2.15
+    version: 1.1.1f-1ubuntu2.16
