@@ -27,5 +27,5 @@ DEBS_TARBALL = struct(
 
 RULES_DOCKER = struct(
     commit = "master",
-    sha256 = "787dd60e3b2e878b40bb0c2e7f0d73d21a401131c154d91d96ed316b8dcaceea",
+    sha256 = "be27407c9a0c0450b98c84fb307d3e3570eef09176fa27c1d11509a4d927ce3a",
 )
