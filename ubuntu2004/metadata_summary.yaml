@@ -5,7 +5,7 @@ UBUNTU2004_TAR:
   - name: curl
     version: 7.68.0-1ubuntu2.13
   - name: libasn1-8-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libbrotli1
     version: 1.0.7-6ubuntu0.1
   - name: libcurl4
@@ -13,21 +13,21 @@ UBUNTU2004_TAR:
   - name: libgssapi-krb5-2
     version: 1.17-6ubuntu4.1
   - name: libgssapi3-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libhcrypto4-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libheimbase1-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libheimntlm0-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libhx509-5-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libk5crypto3
     version: 1.17-6ubuntu4.1
   - name: libkeyutils1
     version: 1.6-6ubuntu1.1
   - name: libkrb5-26-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libkrb5-3
     version: 1.17-6ubuntu4.1
   - name: libkrb5support0
@@ -41,7 +41,7 @@ UBUNTU2004_TAR:
   - name: libpsl5
     version: 0.21.0-1ubuntu1
   - name: libroken18-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: librtmp1
     version: 2.4+20151223.gitfa8646d.1-2build1
   - name: libsasl2-2
@@ -55,7 +55,7 @@ UBUNTU2004_TAR:
   - name: libssl1.1
     version: 1.1.1f-1ubuntu2.16
   - name: libwind0-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: netbase
     version: "6.1"
   - name: openssl
@@ -65,31 +65,31 @@ DEBS_TARBALL:
   - name: ca-certificates
     version: 20211016~20.04.1
   - name: curl
-    version: 7.68.0-1ubuntu2.13
+    version: 7.68.0-1ubuntu2.14
   - name: libasn1-8-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libbrotli1
     version: 1.0.7-6ubuntu0.1
   - name: libcurl4
-    version: 7.68.0-1ubuntu2.13
+    version: 7.68.0-1ubuntu2.14
   - name: libgssapi-krb5-2
     version: 1.17-6ubuntu4.1
   - name: libgssapi3-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libhcrypto4-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libheimbase1-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libheimntlm0-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libhx509-5-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libk5crypto3
     version: 1.17-6ubuntu4.1
   - name: libkeyutils1
     version: 1.6-6ubuntu1.1
   - name: libkrb5-26-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: libkrb5-3
     version: 1.17-6ubuntu4.1
   - name: libkrb5support0
@@ -103,7 +103,7 @@ DEBS_TARBALL:
   - name: libpsl5
     version: 0.21.0-1ubuntu1
   - name: libroken18-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: librtmp1
     version: 2.4+20151223.gitfa8646d.1-2build1
   - name: libsasl2-2
@@ -117,7 +117,7 @@ DEBS_TARBALL:
   - name: libssl1.1
     version: 1.1.1f-1ubuntu2.16
   - name: libwind0-heimdal
-    version: 7.7.0+dfsg-1ubuntu1
+    version: 7.7.0+dfsg-1ubuntu1.1
   - name: netbase
     version: "6.1"
   - name: openssl
