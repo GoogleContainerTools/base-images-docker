@@ -111,7 +111,7 @@ DEBS_TARBALL:
   - name: libsasl2-modules-db
     version: 2.1.27+dfsg-2ubuntu0.1
   - name: libsqlite3-0
-    version: 3.31.1-4ubuntu0.4
+    version: 3.31.1-4ubuntu0.5
   - name: libssh-4
     version: 0.9.3-2ubuntu2.2
   - name: libssl1.1
