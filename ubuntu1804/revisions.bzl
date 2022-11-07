@@ -21,11 +21,11 @@ UBUNTU1804_TAR = struct(
 )
 
 DEBS_TARBALL = struct(
-    revision = "1666809227",
-    sha256 = "84f35548666c50f3c9cdc84dd2bea0678ec3ebdf19c4c08ab403510cc047beac",
+    revision = "1667845892",
+    sha256 = "1351ababfbbb04d338259e4528cef0e2b940f332db5a64607951b5ea0795d5e0",
 )
 
 RULES_DOCKER = struct(
     commit = "master",
-    sha256 = "5380cd137455b4980079abea73c2251ccade716e91ef407ccc0ddb0325525ece",
+    sha256 = "2852a1c474ca35cfb0c3db9e73df09f50d2751b1f7e778f6115d4bd9ec6d3b8e",
 )
