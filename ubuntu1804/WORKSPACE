@@ -36,7 +36,7 @@ http_archive(
 http_file(
     name = "ubuntu1804_tar_latest",
     downloaded_file_path = "ubuntu1804.tar.gz",
-    urls = ["https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.tar.gz"],
+    urls = ["https://partner-images.canonical.com/core/bionic/current/ubuntu-bionic-core-cloudimg-amd64-root.tar.gz"],
 )
 
 load(
