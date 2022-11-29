@@ -1,47 +1,47 @@
 UBUNTU1804_TAR:
   packages:
   - name: ca-certificates
-    version: 20210119~18.04.2
+    version: 20211016~18.04.1
   - name: curl
-    version: 7.58.0-2ubuntu3.16
+    version: 7.58.0-2ubuntu3.21
   - name: libasn1-8-heimdal
-    version: 7.5.0+dfsg-1
+    version: 7.5.0+dfsg-1ubuntu0.1
   - name: libc-bin
-    version: 2.27-3ubuntu1.5
+    version: 2.27-3ubuntu1.6
   - name: libcurl4
-    version: 7.58.0-2ubuntu3.16
+    version: 7.58.0-2ubuntu3.21
   - name: libgssapi-krb5-2
     version: 1.16-2ubuntu0.2
   - name: libgssapi3-heimdal
-    version: 7.5.0+dfsg-1
+    version: 7.5.0+dfsg-1ubuntu0.1
   - name: libhcrypto4-heimdal
-    version: 7.5.0+dfsg-1
+    version: 7.5.0+dfsg-1ubuntu0.1
   - name: libheimbase1-heimdal
-    version: 7.5.0+dfsg-1
+    version: 7.5.0+dfsg-1ubuntu0.1
   - name: libheimntlm0-heimdal
-    version: 7.5.0+dfsg-1
+    version: 7.5.0+dfsg-1ubuntu0.1
   - name: libhx509-5-heimdal
-    version: 7.5.0+dfsg-1
+    version: 7.5.0+dfsg-1ubuntu0.1
   - name: libk5crypto3
     version: 1.16-2ubuntu0.2
   - name: libkeyutils1
-    version: 1.5.9-9.2ubuntu2
+    version: 1.5.9-9.2ubuntu2.1
   - name: libkrb5-26-heimdal
-    version: 7.5.0+dfsg-1
+    version: 7.5.0+dfsg-1ubuntu0.1
   - name: libkrb5-3
     version: 1.16-2ubuntu0.2
   - name: libkrb5support0
     version: 1.16-2ubuntu0.2
   - name: libldap-2.4-2
-    version: 2.4.45+dfsg-1ubuntu1.10
+    version: 2.4.45+dfsg-1ubuntu1.11
   - name: libldap-common
-    version: 2.4.45+dfsg-1ubuntu1.10
+    version: 2.4.45+dfsg-1ubuntu1.11
   - name: libnghttp2-14
     version: 1.30.0-1ubuntu1
   - name: libpsl5
     version: 0.19.1-5build1
   - name: libroken18-heimdal
-    version: 7.5.0+dfsg-1
+    version: 7.5.0+dfsg-1ubuntu0.1
   - name: librtmp1
     version: 2.4+20151223.gitfa8646d.1-1
   - name: libsasl2-2
@@ -49,15 +49,15 @@ UBUNTU1804_TAR:
   - name: libsasl2-modules-db
     version: 2.1.27~101-g0780600+dfsg-3ubuntu2.4
   - name: libsqlite3-0
-    version: 3.22.0-1ubuntu0.4
+    version: 3.22.0-1ubuntu0.7
   - name: libssl1.1
-    version: 1.1.1-1ubuntu2.1~18.04.15
+    version: 1.1.1-1ubuntu2.1~18.04.20
   - name: libwind0-heimdal
-    version: 7.5.0+dfsg-1
+    version: 7.5.0+dfsg-1ubuntu0.1
   - name: netbase
     version: "5.4"
   - name: openssl
-    version: 1.1.1-1ubuntu2.1~18.04.15
+    version: 1.1.1-1ubuntu2.1~18.04.20
 DEBS_TARBALL:
   packages:
   - name: ca-certificates
