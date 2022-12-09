@@ -22,5 +22,5 @@ CENTOS8_TAR = struct(
 
 RULES_DOCKER = struct(
     commit = "master",
-    sha256 = "2852a1c474ca35cfb0c3db9e73df09f50d2751b1f7e778f6115d4bd9ec6d3b8e",
+    sha256 = "7fd77bc78370c1df86e04873aa8e94221c70959432ce2c1fe964ed0373dc9d6b",
 )
