@@ -16,11 +16,11 @@
 # For more details, check the deps_spec.yaml file in the current folder.
 
 CENTOS7_TAR = struct(
-    revision = "1670607082",
-    sha256 = "53172747830a7b33167b43041ab0aa14fdb80a51d170fbb0f66bc572073c626a",
+    revision = "1673645499",
+    sha256 = "a342a0e1e3218d61d816256d288b880f25ea2c996c2f65ef0b7b92fa566ae9ec",
 )
 
 RULES_DOCKER = struct(
     commit = "master",
-    sha256 = "7fd77bc78370c1df86e04873aa8e94221c70959432ce2c1fe964ed0373dc9d6b",
+    sha256 = "31661d44f3992b8cde040ed562b85732572c0f5109e4f9521ccbe6b65b13a85d",
 )
