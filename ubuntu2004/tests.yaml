@@ -22,7 +22,7 @@ fileExistenceTests:
 
 fileContentTests:
 - name: 'Ubuntu Distro Check'
-  expectedContents: ['.*NAME="Ubuntu".*', '.*VERSION="20.04.4 LTS \(Focal Fossa\)".*']
+  expectedContents: ['.*NAME="Ubuntu".*', '.*VERSION="20.04.5 LTS \(Focal Fossa\)".*']
   path: '/etc/os-release'
 
 commandTests:
