@@ -21,7 +21,7 @@ steps:
       #!/usr/bin/env bash
       apt-get update
       apt-get -y install debootstrap
-      debootstrap --variant=minbase "${DISTRO_NAME}" "${DISTRO_NAME}"
+      debootstrap --variant=minbase --include=netbase "${DISTRO_NAME}" "${DISTRO_NAME}"
       tar -C "${DISTRO_NAME}" -czf rootfs.tar.gz .
     id: "rootfs"
 

@@ -21,7 +21,7 @@ steps:
       #!/usr/bin/env bash
       apt-get update
       apt-get -y install debootstrap
-      debootstrap --variant=minbase "${DISTRO_NAME}" "${DISTRO_NAME}"
+      debootstrap --variant=minbase --include=curl,bzip2,ca-certificates "${DISTRO_NAME}" "${DISTRO_NAME}"
       tar -C "${DISTRO_NAME}" -czf rootfs.tar.gz .
     id: "rootfs"
 
