@@ -54,8 +54,8 @@ substitutions:
     #_IMG_DEST: gcp-runtimes/ubuntu_20_0_4:latest-new
     #_IMG_BACKUP_DEST: asci-toolchain-backup/ubuntu2004:latest-new
     _DISTRO_NAME: focal
-    _IMG_DEST: test1-382000/ubuntu_20_0_4:latest-new
-    _IMG_BACKUP_DEST: test1-382000/ubuntu_20_0_4_bak:latest-new
+    _IMG_DEST: gcp-runtimes/ubuntu_20_0_4:latest-new
+    _IMG_BACKUP_DEST: asci-toolchain-backup/ubuntu2004:latest-new
 
 # Push the new image and its backup.
 # Push by using the `images` field here so they will show up in the build results
