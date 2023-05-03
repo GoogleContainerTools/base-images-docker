@@ -32,6 +32,7 @@ steps:
 
 # Step: build the image
   - name: "gcr.io/cloud-builders/docker"
+    dir: debian11
     args: ["build", "-t", "gcr.io/${_IMG_DEST}", "."]
     id: "upgrade-dist"
 

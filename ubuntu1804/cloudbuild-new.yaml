@@ -32,6 +32,7 @@ steps:
 
 # Step: build the image
   - name: "gcr.io/cloud-builders/docker"
+    dir: ubuntu1804
     args: ["build", "-t", "gcr.io/${_IMG_DEST}", "."]
     id: "upgrade-dist"
 
