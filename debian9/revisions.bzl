@@ -22,5 +22,5 @@ DEBIAN9_TAR = struct(
 
 RULES_DOCKER = struct(
     commit = "master",
-    sha256 = "3fdae8c4571d6d3fc343f63c87b3fb030132ad091284b8cbdb7533cb063ded0a",
+    sha256 = "906f90d6a9428b48536dedf0f0d598ea37718e49d04130dcbdf2556357a3c0be",
 )
